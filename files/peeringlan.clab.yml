@@ -2,6 +2,9 @@ name: peeringlan
 topology:
   kinds:
     arista_ceos:
+      image: vrnetlab/arista_ceos:4.33.2F
+      startup-config: configs/__clabNodeName__.conf
+    arista_veos:
       image: vrnetlab/arista_veos:4.33.2F
       startup-config: configs/__clabNodeName__.conf
     linux:
@@ -32,9 +35,17 @@ topology:
   - endpoints:
     - arista_ceos3:eth2
     - client3:eth1
+  - endpoints:
+    - peering-lan:eth4
+    - arista_veos4:eth1
+  - endpoints:
+    - arista_veos4:eth2
+    - client4:eth1
   nodes:
     arista_ceos3:
       kind: arista_ceos
+    arista_veos4:
+      kind: arista_veos
     client1:
       exec:
       - ip address add 192.168.1.254/24 dev eth1
@@ -54,6 +65,13 @@ topology:
       - ip address add 192.168.3.254/24 dev eth1
       - ip route del default
       - ip route add default via 192.168.3.1
+      - ip link set eth1 up
+      kind: linux
+    client4:
+      exec:
+      - ip address add 192.168.4.254/24 dev eth1
+      - ip route del default
+      - ip route add default via 192.168.4.1
       - ip link set eth1 up
       kind: linux
     nokia_srlinux1:

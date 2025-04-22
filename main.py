@@ -28,11 +28,15 @@ if __name__ == "__main__":
 	arista_ceos = Topology.Kind(Kind.Arista_cEOS, **{
 		"image": "vrnetlab/arista_ceos:4.33.2F",
 		"startup-config": Containerlab.Constants.CONFIG_DIR + "/__clabNodeName__" + Kind.Arista_cEOS.config_suffix})
+	arista_veos = Topology.Kind(Kind.Arista_vEOS, **{
+		"image": "vrnetlab/arista_veos:4.33.2F",
+		"startup-config": Containerlab.Constants.CONFIG_DIR + "/__clabNodeName__" + Kind.Arista_vEOS.config_suffix})
 	linux = Topology.Kind(Kind.Linux, image="alpine")
 
 	topology.addKind(nokia_srlinux)
 	topology.addKind(nokia_sros)
 	topology.addKind(arista_ceos)
+	topology.addKind(arista_veos)
 	topology.addKind(linux)
 
 	peering_lan = Kind.Bridge(Containerlab.Constants.PEERING_LAN_NAME)
@@ -41,7 +45,8 @@ if __name__ == "__main__":
 	nodes = [
 		{"kind": Kind.Nokia_SR_Linux},
 		{"kind": Kind.Nokia_SR_OS},
-		{"kind": Kind.Arista_cEOS}]
+		{"kind": Kind.Arista_cEOS},
+		{"kind": Kind.Arista_vEOS}]
 
 	for node in nodes:
 		for i in range(node.get("count", 1)):

@@ -69,3 +69,15 @@ class Arista_cEOS(Clab.Topology.Router):
 			return """
     neighbor $PEER_ADDRESS peer group $PEERING_LAN_NAME-group
     neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
+
+class Arista_vEOS(Clab.Topology.Router):
+	name = "arista_veos"
+	port_prefix = "eth"
+	config_suffix = ".conf"
+
+
+
+	def getNeighborStatement(self) -> str:
+			return """
+    neighbor $PEER_ADDRESS peer group $PEERING_LAN_NAME-group
+    neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
