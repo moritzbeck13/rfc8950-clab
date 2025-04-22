@@ -28,9 +28,6 @@ class Constants:
 	CLIENT_LAN_CLIENT_SUFFIX = "254"
 	CLIENT_LAN_PREFIX_LENGTH = "24"
 
-	DUMMY_LAN_NAME = "dummy-lan"
-	DUMMY_LAN_PREFIX_LENGTH = "24"
-
 
 
 class Lab(yaml.YAMLObject):

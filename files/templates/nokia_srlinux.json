@@ -28,16 +28,6 @@ interface ethernet-1/2 {
         }
     }
 }
-interface ethernet-1/3 {
-    description "$DUMMY_LAN_NAME-interface"
-    subinterface 0 {
-        ipv4 {
-            admin-state enable
-            address $DUMMY_LAN_ADDRESS/$DUMMY_LAN_PREFIX_LENGTH {
-            }
-        }
-    }
-}
 
 routing-policy {
     prefix-set "$CLIENT_LAN_NAME-prefix-set" {
@@ -46,7 +36,7 @@ routing-policy {
     }
 
     policy "accept-$CLIENT_LAN_NAME-policy" {
-        statement 1 {
+        statement 10 {
             match {
                 prefix {
                     prefix-set "$CLIENT_LAN_NAME-prefix-set"
@@ -68,8 +58,6 @@ network-instance "default" {
     interface ethernet-1/1.0 {
     }
     interface ethernet-1/2.0 {
-    }
-    interface ethernet-1/3.0 {
     }
 
     ip-forwarding {
