@@ -1,0 +1,79 @@
+name: peeringlan
+topology:
+  kinds:
+    arista_ceos:
+      image: vrnetlab/ceos:4.33.2F
+      startup-config: configs/__clabNodeName__.conf
+    linux:
+      image: alpine
+    nokia_srlinux:
+      image: ghcr.io/nokia/srlinux
+      startup-config: configs/__clabNodeName__.json
+    nokia_sros:
+      image: vrnetlab/nokia_sros:23.10.R6
+      license: licenses/SR_OS_VSR-SIM1_license.txt
+      startup-config: configs/__clabNodeName__.partial.cfg
+  links:
+  - endpoints:
+    - peering-lan:eth1
+    - nokia_srlinux1:e1-1
+  - endpoints:
+    - nokia_srlinux1:e1-2
+    - client1:eth1
+  - endpoints:
+    - peering-lan:eth2
+    - nokia_sros1:eth1
+  - endpoints:
+    - nokia_sros1:eth2
+    - client2:eth1
+  - endpoints:
+    - peering-lan:eth3
+    - nokia_sros2:eth1
+  - endpoints:
+    - nokia_sros2:eth2
+    - client3:eth1
+  - endpoints:
+    - peering-lan:eth4
+    - arista_ceos1:eth1
+  - endpoints:
+    - arista_ceos1:eth2
+    - client4:eth1
+  nodes:
+    arista_ceos1:
+      kind: arista_ceos
+    client1:
+      exec:
+      - ip address add 192.168.1.254/24 dev eth1
+      - ip route del default
+      - ip route add default via 192.168.1.1
+      - ip link set eth1 up
+      kind: linux
+    client2:
+      exec:
+      - ip address add 192.168.2.254/24 dev eth1
+      - ip route del default
+      - ip route add default via 192.168.2.1
+      - ip link set eth1 up
+      kind: linux
+    client3:
+      exec:
+      - ip address add 192.168.3.254/24 dev eth1
+      - ip route del default
+      - ip route add default via 192.168.3.1
+      - ip link set eth1 up
+      kind: linux
+    client4:
+      exec:
+      - ip address add 192.168.4.254/24 dev eth1
+      - ip route del default
+      - ip route add default via 192.168.4.1
+      - ip link set eth1 up
+      kind: linux
+    nokia_srlinux1:
+      kind: nokia_srlinux
+    nokia_sros1:
+      kind: nokia_sros
+    nokia_sros2:
+      kind: nokia_sros
+    peering-lan:
+      kind: bridge
