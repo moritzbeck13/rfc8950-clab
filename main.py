@@ -44,7 +44,7 @@ if __name__ == "__main__":
 		{"kind": Kind.Arista_cEOS, "count": 1}]
 
 	for node in nodes:
-		for i in range(node.get("count")):
+		for i in range(node.get("count", 1)):
 			id = topology.getNextID()
 			kind = node.get("kind")
 
