@@ -68,7 +68,7 @@ class Lab(yaml.YAMLObject):
 
 	def destroy(self):
 #		os.system("iptables -vL FORWARD --line-numbers -n | grep 'set by containerlab' | awk '{print $1}' | sort -r | xargs -I {} sudo iptables -D FORWARD {}")
-#		os.system("sudo ip link delete dev " + Constants.PEERING_LAN_NAME + " type bridge")
+#		os.system("sudo ip link delete " + Constants.PEERING_LAN_NAME)
 
 #		os.system("rm " + Constants.CONFIG_DIR + "/*")
 
@@ -76,7 +76,7 @@ class Lab(yaml.YAMLObject):
 		pass
 
 	def deploy(self):
-#		os.system("sudo ip link add name " + Constants.PEERING_LAN_NAME + " type bridge")
+#		os.system("sudo ip link add " + Constants.PEERING_LAN_NAME + " type bridge")
 #		os.system("sudo ip link set dev " + Constants.PEERING_LAN_NAME + " up")
 
 #		os.system("clab deploy --reconfigure")
