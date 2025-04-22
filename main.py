@@ -26,7 +26,7 @@ if __name__ == "__main__":
 		"license": "licenses/SR_OS_VSR-SIM1_license.txt",
 		"startup-config": Containerlab.Constants.CONFIG_DIR + "/__clabNodeName__" + Kind.Nokia_SR_OS.config_suffix})
 	arista_ceos = Topology.Kind(Kind.Arista_cEOS, **{
-		"image": "vrnetlab/ceos:4.33.2F",
+		"image": "vrnetlab/arista_ceos:4.33.2F",
 		"startup-config": Containerlab.Constants.CONFIG_DIR + "/__clabNodeName__" + Kind.Arista_cEOS.config_suffix})
 	linux = Topology.Kind(Kind.Linux, image="alpine")
 

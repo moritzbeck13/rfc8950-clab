@@ -2,7 +2,7 @@ name: peeringlan
 topology:
   kinds:
     arista_ceos:
-      image: vrnetlab/ceos:4.33.2F
+      image: vrnetlab/arista_veos:4.33.2F
       startup-config: configs/__clabNodeName__.conf
     linux:
       image: alpine
