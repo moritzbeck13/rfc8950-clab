@@ -48,7 +48,7 @@ if __name__ == "__main__":
 			id = topology.getNextID()
 			kind = node.get("kind")
 
-			router = kind(kind.name + str(i+1), id)
+			router = kind(kind.name + str(id), id)
 			host = Kind.Linux("client" + str(id), id)
 
 			topology.addNode(router)
