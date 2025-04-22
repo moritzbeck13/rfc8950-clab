@@ -39,9 +39,9 @@ if __name__ == "__main__":
 	topology.addNode(peering_lan)
 
 	nodes = [
-		{"kind": Kind.Nokia_SR_Linux, "count": 1},
-		{"kind": Kind.Nokia_SR_OS, "count": 2},
-		{"kind": Kind.Arista_cEOS, "count": 1}]
+		{"kind": Kind.Nokia_SR_Linux},
+		{"kind": Kind.Nokia_SR_OS},
+		{"kind": Kind.Arista_cEOS}]
 
 	for node in nodes:
 		for i in range(node.get("count", 1)):
