@@ -58,7 +58,6 @@ class Link(yaml.YAMLObject):
 		self.setNodeTo(node_to)
 
 	def __repr__(self) -> dict:
-		# TODO Is it possible to make this return inline lists?
 		return {"endpoints": [self.getNodeFrom().getName() + ":" + self.getNodeFrom().getNextPort(), self.getNodeTo().getName() + ":" + self.getNodeTo().getNextPort()]}
 
 
