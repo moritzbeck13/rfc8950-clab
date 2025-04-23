@@ -1,0 +1,8 @@
+.*/
+__*__/
+
+files/configs/
+files/licenses/
+
+*.txt
+*.clab.yml
