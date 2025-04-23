@@ -73,11 +73,9 @@ class Lab(yaml.YAMLObject):
 		os.system("rm " + Constants.FILES_DIR + "/" + Constants.CONFIG_DIR + "/*")
 
 		os.system("clab destroy --cleanup --topo " + Constants.FILES_DIR + "/" + self.getName() + ".clab.yml")
-		pass
 
 	def deploy(self):
 		os.system("sudo ip link add " + Constants.PEERING_LAN_NAME + " type bridge")
 		os.system("sudo ip link set dev " + Constants.PEERING_LAN_NAME + " up")
 
 		os.system("clab deploy --reconfigure --topo " + Constants.FILES_DIR + "/" + self.getName() + ".clab.yml")
-		pass
