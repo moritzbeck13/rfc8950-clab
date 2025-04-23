@@ -80,7 +80,7 @@ class Link(yaml.YAMLObject):
 
 class Node(Kind):
 	name = None
-	port_prefix = None
+	port_prefix = "eth"
 
 
 

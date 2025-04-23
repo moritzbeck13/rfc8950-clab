@@ -5,11 +5,9 @@ import Clab.Topology
 
 class Bridge(Clab.Topology.Node):
 	name = "bridge"
-	port_prefix = "eth"
 
 class Linux(Clab.Topology.Node):
 	name = "linux"
-	port_prefix = "eth"
 
 
 
@@ -46,7 +44,6 @@ class Nokia_SR_Linux(Clab.Topology.Router):
 
 class Nokia_SR_OS(Clab.Topology.Router):
 	name = "nokia_sros"
-	port_prefix = "eth"
 	config_suffix = ".partial.cfg"
 
 
@@ -60,7 +57,6 @@ class Nokia_SR_OS(Clab.Topology.Router):
 
 class Arista_cEOS(Clab.Topology.Router):
 	name = "arista_ceos"
-	port_prefix = "eth"
 	config_suffix = ".conf"
 
 
@@ -72,7 +68,6 @@ class Arista_cEOS(Clab.Topology.Router):
 
 class Arista_vEOS(Clab.Topology.Router):
 	name = "arista_veos"
-	port_prefix = "eth"
 	config_suffix = ".conf"
 
 
