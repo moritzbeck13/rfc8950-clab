@@ -67,17 +67,17 @@ class Lab(yaml.YAMLObject):
 			node.generateConfig(nodes)
 
 	def destroy(self):
-#		os.system("iptables -vL FORWARD --line-numbers -n | grep 'set by containerlab' | awk '{print $1}' | sort -r | xargs -I {} sudo iptables -D FORWARD {}")
-#		os.system("sudo ip link delete " + Constants.PEERING_LAN_NAME)
+		os.system("sudo iptables -vL FORWARD --line-numbers -n | grep 'set by containerlab' | awk '{print $1}' | sort -r | xargs -I {} sudo iptables -D FORWARD {}")
+		os.system("sudo ip link delete " + Constants.PEERING_LAN_NAME)
 
-#		os.system("rm " + Constants.CONFIG_DIR + "/*")
+		os.system("rm " + Constants.FILES_DIR + "/" + Constants.CONFIG_DIR + "/*")
 
-#		os.system("clab destroy --cleanup")
+		os.system("clab destroy --cleanup --topo " + Constants.FILES_DIR + "/" + self.getName() + ".clab.yml")
 		pass
 
 	def deploy(self):
-#		os.system("sudo ip link add " + Constants.PEERING_LAN_NAME + " type bridge")
-#		os.system("sudo ip link set dev " + Constants.PEERING_LAN_NAME + " up")
+		os.system("sudo ip link add " + Constants.PEERING_LAN_NAME + " type bridge")
+		os.system("sudo ip link set dev " + Constants.PEERING_LAN_NAME + " up")
 
-#		os.system("clab deploy --reconfigure")
+		os.system("clab deploy --reconfigure --topo " + Constants.FILES_DIR + "/" + self.getName() + ".clab.yml")
 		pass

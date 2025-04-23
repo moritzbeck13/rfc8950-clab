@@ -48,4 +48,6 @@ if __name__ == "__main__":
 			topology.connectNodes(peering_lan, router)
 			topology.connectNodes(router, host)
 
+	lab.destroy()
 	lab.export()
+	lab.deploy()
