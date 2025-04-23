@@ -1,0 +1,43 @@
+interfaces {
+    lo0 {
+        unit 0 {
+            family inet {
+                address $ROUTER_LOOPBACK_ADDRESS/$ROUTER_LOOPBACK_PREFIX_LENGTH;
+            }
+        }
+    }
+    ge-0/0/0 {
+        unit 0 {
+            family inet6 {
+                address $PEERING_LAN_ADDRESS/$PEERING_LAN_PREFIX_LENGTH;
+            }
+        }
+    }
+    ge-0/0/1 {
+        unit 0 {
+            family inet {
+                address $CLIENT_LAN_ADDRESS/$CLIENT_LAN_PREFIX_LENGTH;
+            }
+        }
+    }
+}
+
+policy-options {
+}
+
+routing-options {
+    autonomous-system $ASN;
+    router-id $ROUTER_LOOPBACK_ADDRESS;
+}
+
+protocols {
+    bgp {
+        group $PEERING_LAN_NAME-group {
+            family inet {
+                unicast {
+                    extended-nexthop;
+                }
+            }
+        }
+    }
+}
