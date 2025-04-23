@@ -28,18 +28,11 @@ if __name__ == "__main__":
 	peering_lan = Kind.Bridge(Containerlab.Constants.PEERING_LAN_NAME)
 	topology.addNode(peering_lan)
 
-	nodes = [
-		{"kind": Kind.Nokia_SR_Linux},
-		{"kind": Kind.Nokia_SR_OS},
-		{"kind": Kind.Arista_cEOS},
-		{"kind": Kind.Arista_vEOS}]
-
-	for node in nodes:
-		for i in range(node.get("count", 1)):
+	for kind in topology.getKinds():
+		if issubclass(kind.getKind(), Topology.Router):
 			id = topology.getNextID()
-			kind = node.get("kind")
 
-			router = kind(kind.name + str(id), id)
+			router = kind.getKind()(kind.name + str(id), id)
 			host = Kind.Linux("client" + str(id), id)
 
 			topology.addNode(router)
