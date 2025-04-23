@@ -18,26 +18,12 @@ if __name__ == "__main__":
 	lab = Containerlab.Lab("peeringlan")
 	topology = lab.getTopology()
 
-	nokia_srlinux = Topology.Kind(Kind.Nokia_SR_Linux, **{
-		"image": "ghcr.io/nokia/srlinux",
-		"startup-config": Containerlab.Constants.CONFIG_DIR + "/__clabNodeName__" + Kind.Nokia_SR_Linux.config_suffix})
-	nokia_sros = Topology.Kind(Kind.Nokia_SR_OS, **{
-		"image": "vrnetlab/nokia_sros:23.10.R6",
-		"license": "licenses/SR_OS_VSR-SIM1_license.txt",
-		"startup-config": Containerlab.Constants.CONFIG_DIR + "/__clabNodeName__" + Kind.Nokia_SR_OS.config_suffix})
-	arista_ceos = Topology.Kind(Kind.Arista_cEOS, **{
-		"image": "vrnetlab/arista_ceos:4.33.2F",
-		"startup-config": Containerlab.Constants.CONFIG_DIR + "/__clabNodeName__" + Kind.Arista_cEOS.config_suffix})
-	arista_veos = Topology.Kind(Kind.Arista_vEOS, **{
-		"image": "vrnetlab/arista_veos:4.33.2F",
-		"startup-config": Containerlab.Constants.CONFIG_DIR + "/__clabNodeName__" + Kind.Arista_vEOS.config_suffix})
-	linux = Topology.Kind(Kind.Linux, image="alpine")
-
-	topology.addKind(nokia_srlinux)
-	topology.addKind(nokia_sros)
-	topology.addKind(arista_ceos)
-	topology.addKind(arista_veos)
-	topology.addKind(linux)
+	topology.addKind(Topology.Kind(Kind.Nokia_SR_Linux, image="ghcr.io/nokia/srlinux"))
+	topology.addKind(Topology.Kind(Kind.Nokia_SR_OS, image="vrnetlab/nokia_sros:23.10.R6", license="licenses/SR_OS_VSR-SIM1_license.txt"))
+	topology.addKind(Topology.Kind(Kind.Arista_cEOS, image="vrnetlab/arista_ceos:4.33.2F"))
+	topology.addKind(Topology.Kind(Kind.Arista_vEOS, image="vrnetlab/arista_veos:4.33.2F"))
+	topology.addKind(Topology.Kind(Kind.Juniper_vJunos_router, image="vrnetlab/juniper_vjunosrouter:24.2R1-S2.5"))
+	topology.addKind(Topology.Kind(Kind.Linux, image="alpine"))
 
 	peering_lan = Kind.Bridge(Containerlab.Constants.PEERING_LAN_NAME)
 	topology.addNode(peering_lan)

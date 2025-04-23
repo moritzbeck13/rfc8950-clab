@@ -2,13 +2,18 @@ from __future__ import annotations
 
 import yaml
 import Clab.Containerlab
+import Clab.Topology
 
 
 
 class Kind(yaml.YAMLObject):
 	def __init__(self, Kind: type[Node], **kwargs: dict):
 		self.setName(Kind.name)
+		self.setKind(Kind)
 		self.setAttributes(kwargs)
+
+		if issubclass(Kind, Clab.Topology.Router):
+			self.setAttribute("startup-config", Clab.Containerlab.Constants.CONFIG_DIR + "/__clabNodeName__" + Kind.config_suffix)
 
 	def __repr__(self) -> dict:
 		return self.getAttributes()
@@ -20,6 +25,14 @@ class Kind(yaml.YAMLObject):
 
 	def setName(self, name: str):
 		self.name = name
+
+
+
+	def getKind(self) -> type:
+		return self.kind
+
+	def setKind(self, kind: type):
+		self.kind = kind
 
 
 
@@ -74,6 +87,7 @@ class Node(Kind):
 
 	def __init__(self, name: str, id: int = None, **kwargs: dict):
 		self.setName(name)
+		self.setKind(type(self))
 		self.setID(id)
 		self.setPortNumber(0)
 
