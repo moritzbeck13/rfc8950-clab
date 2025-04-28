@@ -25,10 +25,6 @@ class Linux(Clab.Topology.Node):
 
 
 class Nokia_SR_Linux(Clab.Topology.Router):
-	#"route-table": "show network-instance default route-table ipv4-unicast prefix $PREFIX",
-	#"bgp-routes": "show network-instance default protocols bgp routes ipv4 prefix $PREFIX",
-	#"bgp-received-routes": "show network-instance default protocols bgp neighbor $NEIGHBOR received-routes ipv4"
-
 	name = "nokia_srlinux"
 	port_prefix = "e1-"
 	config_suffix = ".json"
