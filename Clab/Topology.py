@@ -138,15 +138,17 @@ class Router(Node):
 		neighbor = self.getNeighborStatement()
 		neighbor = neighbor.replace("$PEERING_LAN_NAME", Clab.Containerlab.Constants.PEERING_LAN_NAME)
 
-		neighbors = ""
+		neighbors = []
 
 		for peer in peers:
 			peer_id = peer.getID()
 
 			if isinstance(peer, Router) and peer is not self:
-				neighbors += neighbor \
+				neighbors.append(neighbor \
 					.replace("$PEER_ADDRESS",	Clab.Containerlab.Constants.PEERING_LAN_PREFIX + str(peer_id)) \
-					.replace("$PEER_ASN",		str(Clab.Containerlab.Constants.BASE_ASN + peer_id))
+					.replace("$PEER_ASN",		str(Clab.Containerlab.Constants.BASE_ASN + peer_id)))
+
+		neighbors = "\n".join(neighbors)
 
 		id = self.getID()
 		id_str = str(id)

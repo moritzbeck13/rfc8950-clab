@@ -36,7 +36,7 @@ class Nokia_SR_Linux(Clab.Topology.Router):
 
 
 	def getNeighborStatement(self) -> str:
-		return """
+		return """\
             neighbor $PEER_ADDRESS {
                 peer-group "$PEERING_LAN_NAME-group"
                 peer-as $PEER_ASN
@@ -49,7 +49,7 @@ class Nokia_SR_OS(Clab.Topology.Router):
 
 
 	def getNeighborStatement(self) -> str:
-		return """
+		return """\
             neighbor $PEER_ADDRESS {
                 group "$PEERING_LAN_NAME-group"
                 peer-as $PEER_ASN
@@ -62,7 +62,7 @@ class Arista_cEOS(Clab.Topology.Router):
 
 
 	def getNeighborStatement(self) -> str:
-		return """
+		return """\
     neighbor $PEER_ADDRESS peer group $PEERING_LAN_NAME-group
     neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
 
@@ -73,7 +73,7 @@ class Arista_vEOS(Clab.Topology.Router):
 
 
 	def getNeighborStatement(self) -> str:
-		return """
+		return """\
     neighbor $PEER_ADDRESS peer group $PEERING_LAN_NAME-group
     neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
 

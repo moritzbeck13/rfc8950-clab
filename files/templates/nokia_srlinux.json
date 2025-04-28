@@ -82,7 +82,8 @@ network-instance "default" {
 
             group "$PEERING_LAN_NAME-group" {
             }
-            $NEIGHBORS
+
+$NEIGHBORS
         }
     }
 }
