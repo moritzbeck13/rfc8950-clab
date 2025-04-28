@@ -23,6 +23,7 @@ if __name__ == "__main__":
 	topology.addKind(Topology.Kind(Kind.Arista_cEOS, image="vrnetlab/arista_ceos:4.33.2F"))
 	topology.addKind(Topology.Kind(Kind.Arista_vEOS, image="vrnetlab/arista_veos:4.33.2F"))
 	topology.addKind(Topology.Kind(Kind.Juniper_vJunos_router, image="vrnetlab/juniper_vjunosrouter:24.2R1-S2.5"))
+	topology.addKind(Topology.Kind(Kind.Juniper_vJunos_Evolved, image="vrnetlab/juniper_vjunosevolved:24.4R1.8"))
 	topology.addKind(Topology.Kind(Kind.Linux, image="alpine"))
 
 	peering_lan = Kind.Bridge(Containerlab.Constants.PEERING_LAN_NAME)
