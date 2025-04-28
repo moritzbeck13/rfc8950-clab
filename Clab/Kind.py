@@ -62,7 +62,7 @@ class Arista_cEOS(Clab.Topology.Router):
 
 
 	def getNeighborStatement(self) -> str:
-			return """
+		return """
     neighbor $PEER_ADDRESS peer group $PEERING_LAN_NAME-group
     neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
 
@@ -73,7 +73,7 @@ class Arista_vEOS(Clab.Topology.Router):
 
 
 	def getNeighborStatement(self) -> str:
-			return """
+		return """
     neighbor $PEER_ADDRESS peer group $PEERING_LAN_NAME-group
     neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
 
@@ -84,6 +84,6 @@ class Juniper_vJunos_router(Clab.Topology.Router):
 
 
 	def getNeighborStatement(self) -> str:
-			return """
+		return """
     neighbor $PEER_ADDRESS peer group $PEERING_LAN_NAME-group
     neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
