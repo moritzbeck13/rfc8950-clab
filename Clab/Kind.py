@@ -83,7 +83,17 @@ class Juniper_vJunos_router(Clab.Topology.Router):
 		return """\
             neighbor $PEER_ADDRESS remote-as $PEER_ASN;"""
 
-class Juniper_vJunos_Evolved(Clab.Topology.Router):
+class Juniper_vJunos_switch(Clab.Topology.Router):
+	name = "juniper_vjunosswitch"
+	config_suffix = ".json"
+
+
+
+	def getNeighborStatement(self) -> str:
+		return """\
+            neighbor $PEER_ADDRESS remote-as $PEER_ASN;"""
+
+class Juniper_vJunosEvolved(Clab.Topology.Router):
 	name = "juniper_vjunosevolved"
 	config_suffix = ".json"
 

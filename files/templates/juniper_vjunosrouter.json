@@ -31,11 +31,16 @@ policy-options {
         $CLIENT_LAN_NETWORK/$CLIENT_LAN_PREFIX_LENGTH;
     }
 
-    policy-statement accept-$CLIENT_LAN_NAME-policy-statement {
-        from {
-            prefix-list $CLIENT_LAN_NAME-prefix-list;
+    policy-statement accept-client-lan-policy-statement {
+        term 10 {
+            from {
+                prefix-list client-lan-prefix-list;
+            }
+            then accept;
         }
-        then accept;
+        term 20 {
+            then reject;
+        }
     }
     policy-statement default-accept-policy-statement {
         then accept;
@@ -58,7 +63,6 @@ protocols {
             }
         }
         group $PEERING_LAN_NAME-group {
-            type external;
 $NEIGHBORS
         }
     }
