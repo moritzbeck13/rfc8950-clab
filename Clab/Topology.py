@@ -165,6 +165,7 @@ class Router(Node):
 			.replace("$CLIENT_LAN_ADDRESS",				Clab.Containerlab.Constants.CLIENT_LAN_PREFIX + id_str + "." + Clab.Containerlab.Constants.CLIENT_LAN_ROUTER_SUFFIX) \
 			.replace("$CLIENT_LAN_NETWORK",				Clab.Containerlab.Constants.CLIENT_LAN_PREFIX + id_str + "." + "0") \
 			.replace("$CLIENT_LAN_PREFIX_LENGTH",		Clab.Containerlab.Constants.CLIENT_LAN_PREFIX_LENGTH) \
+			.replace("$CLIENT_LAN_SUBNET_MASK",			Clab.Containerlab.Constants.CLIENT_LAN_SUBNET_MASK) \
 			.replace("$NEIGHBORS",						neighbors)
 
 		file = open(Clab.Containerlab.Constants.FILES_DIR + "/" + Clab.Containerlab.Constants.CONFIG_DIR + "/" + self.getName() + self.config_suffix, "w")
