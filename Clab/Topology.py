@@ -161,6 +161,7 @@ class Router(Node):
 			.replace("$ROUTER_LOOPBACK_NAME",			Clab.Containerlab.Constants.ROUTER_LOOPBACK_NAME) \
 			.replace("$ROUTER_LOOPBACK_ADDRESS",		Clab.Containerlab.Constants.ROUTER_LOOPBACK_PREFIX + id_str + "." + Clab.Containerlab.Constants.ROUTER_LOOPBACK_SUFFIX) \
 			.replace("$ROUTER_LOOPBACK_PREFIX_LENGTH",	Clab.Containerlab.Constants.ROUTER_LOOPBACK_PREFIX_LENGTH) \
+			.replace("$ROUTER_LOOPBACK_SUBNET_MASK",	Clab.Containerlab.Constants.ROUTER_LOOPBACK_SUBNET_MASK) \
 			.replace("$CLIENT_LAN_NAME",				Clab.Containerlab.Constants.CLIENT_LAN_NAME) \
 			.replace("$CLIENT_LAN_ADDRESS",				Clab.Containerlab.Constants.CLIENT_LAN_PREFIX + id_str + "." + Clab.Containerlab.Constants.CLIENT_LAN_ROUTER_SUFFIX) \
 			.replace("$CLIENT_LAN_NETWORK",				Clab.Containerlab.Constants.CLIENT_LAN_PREFIX + id_str + "." + "0") \
