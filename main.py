@@ -33,8 +33,8 @@ if __name__ == "__main__":
 		if issubclass(kind.getKind(), Topology.Router):
 			id = topology.getNextID()
 
-			router = kind.getKind()(kind.name + str(id), id)
-			host = Kind.Linux("client" + str(id), id)
+			router = kind.getKind()(kind.name + "_" + str(id), id)
+			host = Kind.Linux("client_" + str(id), id)
 
 			topology.addNode(router)
 			topology.addNode(host)
