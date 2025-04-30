@@ -59,6 +59,8 @@ class Lab(yaml.YAMLObject):
 
 
 	def export(self):
+		os.system("rm " + Constants.FILES_DIR + "/" + Constants.CONFIG_DIR + "/*")
+
 		file = open(Constants.FILES_DIR + "/" + self.getName() + ".clab.yml", "w")
 		file.write(yaml.dump(self))
 		file.close()
@@ -71,8 +73,6 @@ class Lab(yaml.YAMLObject):
 	def destroy(self):
 		os.system("sudo iptables -vL FORWARD --line-numbers -n | grep 'set by containerlab' | awk '{print $1}' | sort -r | xargs -I {} sudo iptables -D FORWARD {}")
 		os.system("sudo ip link delete " + Constants.PEERING_LAN_NAME)
-
-		os.system("rm " + Constants.FILES_DIR + "/" + Constants.CONFIG_DIR + "/*")
 
 		os.system("clab destroy --cleanup --topo " + Constants.FILES_DIR + "/" + self.getName() + ".clab.yml")
 
