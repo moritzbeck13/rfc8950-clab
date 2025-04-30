@@ -73,6 +73,17 @@ class Arista_vEOS(Clab.Topology.Router):
     neighbor $PEER_ADDRESS peer group $PEERING_LAN_NAME-group
     neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
 
+class Cisco_XRv9k(Clab.Topology.Router):
+	name = "cisco_xrv9k"
+	config_suffix = ".partial.cfg"
+
+
+
+	def getNeighborStatement(self) -> str:
+		return """\
+    neighbor $PEER_ADDRESS peer-group $PEERING_LAN_NAME-group
+    neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
+
 class Juniper_vJunos_router(Clab.Topology.Router):
 	name = "juniper_vjunosrouter"
 	config_suffix = ".cfg"

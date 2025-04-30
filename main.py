@@ -22,8 +22,10 @@ if __name__ == "__main__":
 	topology.addKind(Topology.Kind(Kind.Nokia_SR_OS, image="vrnetlab/nokia_sros:23.10.R6", license="licenses/SR_OS_VSR-SIM1_license.txt"))
 	topology.addKind(Topology.Kind(Kind.Arista_cEOS, image="vrnetlab/arista_ceos:4.33.2F"))
 	topology.addKind(Topology.Kind(Kind.Arista_vEOS, image="vrnetlab/arista_veos:4.33.2F"))
-	topology.addKind(Topology.Kind(Kind.Juniper_vJunos_router, image="vrnetlab/juniper_vjunosrouter:24.2R1-S2.5"))
-	topology.addKind(Topology.Kind(Kind.Juniper_vJunos_Evolved, image="vrnetlab/juniper_vjunosevolved:24.4R1.8"))
+	topology.addKind(Topology.Kind(Kind.Cisco_XRv9k, image="vrnetlab/cisco_xrv9k:6.6.3"))
+	topology.addKind(Topology.Kind(Kind.Juniper_vJunos_router, image="vrnetlab/juniper_vjunos-router:23.2R1.15"))
+	topology.addKind(Topology.Kind(Kind.Juniper_vJunos_switch, image="vrnetlab/juniper_vjunos-switch:23.1R1.8"))
+	topology.addKind(Topology.Kind(Kind.Juniper_vJunosEvolved, image="vrnetlab/juniper_vjunosevolved:24.4R1.8"))
 	topology.addKind(Topology.Kind(Kind.Linux, image="alpine"))
 
 	peering_lan = Kind.Bridge(Containerlab.Constants.PEERING_LAN_NAME)
