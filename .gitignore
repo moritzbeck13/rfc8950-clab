@@ -6,5 +6,4 @@ files/licenses/
 
 .*
 !.gitignore
-*.txt
 *.clab.yml
