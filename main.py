@@ -1,6 +1,6 @@
 import yaml
 
-from Clab import Containerlab, Kind, Lab, Topology
+from clab import Containerlab, Kind, Lab, Topology
 
 
 

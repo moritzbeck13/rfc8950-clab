@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import yaml
-import Clab.Containerlab
-import Clab.Topology
+import clab.Containerlab
+import clab.Topology
 
 
 
@@ -12,8 +12,8 @@ class Kind(yaml.YAMLObject):
 		self.setKind(Kind)
 		self.setAttributes(kwargs)
 
-		if issubclass(Kind, Clab.Topology.Router):
-			self.setAttribute("startup-config", Clab.Containerlab.Constants.CONFIG_DIR + "/__clabNodeName__" + Kind.config_suffix)
+		if issubclass(Kind, clab.Topology.Router):
+			self.setAttribute("startup-config", clab.Containerlab.Constants.CONFIG_DIR + "/__clabNodeName__" + Kind.config_suffix)
 
 	def __repr__(self) -> dict:
 		return self.getAttributes()
@@ -131,12 +131,12 @@ class Router(Node):
 		return ""
 
 	def generateConfig(self, peers: list[Node]):
-		file = open(Clab.Containerlab.Constants.FILES_DIR + "/" + Clab.Containerlab.Constants.TEMPLATE_DIR + "/" + type(self).name + self.config_suffix)
+		file = open(clab.Containerlab.Constants.FILES_DIR + "/" + clab.Containerlab.Constants.TEMPLATE_DIR + "/" + type(self).name + self.config_suffix)
 		config = file.read()
 		file.close()
 
 		neighbor = self.getNeighborStatement()
-		neighbor = neighbor.replace("$PEERING_LAN_NAME", Clab.Containerlab.Constants.PEERING_LAN_NAME)
+		neighbor = neighbor.replace("$PEERING_LAN_NAME", clab.Containerlab.Constants.PEERING_LAN_NAME)
 
 		neighbors = []
 
@@ -145,8 +145,8 @@ class Router(Node):
 
 			if isinstance(peer, Router) and peer is not self:
 				neighbors.append(neighbor \
-					.replace("$PEER_ADDRESS",	Clab.Containerlab.Constants.PEERING_LAN_PREFIX + str(peer_id)) \
-					.replace("$PEER_ASN",		str(Clab.Containerlab.Constants.BASE_ASN + peer_id)))
+					.replace("$PEER_ADDRESS",	clab.Containerlab.Constants.PEERING_LAN_PREFIX + str(peer_id)) \
+					.replace("$PEER_ASN",		str(clab.Containerlab.Constants.BASE_ASN + peer_id)))
 
 		neighbors = "\n".join(neighbors)
 
@@ -154,21 +154,21 @@ class Router(Node):
 		id_str = str(id)
 
 		config = config \
-			.replace("$ASN",							str(Clab.Containerlab.Constants.BASE_ASN + id)) \
-			.replace("$PEERING_LAN_NAME",				Clab.Containerlab.Constants.PEERING_LAN_NAME) \
-			.replace("$PEERING_LAN_ADDRESS",			Clab.Containerlab.Constants.PEERING_LAN_PREFIX + id_str) \
-			.replace("$PEERING_LAN_PREFIX_LENGTH",		Clab.Containerlab.Constants.PEERING_LAN_PREFIX_LENGTH) \
-			.replace("$ROUTER_LOOPBACK_NAME",			Clab.Containerlab.Constants.ROUTER_LOOPBACK_NAME) \
-			.replace("$ROUTER_LOOPBACK_ADDRESS",		Clab.Containerlab.Constants.ROUTER_LOOPBACK_PREFIX + id_str + "." + Clab.Containerlab.Constants.ROUTER_LOOPBACK_SUFFIX) \
-			.replace("$ROUTER_LOOPBACK_PREFIX_LENGTH",	Clab.Containerlab.Constants.ROUTER_LOOPBACK_PREFIX_LENGTH) \
-			.replace("$ROUTER_LOOPBACK_SUBNET_MASK",	Clab.Containerlab.Constants.ROUTER_LOOPBACK_SUBNET_MASK) \
-			.replace("$CLIENT_LAN_NAME",				Clab.Containerlab.Constants.CLIENT_LAN_NAME) \
-			.replace("$CLIENT_LAN_ADDRESS",				Clab.Containerlab.Constants.CLIENT_LAN_PREFIX + id_str + "." + Clab.Containerlab.Constants.CLIENT_LAN_ROUTER_SUFFIX) \
-			.replace("$CLIENT_LAN_NETWORK",				Clab.Containerlab.Constants.CLIENT_LAN_PREFIX + id_str + "." + "0") \
-			.replace("$CLIENT_LAN_PREFIX_LENGTH",		Clab.Containerlab.Constants.CLIENT_LAN_PREFIX_LENGTH) \
-			.replace("$CLIENT_LAN_SUBNET_MASK",			Clab.Containerlab.Constants.CLIENT_LAN_SUBNET_MASK) \
+			.replace("$ASN",							str(clab.Containerlab.Constants.BASE_ASN + id)) \
+			.replace("$PEERING_LAN_NAME",				clab.Containerlab.Constants.PEERING_LAN_NAME) \
+			.replace("$PEERING_LAN_ADDRESS",			clab.Containerlab.Constants.PEERING_LAN_PREFIX + id_str) \
+			.replace("$PEERING_LAN_PREFIX_LENGTH",		clab.Containerlab.Constants.PEERING_LAN_PREFIX_LENGTH) \
+			.replace("$ROUTER_LOOPBACK_NAME",			clab.Containerlab.Constants.ROUTER_LOOPBACK_NAME) \
+			.replace("$ROUTER_LOOPBACK_ADDRESS",		clab.Containerlab.Constants.ROUTER_LOOPBACK_PREFIX + id_str + "." + clab.Containerlab.Constants.ROUTER_LOOPBACK_SUFFIX) \
+			.replace("$ROUTER_LOOPBACK_PREFIX_LENGTH",	clab.Containerlab.Constants.ROUTER_LOOPBACK_PREFIX_LENGTH) \
+			.replace("$ROUTER_LOOPBACK_SUBNET_MASK",	clab.Containerlab.Constants.ROUTER_LOOPBACK_SUBNET_MASK) \
+			.replace("$CLIENT_LAN_NAME",				clab.Containerlab.Constants.CLIENT_LAN_NAME) \
+			.replace("$CLIENT_LAN_ADDRESS",				clab.Containerlab.Constants.CLIENT_LAN_PREFIX + id_str + "." + clab.Containerlab.Constants.CLIENT_LAN_ROUTER_SUFFIX) \
+			.replace("$CLIENT_LAN_NETWORK",				clab.Containerlab.Constants.CLIENT_LAN_PREFIX + id_str + "." + "0") \
+			.replace("$CLIENT_LAN_PREFIX_LENGTH",		clab.Containerlab.Constants.CLIENT_LAN_PREFIX_LENGTH) \
+			.replace("$CLIENT_LAN_SUBNET_MASK",			clab.Containerlab.Constants.CLIENT_LAN_SUBNET_MASK) \
 			.replace("$NEIGHBORS",						neighbors)
 
-		file = open(Clab.Containerlab.Constants.FILES_DIR + "/" + Clab.Containerlab.Constants.CONFIG_DIR + "/" + self.getName() + self.config_suffix, "w")
+		file = open(clab.Containerlab.Constants.FILES_DIR + "/" + clab.Containerlab.Constants.CONFIG_DIR + "/" + self.getName() + self.config_suffix, "w")
 		file.write(config)
 		file.close()

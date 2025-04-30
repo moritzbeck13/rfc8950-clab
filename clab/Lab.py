@@ -1,5 +1,5 @@
 import yaml
-import Clab.Topology
+import clab.Topology
 
 
 
@@ -24,42 +24,42 @@ class Topology(yaml.YAMLObject):
 
 
 
-	def getKinds(self) -> list[Clab.Topology.Kind]:
+	def getKinds(self) -> list[clab.Topology.Kind]:
 		return self.kinds
 
-	def setKinds(self, kinds: list[Clab.Topology.Kind]):
+	def setKinds(self, kinds: list[clab.Topology.Kind]):
 		self.kinds = kinds
 
 
-	def addKind(self, kind: Clab.Topology.Kind):
+	def addKind(self, kind: clab.Topology.Kind):
 		self.getKinds().append(kind)
 
 
 
-	def getNodes(self) -> list[Clab.Topology.Node]:
+	def getNodes(self) -> list[clab.Topology.Node]:
 		return self.nodes
 
-	def setNodes(self, nodes: list[Clab.Topology.Node]):
+	def setNodes(self, nodes: list[clab.Topology.Node]):
 		self.nodes = nodes
 
 
-	def addNode(self, node: Clab.Topology.Node):
+	def addNode(self, node: clab.Topology.Node):
 		self.getNodes().append(node)
 
 
 
-	def getLinks(self) -> list[Clab.Topology.Link]:
+	def getLinks(self) -> list[clab.Topology.Link]:
 		return self.links
 
-	def setLinks(self, links: list[Clab.Topology.Link]):
+	def setLinks(self, links: list[clab.Topology.Link]):
 		self.links = links
 
 
-	def connectNodes(self, node_from: Clab.Topology.Node, node_to: Clab.Topology.Node):
-		self.addLink(Clab.Topology.Link(node_from, node_to))
+	def connectNodes(self, node_from: clab.Topology.Node, node_to: clab.Topology.Node):
+		self.addLink(clab.Topology.Link(node_from, node_to))
 
 
-	def addLink(self, link: Clab.Topology.Link):
+	def addLink(self, link: clab.Topology.Link):
 		self.getLinks().append(link)
 
 

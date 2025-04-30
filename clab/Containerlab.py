@@ -1,6 +1,6 @@
 import os
 import yaml
-import Clab.Lab
+import clab.Lab
 
 
 
@@ -35,7 +35,7 @@ class Constants:
 class Lab(yaml.YAMLObject):
 	def __init__(self, name: str):
 		self.setName(name)
-		self.setTopology(Clab.Lab.Topology())
+		self.setTopology(clab.Lab.Topology())
 
 	def __repr__(self) -> dict:
 		return {"name": self.getName(), "topology": self.getTopology()}
@@ -50,10 +50,10 @@ class Lab(yaml.YAMLObject):
 
 
 
-	def getTopology(self) -> Clab.Lab.Topology:
+	def getTopology(self) -> clab.Lab.Topology:
 		return self.topology
 
-	def setTopology(self, topology: Clab.Lab.Topology):
+	def setTopology(self, topology: clab.Lab.Topology):
 		self.topology = topology
 
 
