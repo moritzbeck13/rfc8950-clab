@@ -1,6 +1,6 @@
 import yaml
 
-from clab import Containerlab, Kind, Lab, Topology
+from clab import Constants, Containerlab, Kind, Lab, Topology
 
 
 
@@ -28,7 +28,7 @@ if __name__ == "__main__":
 	topology.addKind(Topology.Kind(Kind.Juniper_vJunosEvolved, image="vrnetlab/juniper_vjunosevolved:24.4R1.8"))
 	topology.addKind(Topology.Kind(Kind.Linux, image="alpine"))
 
-	peering_lan = Kind.Bridge(Containerlab.Constants.PEERING_LAN_NAME)
+	peering_lan = Kind.Bridge(Constants.PEERING_LAN_NAME)
 	topology.addNode(peering_lan)
 
 	for kind in topology.getKinds():
