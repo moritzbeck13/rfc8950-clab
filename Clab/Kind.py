@@ -40,7 +40,7 @@ class Nokia_SR_Linux(Clab.Topology.Router):
 
 class Nokia_SR_OS(Clab.Topology.Router):
 	name = "nokia_sros"
-	config_suffix = ".partial.cfg"
+	config_suffix = ".partial.txt"
 
 
 
@@ -53,7 +53,7 @@ class Nokia_SR_OS(Clab.Topology.Router):
 
 class Arista_cEOS(Clab.Topology.Router):
 	name = "arista_ceos"
-	config_suffix = ".conf"
+	config_suffix = ""
 
 
 
@@ -64,7 +64,7 @@ class Arista_cEOS(Clab.Topology.Router):
 
 class Arista_vEOS(Clab.Topology.Router):
 	name = "arista_veos"
-	config_suffix = ".conf"
+	config_suffix = ".cfg"
 
 
 
@@ -75,7 +75,7 @@ class Arista_vEOS(Clab.Topology.Router):
 
 class Juniper_vJunos_router(Clab.Topology.Router):
 	name = "juniper_vjunosrouter"
-	config_suffix = ".json"
+	config_suffix = ".cfg"
 
 
 
@@ -85,7 +85,7 @@ class Juniper_vJunos_router(Clab.Topology.Router):
 
 class Juniper_vJunos_switch(Clab.Topology.Router):
 	name = "juniper_vjunosswitch"
-	config_suffix = ".json"
+	config_suffix = ".cfg"
 
 
 
@@ -95,7 +95,7 @@ class Juniper_vJunos_switch(Clab.Topology.Router):
 
 class Juniper_vJunosEvolved(Clab.Topology.Router):
 	name = "juniper_vjunosevolved"
-	config_suffix = ".json"
+	config_suffix = ".cfg"
 
 
 
