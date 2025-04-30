@@ -6,34 +6,6 @@ import clab.Lab
 
 
 
-class Constants:
-	FILES_DIR = "files"
-
-	CONFIG_DIR = "configs"
-	LICENSES_DIR = "licenses"
-	TEMPLATE_DIR = "templates"
-
-	BASE_ASN = 65000
-
-	PEERING_LAN_NAME = "peering-lan"
-	PEERING_LAN_PREFIX = "c1ab::"
-	PEERING_LAN_PREFIX_LENGTH = "64"
-
-	ROUTER_LOOPBACK_NAME = "loopback"
-	ROUTER_LOOPBACK_PREFIX = "172.16."
-	ROUTER_LOOPBACK_SUFFIX = "1"
-	ROUTER_LOOPBACK_PREFIX_LENGTH = "32"
-	ROUTER_LOOPBACK_SUBNET_MASK = "255.255.255.255"
-
-	CLIENT_LAN_NAME = "client-lan"
-	CLIENT_LAN_PREFIX = "192.168."
-	CLIENT_LAN_ROUTER_SUFFIX = "1"
-	CLIENT_LAN_CLIENT_SUFFIX = "254"
-	CLIENT_LAN_PREFIX_LENGTH = "24"
-	CLIENT_LAN_SUBNET_MASK = "255.255.255.0"
-
-
-
 class Lab(yaml.YAMLObject):
 	def __init__(self, name: str):
 		self.setName(name)
