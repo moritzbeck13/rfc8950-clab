@@ -95,7 +95,7 @@ class Node(Kind):
 		self.setPortNumber(0)
 
 		self.setAttributes(kwargs)
-		self.setAttribute("kind", self.getKind().getName())
+		self.setAttribute("kind", self.getKind().name)
 
 
 
@@ -135,7 +135,7 @@ class Router(Node):
 		return ""
 
 	def generateConfig(self, peers: list[Node]):
-		file = open(clab.Constants.FILES_DIR + "/" + clab.Constants.TEMPLATE_DIR + "/" + self.getKind().getName() + self.config_suffix)
+		file = open(clab.Constants.FILES_DIR + "/" + clab.Constants.TEMPLATE_DIR + "/" + self.getKind().name + self.config_suffix)
 		config = file.read()
 		file.close()
 
