@@ -30,10 +30,10 @@ class Kind(yaml.YAMLObject):
 
 
 
-	def getKind(self) -> type:
+	def getKind(self) -> type[Node]:
 		return self.kind
 
-	def setKind(self, kind: type):
+	def setKind(self, kind: type[Node]):
 		self.kind = kind
 
 
@@ -133,7 +133,7 @@ class Router(Node):
 		return ""
 
 	def generateConfig(self, peers: list[Node]):
-		file = open(clab.Constants.FILES_DIR + "/" + clab.Constants.TEMPLATE_DIR + "/" + type(self).name + self.config_suffix)
+		file = open(clab.Constants.FILES_DIR + "/" + clab.Constants.TEMPLATE_DIR + "/" + self.getKind().getName() + self.config_suffix)
 		config = file.read()
 		file.close()
 
