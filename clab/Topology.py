@@ -11,11 +11,10 @@ class Kind(yaml.YAMLObject):
 	def __init__(self, Kind: type[Node], **kwargs: dict):
 		self.setName(Kind.name)
 		self.setKind(Kind)
+		self.setAttributes(kwargs)
 
 		if issubclass(Kind, clab.Topology.Router):
 			self.setAttribute("startup-config", clab.Constants.CONFIG_DIR + "/__clabNodeName__" + Kind.config_suffix)
-
-		self.setAttributes(kwargs)
 
 	def __repr__(self) -> dict:
 		return self.getAttributes()
@@ -95,8 +94,8 @@ class Node(Kind):
 		self.setID(id)
 		self.setPortNumber(0)
 
-		self.setAttribute("kind", self.getKind().getName())
 		self.setAttributes(kwargs)
+		self.setAttribute("kind", self.getKind().getName())
 
 
 
