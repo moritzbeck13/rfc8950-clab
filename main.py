@@ -29,14 +29,14 @@ if __name__ == "__main__":
 		(Kind.Juniper_vJunosEvolved, {"image": "vrnetlab/juniper_vjunosevolved:24.4R1.8"})
 	]
 
-	peering_lan = Kind.Bridge(Constants.PEERING_LAN_NAME, None)
+	peering_lan = Kind.Bridge(Constants.PEERING_LAN_NAME)
 	topology.addNode(peering_lan)
 
 	for Node, attributes in nodes:
 		id = topology.getNextID()
 
-		router = Node(Node.kind + "_" + str(id), id, **attributes)
-		client = Kind.Linux("client_" + str(id), id, image="alpine")
+		router = Node(id, **attributes)
+		client = Kind.Alpine(id)
 
 		topology.addNode(router)
 		topology.addNode(client)

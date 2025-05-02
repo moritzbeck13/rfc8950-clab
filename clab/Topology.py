@@ -5,29 +5,22 @@ import yaml
 
 
 class Node(yaml.YAMLObject):
-	kind = None
-	port_prefix = "eth"
+	NAME = None
+	KIND = None
+	PORT_PREFIX = "eth"
 
 
 
-	def __init__(self, name: str, id: int, **kwargs: dict):
-		self.setName(name)
+	def __init__(self, id: int, **kwargs: dict):
 		self.setID(id)
+		self.setName(self.NAME + "_" + str(self.getID()))
 		self.setPortNumber(0)
 
 		self.setAttributes(kwargs)
-		self.setAttribute("kind", self.kind)
+		self.setAttribute("kind", self.KIND)
 
 	def __repr__(self) -> dict:
 		return self.getAttributes()
-
-
-
-	def getName(self) -> str:
-		return self.name
-
-	def setName(self, name: str):
-		self.name = name
 
 
 
@@ -36,6 +29,14 @@ class Node(yaml.YAMLObject):
 
 	def setID(self, id: int):
 		self.id = id
+	
+
+
+	def getName(self) -> str:
+		return self.name
+
+	def setName(self, name: str):
+		self.name = name
 
 
 
@@ -49,7 +50,7 @@ class Node(yaml.YAMLObject):
 	def getNextPort(self) -> str:
 		self.setPortNumber(self.getPortNumber()+1)
 
-		return self.port_prefix + str(self.getPortNumber())
+		return self.PORT_PREFIX + str(self.getPortNumber())
 
 
 

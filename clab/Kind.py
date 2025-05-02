@@ -4,18 +4,26 @@ import clab.Topology
 
 
 class Bridge(clab.Topology.Node):
-	kind = "bridge"
+	KIND = "bridge"
 
-class Linux(clab.Topology.Node):
-	kind = "linux"
+	def __init__(self, name: str):
+		self.setName(name)
+		self.setPortNumber(0)
+
+		self.setAttributes({"kind": self.KIND})
+
+class Alpine(clab.Topology.Node):
+	KIND = "linux"
+	NAME = "client"
 
 
 
-	def __init__(self, name: str, id: int, **kwargs):
-		super().__init__(name, id, **kwargs)
+	def __init__(self, id: int, **kwargs):
+		super().__init__(id, **kwargs)
 
 		id_str = str(id)
 
+		self.setAttribute("image", "alpine")
 		self.setAttribute(
 			"exec", [
 				"ip address add " + clab.Constants.CLIENT_LAN_PREFIX + id_str + "." + clab.Constants.CLIENT_LAN_CLIENT_SUFFIX + "/" + clab.Constants.CLIENT_LAN_PREFIX_LENGTH + " dev eth1",
@@ -26,22 +34,22 @@ class Linux(clab.Topology.Node):
 
 
 class Router(clab.Topology.Node):
-	config_suffix = None
+	FILE_EXTENSION = None
 
 
 
-	def __init__(self, name, id, **kwargs):
-		super().__init__(name, id, **kwargs)
+	def __init__(self, id, **kwargs):
+		super().__init__(id, **kwargs)
 
-		self.setAttribute("startup-config", clab.Constants.CONFIG_DIR + "/" + self.getName() + self.config_suffix)
+		self.setAttribute("startup-config", clab.Constants.CONFIG_DIR + "/" + self.getName() + self.FILE_EXTENSION)
 
 
 
 	def getNeighborStatement(self) -> str:
-		return ""
+		return None
 
 	def generateConfig(self, peers: list[clab.Topology.Node]):
-		file = open(clab.Constants.FILES_DIR + "/" + clab.Constants.TEMPLATE_DIR + "/" + self.kind + self.config_suffix)
+		file = open(clab.Constants.FILES_DIR + "/" + clab.Constants.TEMPLATE_DIR + "/" + self.NAME + self.FILE_EXTENSION)
 		config = file.read()
 		file.close()
 
@@ -51,9 +59,9 @@ class Router(clab.Topology.Node):
 		neighbors = []
 
 		for peer in peers:
-			peer_id = peer.getID()
-
 			if isinstance(peer, Router) and peer is not self:
+				peer_id = peer.getID()
+
 				neighbors.append(neighbor \
 					.replace("$PEER_ADDRESS",	clab.Constants.PEERING_LAN_PREFIX + str(peer_id)) \
 					.replace("$PEER_ASN",		str(clab.Constants.BASE_ASN + peer_id)))
@@ -79,18 +87,30 @@ class Router(clab.Topology.Node):
 			.replace("$CLIENT_LAN_SUBNET_MASK",			clab.Constants.CLIENT_LAN_SUBNET_MASK) \
 			.replace("$NEIGHBORS",						neighbors)
 
-		file = open(clab.Constants.FILES_DIR + "/" + clab.Constants.CONFIG_DIR + "/" + self.getName() + self.config_suffix, "w")
+		file = open(clab.Constants.FILES_DIR + "/" + clab.Constants.CONFIG_DIR + "/" + self.getName() + self.FILE_EXTENSION, "w")
 		file.write(config)
 		file.close()
 
 
 
-class BIRD(Linux, Router):
-	config_suffix = ".conf"
+class BIRD(Router):
+	KIND = "linux"
+	NAME = "bird"
+	FILE_EXTENSION = ".conf"
 
 
-	def __init__(self, name, id, **kwargs):
-		super().__init__(name, id, **kwargs)
+
+	def __init__(self, id, **kwargs):
+		super().__init__(id, **kwargs)
+
+		id_str = str(id)
+
+		self.setAttribute("exec", [
+			"ip address add " + clab.Constants.PEERING_LAN_PREFIX + id_str + "/" + clab.Constants.PEERING_LAN_PREFIX_LENGTH + " dev eth1",
+			"ip link set eth1 up",
+			"ip address add " + clab.Constants.CLIENT_LAN_PREFIX + id_str + "." + clab.Constants.CLIENT_LAN_CLIENT_SUFFIX + "/" + clab.Constants.CLIENT_LAN_PREFIX_LENGTH + " dev eth2",
+			"ip link set eth2 up"])
+		self.setAttribute("binds", [clab.Constants.CONFIG_DIR + "/" + self.getName() + self.FILE_EXTENSION + ":/etc/bird.conf"])
 
 
 
@@ -101,9 +121,10 @@ class BIRD(Linux, Router):
 
 
 class Nokia_SR_Linux(Router):
-	kind = "nokia_srlinux"
-	port_prefix = "e1-"
-	config_suffix = ".json"
+	KIND = "nokia_srlinux"
+	NAME = "nokia_srlinux"
+	FILE_EXTENSION = ".json"
+	PORT_PREFIX = "e1-"
 
 
 
@@ -115,8 +136,9 @@ class Nokia_SR_Linux(Router):
             }"""
 
 class Nokia_SR_OS(Router):
-	kind = "nokia_sros"
-	config_suffix = ".partial.txt"
+	KIND = "nokia_sros"
+	NAME = "nokia_sros"
+	FILE_EXTENSION = ".partial.txt"
 
 
 
@@ -128,8 +150,9 @@ class Nokia_SR_OS(Router):
             }"""
 
 class Arista_cEOS(Router):
-	kind = "arista_ceos"
-	config_suffix = ""
+	KIND = "arista_ceos"
+	NAME = "arista_ceos"
+	FILE_EXTENSION = ""
 
 
 
@@ -139,8 +162,9 @@ class Arista_cEOS(Router):
     neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
 
 class Arista_vEOS(Router):
-	kind = "arista_veos"
-	config_suffix = ".cfg"
+	KIND = "arista_veos"
+	NAME = "arista_veos"
+	FILE_EXTENSION = ".cfg"
 
 
 
@@ -150,8 +174,9 @@ class Arista_vEOS(Router):
     neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
 
 class Cisco_XRv9k(Router):
-	kind = "cisco_xrv9k"
-	config_suffix = ".partial.cfg"
+	KIND = "cisco_xrv9k"
+	NAME = "cisco_xrv9k"
+	FILE_EXTENSION = ".partial.cfg"
 
 
 
@@ -161,8 +186,9 @@ class Cisco_XRv9k(Router):
     neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
 
 class Juniper_vJunos_router(Router):
-	kind = "juniper_vjunosrouter"
-	config_suffix = ".cfg"
+	KIND = "juniper_vjunosrouter"
+	NAME = "juniper_vjunosrouter"
+	FILE_EXTENSION = ".cfg"
 
 
 
@@ -171,8 +197,9 @@ class Juniper_vJunos_router(Router):
             neighbor $PEER_ADDRESS remote-as $PEER_ASN;"""
 
 class Juniper_vJunos_switch(Router):
-	kind = "juniper_vjunosswitch"
-	config_suffix = ".cfg"
+	KIND = "juniper_vjunosswitch"
+	NAME = "juniper_vjunosswitch"
+	FILE_EXTENSION = ".cfg"
 
 
 
@@ -181,8 +208,9 @@ class Juniper_vJunos_switch(Router):
             neighbor $PEER_ADDRESS remote-as $PEER_ASN;"""
 
 class Juniper_vJunosEvolved(Router):
-	kind = "juniper_vjunosevolved"
-	config_suffix = ".cfg"
+	KIND = "juniper_vjunosevolved"
+	NAME = "juniper_vjunosevolved"
+	FILE_EXTENSION = ".cfg"
 
 
 
