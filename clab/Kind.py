@@ -131,7 +131,7 @@ class Nokia_SR_Linux(Router):
 	def getNeighborStatement(self) -> str:
 		return """\
             neighbor $PEER_ADDRESS {
-                peer-group "$PEERING_LAN_NAME-group"
+                peer-group "$PEERING_LAN_NAME_group"
                 peer-as $PEER_ASN
             }"""
 
@@ -145,7 +145,7 @@ class Nokia_SR_OS(Router):
 	def getNeighborStatement(self) -> str:
 		return """\
             neighbor $PEER_ADDRESS {
-                group "$PEERING_LAN_NAME-group"
+                group "$PEERING_LAN_NAME_group"
                 peer-as $PEER_ASN
             }"""
 
@@ -158,7 +158,7 @@ class Arista_cEOS(Router):
 
 	def getNeighborStatement(self) -> str:
 		return """\
-    neighbor $PEER_ADDRESS peer group $PEERING_LAN_NAME-group
+    neighbor $PEER_ADDRESS peer group $PEERING_LAN_NAME_group
     neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
 
 class Arista_vEOS(Router):
@@ -170,7 +170,7 @@ class Arista_vEOS(Router):
 
 	def getNeighborStatement(self) -> str:
 		return """\
-    neighbor $PEER_ADDRESS peer group $PEERING_LAN_NAME-group
+    neighbor $PEER_ADDRESS peer group $PEERING_LAN_NAME_group
     neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
 
 class Cisco_XRv9k(Router):
@@ -182,7 +182,7 @@ class Cisco_XRv9k(Router):
 
 	def getNeighborStatement(self) -> str:
 		return """\
-    neighbor $PEER_ADDRESS peer-group $PEERING_LAN_NAME-group
+    neighbor $PEER_ADDRESS peer-group $PEERING_LAN_NAME_group
     neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
 
 class Juniper_vJunos_router(Router):

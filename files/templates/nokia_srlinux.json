@@ -1,5 +1,5 @@
 interface system0 {
-    description "$ROUTER_LOOPBACK_NAME-interface"
+    description "$ROUTER_LOOPBACK_NAME_interface"
     subinterface 0 {
         ipv4 {
             admin-state enable
@@ -9,7 +9,7 @@ interface system0 {
     }
 }
 interface ethernet-1/1 {
-    description "$PEERING_LAN_NAME-interface"
+    description "$PEERING_LAN_NAME_interface"
     subinterface 0 {
         ipv6 {
             admin-state enable
@@ -19,7 +19,7 @@ interface ethernet-1/1 {
     }
 }
 interface ethernet-1/2 {
-    description "$CLIENT_LAN_NAME-interface"
+    description "$CLIENT_LAN_NAME_interface"
     subinterface 0 {
         ipv4 {
             admin-state enable
@@ -30,16 +30,16 @@ interface ethernet-1/2 {
 }
 
 routing-policy {
-    prefix-set "$CLIENT_LAN_NAME-prefix-set" {
+    prefix-set "$CLIENT_LAN_NAME_prefix_set" {
         prefix $CLIENT_LAN_NETWORK/$CLIENT_LAN_PREFIX_LENGTH mask-length-range exact {
         }
     }
 
-    policy "accept-$CLIENT_LAN_NAME-policy" {
+    policy "accept_$CLIENT_LAN_NAME_policy" {
         statement 10 {
             match {
                 prefix {
-                    prefix-set "$CLIENT_LAN_NAME-prefix-set"
+                    prefix-set "$CLIENT_LAN_NAME_prefix_set"
                 }
             }
             action {
@@ -47,7 +47,7 @@ routing-policy {
             }
         }
     }
-    policy "default-accept-policy" {
+    policy "default_accept_policy" {
         default-action {
             policy-result accept
         }
@@ -69,8 +69,8 @@ network-instance "default" {
             autonomous-system $ASN
             router-id $ROUTER_LOOPBACK_ADDRESS
 
-            export-policy [ "accept-$CLIENT_LAN_NAME-policy" ]
-            import-policy [ "default-accept-policy" ]
+            export-policy [ "accept_$CLIENT_LAN_NAME_policy" ]
+            import-policy [ "default_accept_policy" ]
 
             afi-safi ipv4-unicast {
                 admin-state enable
@@ -80,7 +80,7 @@ network-instance "default" {
                 }
             }
 
-            group "$PEERING_LAN_NAME-group" {
+            group "$PEERING_LAN_NAME_group" {
             }
 
 $NEIGHBORS
