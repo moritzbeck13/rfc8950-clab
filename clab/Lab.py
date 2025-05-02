@@ -1,4 +1,5 @@
 import yaml
+
 import clab.Topology
 
 
@@ -12,7 +13,10 @@ class Topology(yaml.YAMLObject):
 		self.setID(0)
 
 	def __repr__(self) -> dict:
-		dict = {"kinds": {}, "nodes": {}, "links": self.getLinks()}
+		dict = {
+			"kinds": {},
+			"nodes": {},
+			"links": self.getLinks()}
 
 		for kind in self.getKinds():
 			dict.get("kinds")[kind.getName()] = kind
@@ -55,12 +59,12 @@ class Topology(yaml.YAMLObject):
 		self.links = links
 
 
-	def connectNodes(self, node_from: clab.Topology.Node, node_to: clab.Topology.Node):
-		self.addLink(clab.Topology.Link(node_from, node_to))
-
-
 	def addLink(self, link: clab.Topology.Link):
 		self.getLinks().append(link)
+
+
+	def connectNodes(self, node_from: clab.Topology.Node, node_to: clab.Topology.Node):
+		self.addLink(clab.Topology.Link(node_from, node_to))
 
 
 

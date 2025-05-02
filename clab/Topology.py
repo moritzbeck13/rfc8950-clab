@@ -60,7 +60,10 @@ class Link(yaml.YAMLObject):
 		self.setNodeTo(node_to)
 
 	def __repr__(self) -> dict:
-		return {"endpoints": [self.getNodeFrom().getName() + ":" + self.getNodeFrom().getNextPort(), self.getNodeTo().getName() + ":" + self.getNodeTo().getNextPort()]}
+		return {
+			"endpoints": [
+				self.getNodeFrom().getName() + ":" + self.getNodeFrom().getNextPort(),
+	 			self.getNodeTo().getName() + ":" + self.getNodeTo().getNextPort()]}
 
 
 
@@ -166,7 +169,7 @@ class Router(Node):
 			.replace("$ROUTER_LOOPBACK_SUBNET_MASK",	clab.Constants.ROUTER_LOOPBACK_SUBNET_MASK) \
 			.replace("$CLIENT_LAN_NAME",				clab.Constants.CLIENT_LAN_NAME) \
 			.replace("$CLIENT_LAN_ADDRESS",				clab.Constants.CLIENT_LAN_PREFIX + id_str + "." + clab.Constants.CLIENT_LAN_ROUTER_SUFFIX) \
-			.replace("$CLIENT_LAN_NETWORK",				clab.Constants.CLIENT_LAN_PREFIX + id_str + "." + "0") \
+			.replace("$CLIENT_LAN_NETWORK",				clab.Constants.CLIENT_LAN_PREFIX + id_str + ".0") \
 			.replace("$CLIENT_LAN_PREFIX_LENGTH",		clab.Constants.CLIENT_LAN_PREFIX_LENGTH) \
 			.replace("$CLIENT_LAN_SUBNET_MASK",			clab.Constants.CLIENT_LAN_SUBNET_MASK) \
 			.replace("$NEIGHBORS",						neighbors)

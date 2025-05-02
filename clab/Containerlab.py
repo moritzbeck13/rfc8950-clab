@@ -12,7 +12,9 @@ class Lab(yaml.YAMLObject):
 		self.setTopology(clab.Lab.Topology())
 
 	def __repr__(self) -> dict:
-		return {"name": self.getName(), "topology": self.getTopology()}
+		return {
+			"name": self.getName(),
+			"topology": self.getTopology()}
 
 
 
@@ -43,6 +45,7 @@ class Lab(yaml.YAMLObject):
 
 		for node in nodes:
 			node.generateConfig(nodes)
+
 
 	def destroy(self):
 		os.system("sudo iptables -vL FORWARD --line-numbers -n | grep 'set by containerlab' | awk '{print $1}' | sort -r | xargs -I {} sudo iptables -D FORWARD {}")

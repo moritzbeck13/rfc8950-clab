@@ -1,3 +1,4 @@
+import clab.Constants
 import clab.Topology
 
 
@@ -15,7 +16,8 @@ class Linux(clab.Topology.Node):
 
 		id_str = str(id)
 
-		self.setAttribute("exec", [
+		self.setAttribute(
+			"exec", [
 				"ip address add " + clab.Constants.CLIENT_LAN_PREFIX + id_str + "." + clab.Constants.CLIENT_LAN_CLIENT_SUFFIX + "/" + clab.Constants.CLIENT_LAN_PREFIX_LENGTH + " dev eth1",
 				"ip route del default",
 				"ip route add default via " + clab.Constants.CLIENT_LAN_PREFIX + id_str + "." + clab.Constants.CLIENT_LAN_ROUTER_SUFFIX,
