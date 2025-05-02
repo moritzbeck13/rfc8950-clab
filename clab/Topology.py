@@ -3,18 +3,22 @@ from __future__ import annotations
 import yaml
 
 import clab.Constants
-import clab.Topology
 
 
 
-class Kind(yaml.YAMLObject):
-	def __init__(self, Kind: type[Node], **kwargs: dict):
-		self.setName(Kind.name)
-		self.setKind(Kind)
+class Node(yaml.YAMLObject):
+	kind = None
+	port_prefix = "eth"
+
+
+
+	def __init__(self, name: str, id: int, **kwargs: dict):
+		self.setName(name)
+		self.setID(id)
+		self.setPortNumber(0)
+
 		self.setAttributes(kwargs)
-
-		if issubclass(Kind, clab.Topology.Router):
-			self.setAttribute("startup-config", clab.Constants.CONFIG_DIR + "/__clabNodeName__" + Kind.config_suffix)
+		self.setAttribute("kind", self.kind)
 
 	def __repr__(self) -> dict:
 		return self.getAttributes()
@@ -26,76 +30,6 @@ class Kind(yaml.YAMLObject):
 
 	def setName(self, name: str):
 		self.name = name
-
-
-
-	def getKind(self) -> type[Node]:
-		return self.kind
-
-	def setKind(self, kind: type[Node]):
-		self.kind = kind
-
-
-
-	def getAttributes(self) -> dict:
-		return self.attributes
-
-	def setAttributes(self, attributes: dict):
-		self.attributes = attributes
-
-
-
-	def getAttribute(self, key: str) -> str:
-		return self.getAttributes().get(key)
-
-	def setAttribute(self, key: str, value: str):
-		self.getAttributes()[key] = value
-
-
-
-class Link(yaml.YAMLObject):
-	def __init__(self, node_from: Node, node_to: Node):
-		self.setNodeFrom(node_from)
-		self.setNodeTo(node_to)
-
-	def __repr__(self) -> dict:
-		return {
-			"endpoints": [
-				self.getNodeFrom().getName() + ":" + self.getNodeFrom().getNextPort(),
-	 			self.getNodeTo().getName() + ":" + self.getNodeTo().getNextPort()]}
-
-
-
-	def getNodeFrom(self) -> Node:
-		return self.node_from
-
-	def setNodeFrom(self, node: Node):
-		self.node_from = node
-
-
-
-	def getNodeTo(self) -> Node:
-		return self.node_to
-
-	def setNodeTo(self, node: Node):
-		self.node_to = node
-
-
-
-class Node(Kind):
-	name = None
-	port_prefix = "eth"
-
-
-
-	def __init__(self, name: str, id: int = None, **kwargs: dict):
-		self.setName(name)
-		self.setKind(type(self))
-		self.setID(id)
-		self.setPortNumber(0)
-
-		self.setAttributes(kwargs)
-		self.setAttribute("kind", self.getKind().name)
 
 
 
@@ -121,6 +55,22 @@ class Node(Kind):
 
 
 
+	def getAttributes(self) -> dict:
+		return self.attributes
+
+	def setAttributes(self, attributes: dict):
+		self.attributes = attributes
+
+
+
+	def getAttribute(self, key: str) -> str:
+		return self.getAttributes().get(key)
+
+	def setAttribute(self, key: str, value: str):
+		self.getAttributes()[key] = value
+
+
+
 	def generateConfig(self, nodes: list[Node]):
 		pass
 
@@ -131,11 +81,18 @@ class Router(Node):
 
 
 
+	def __init__(self, name, id, **kwargs):
+		super().__init__(name, id, **kwargs)
+
+		self.setAttribute("startup-config", clab.Constants.CONFIG_DIR + "/" + self.getName() + self.config_suffix)
+
+
+
 	def getNeighborStatement(self) -> str:
 		return ""
 
 	def generateConfig(self, peers: list[Node]):
-		file = open(clab.Constants.FILES_DIR + "/" + clab.Constants.TEMPLATE_DIR + "/" + self.getKind().name + self.config_suffix)
+		file = open(clab.Constants.FILES_DIR + "/" + clab.Constants.TEMPLATE_DIR + "/" + self.kind + self.config_suffix)
 		config = file.read()
 		file.close()
 
@@ -176,3 +133,32 @@ class Router(Node):
 		file = open(clab.Constants.FILES_DIR + "/" + clab.Constants.CONFIG_DIR + "/" + self.getName() + self.config_suffix, "w")
 		file.write(config)
 		file.close()
+
+
+
+class Link(yaml.YAMLObject):
+	def __init__(self, node_from: Node, node_to: Node):
+		self.setNodeFrom(node_from)
+		self.setNodeTo(node_to)
+
+	def __repr__(self) -> dict:
+		return {
+			"endpoints": [
+				self.getNodeFrom().getName() + ":" + self.getNodeFrom().getNextPort(),
+	 			self.getNodeTo().getName() + ":" + self.getNodeTo().getNextPort()]}
+
+
+
+	def getNodeFrom(self) -> Node:
+		return self.node_from
+
+	def setNodeFrom(self, node: Node):
+		self.node_from = node
+
+
+
+	def getNodeTo(self) -> Node:
+		return self.node_to
+
+	def setNodeTo(self, node: Node):
+		self.node_to = node

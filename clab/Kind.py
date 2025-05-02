@@ -4,10 +4,10 @@ import clab.Topology
 
 
 class Bridge(clab.Topology.Node):
-	name = "bridge"
+	kind = "bridge"
 
 class Linux(clab.Topology.Node):
-	name = "linux"
+	kind = "linux"
 
 
 
@@ -26,7 +26,7 @@ class Linux(clab.Topology.Node):
 
 
 class Nokia_SR_Linux(clab.Topology.Router):
-	name = "nokia_srlinux"
+	kind = "nokia_srlinux"
 	port_prefix = "e1-"
 	config_suffix = ".json"
 
@@ -40,7 +40,7 @@ class Nokia_SR_Linux(clab.Topology.Router):
             }"""
 
 class Nokia_SR_OS(clab.Topology.Router):
-	name = "nokia_sros"
+	kind = "nokia_sros"
 	config_suffix = ".partial.txt"
 
 
@@ -53,7 +53,7 @@ class Nokia_SR_OS(clab.Topology.Router):
             }"""
 
 class Arista_cEOS(clab.Topology.Router):
-	name = "arista_ceos"
+	kind = "arista_ceos"
 	config_suffix = ""
 
 
@@ -64,7 +64,7 @@ class Arista_cEOS(clab.Topology.Router):
     neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
 
 class Arista_vEOS(clab.Topology.Router):
-	name = "arista_veos"
+	kind = "arista_veos"
 	config_suffix = ".cfg"
 
 
@@ -75,7 +75,7 @@ class Arista_vEOS(clab.Topology.Router):
     neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
 
 class Cisco_XRv9k(clab.Topology.Router):
-	name = "cisco_xrv9k"
+	kind = "cisco_xrv9k"
 	config_suffix = ".partial.cfg"
 
 
@@ -86,7 +86,7 @@ class Cisco_XRv9k(clab.Topology.Router):
     neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
 
 class Juniper_vJunos_router(clab.Topology.Router):
-	name = "juniper_vjunosrouter"
+	kind = "juniper_vjunosrouter"
 	config_suffix = ".cfg"
 
 
@@ -96,7 +96,7 @@ class Juniper_vJunos_router(clab.Topology.Router):
             neighbor $PEER_ADDRESS remote-as $PEER_ASN;"""
 
 class Juniper_vJunos_switch(clab.Topology.Router):
-	name = "juniper_vjunosswitch"
+	kind = "juniper_vjunosswitch"
 	config_suffix = ".cfg"
 
 
@@ -106,7 +106,7 @@ class Juniper_vJunos_switch(clab.Topology.Router):
             neighbor $PEER_ADDRESS remote-as $PEER_ASN;"""
 
 class Juniper_vJunosEvolved(clab.Topology.Router):
-	name = "juniper_vjunosevolved"
+	kind = "juniper_vjunosevolved"
 	config_suffix = ".cfg"
 
 
