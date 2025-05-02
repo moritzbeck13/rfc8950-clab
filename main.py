@@ -32,20 +32,18 @@ if __name__ == "__main__":
 	peering_lan = Kind.Bridge(Constants.PEERING_LAN_NAME, None)
 	topology.addNode(peering_lan)
 
-	for node in nodes:
-		Node, attributes = node
-		if issubclass(Node, Topology.Router):
-			id = topology.getNextID()
+	for Node, attributes in nodes:
+		id = topology.getNextID()
 
-			router = Node(Node.kind + "_" + str(id), id, **attributes)
-			client = Kind.Linux("client_" + str(id), id, image="alpine")
+		router = Node(Node.kind + "_" + str(id), id, **attributes)
+		client = Kind.Linux("client_" + str(id), id, image="alpine")
 
-			topology.addNode(router)
-			topology.addNode(client)
+		topology.addNode(router)
+		topology.addNode(client)
 
-			topology.connectNodes(peering_lan, router)
-			topology.connectNodes(router, client)
+		topology.connectNodes(peering_lan, router)
+		topology.connectNodes(router, client)
 
-#	lab.destroy()
+	lab.destroy()
 	lab.export()
-#	lab.deploy()
+	lab.deploy()

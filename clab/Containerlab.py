@@ -2,6 +2,7 @@ import os
 import yaml
 
 import clab.Constants
+import clab.Kind
 import clab.Lab
 
 
@@ -44,7 +45,8 @@ class Lab(yaml.YAMLObject):
 		nodes = self.getTopology().getNodes()
 
 		for node in nodes:
-			node.generateConfig(nodes)
+			if isinstance(node, clab.Kind.Router):
+				node.generateConfig(nodes)
 
 
 	def destroy(self):
