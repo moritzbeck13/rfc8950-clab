@@ -116,7 +116,9 @@ class BIRD(Router):
 
 	def getNeighborStatement(self) -> str:
 		return """\
-    neighbor $PEER_ADDRESS as $PEER_ASN;"""
+protocol bgp from $PEERING_LAN_NAME_template {
+  	neighbor $PEER_ADDRESS as $PEER_ASN;
+}"""
 
 
 
