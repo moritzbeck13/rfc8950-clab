@@ -1,3 +1,5 @@
+import os
+
 import clab.Constants
 import clab.Topology
 
@@ -7,10 +9,21 @@ class Bridge(clab.Topology.Node):
 	KIND = "bridge"
 
 	def __init__(self, name: str):
+		self.setID(None)
 		self.setName(name)
 		self.setPortNumber(0)
 
 		self.setAttributes({"kind": self.KIND})
+
+
+
+	def destroy(self):
+		os.system("sudo iptables -vL FORWARD --line-numbers -n | grep 'set by containerlab' | awk '{print $1}' | sort -r | xargs -I {} sudo iptables -D FORWARD {}")
+		os.system("sudo ip link delete " + clab.Constants.PEERING_LAN_NAME)
+
+	def deploy(self):
+		os.system("sudo ip link add " + clab.Constants.PEERING_LAN_NAME + " type bridge")
+		os.system("sudo ip link set dev " + clab.Constants.PEERING_LAN_NAME + " up")
 
 class Alpine(clab.Topology.Node):
 	KIND = "linux"

@@ -70,6 +70,14 @@ class Node(yaml.YAMLObject):
 
 
 
+	def destroy(self):
+		pass
+
+	def deploy(self):
+		pass
+
+
+
 class Link(yaml.YAMLObject):
 	def __init__(self, node_from: Node, node_to: Node):
 		self.setNodeFrom(node_from)
