@@ -11,9 +11,9 @@ if __name__ == "__main__":
 		(Kind.Nokia_SR_OS, {"image": "vrnetlab/nokia_sros:23.10.R6", "license": Constants.LICENSES_DIR + "/SR_OS_VSR-SIM1_license.txt"}),
 		(Kind.Arista_cEOS, {"image": "vrnetlab/arista_ceos:4.33.2F"}),
 		(Kind.Arista_vEOS, {"image": "vrnetlab/arista_veos:4.33.2F"}),
-		(Kind.Cisco_XRv9k, {"image": "vrnetlab/cisco_xrv9k:6.6.3"}),
-		(Kind.Juniper_vJunos_router, {"image": "vrnetlab/juniper_vjunos-router:23.2R1.15"}),
-		(Kind.Juniper_vJunos_switch, {"image": "vrnetlab/juniper_vjunos-switch:23.1R1.8"}),
+#		(Kind.Cisco_XRv9k, {"image": "vrnetlab/cisco_xrv9k:6.6.3"}),
+#		(Kind.Juniper_vJunos_router, {"image": "vrnetlab/juniper_vjunos-router:23.2R1.15"}),
+#		(Kind.Juniper_vJunos_switch, {"image": "vrnetlab/juniper_vjunos-switch:23.1R1.8"}),
 		(Kind.Juniper_vJunosEvolved, {"image": "vrnetlab/juniper_vjunosevolved:24.4R1.8"}),
 		(Kind.BIRD, {"image": "ghcr.io/srl-labs/bird:2.13"})
 	]

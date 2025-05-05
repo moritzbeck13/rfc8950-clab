@@ -104,8 +104,6 @@ class Router(clab.Topology.Node):
 		file.write(config)
 		file.close()
 
-
-
 class BIRD(Router):
 	KIND = "linux"
 	NAME = "bird"
@@ -132,8 +130,6 @@ class BIRD(Router):
 protocol bgp from $PEERING_LAN_NAME_template {
   	neighbor $PEER_ADDRESS as $PEER_ASN;
 }"""
-
-
 
 class Nokia_SR_Linux(Router):
 	KIND = "nokia_srlinux"
