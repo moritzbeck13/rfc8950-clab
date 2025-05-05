@@ -119,7 +119,7 @@ class BIRD(Router):
 		self.setAttribute("exec", [
 			"ip address add " + clab.Constants.PEERING_LAN_PREFIX + id_str + "/" + clab.Constants.PEERING_LAN_PREFIX_LENGTH + " dev eth1",
 			"ip link set eth1 up",
-			"ip address add " + clab.Constants.CLIENT_LAN_PREFIX + id_str + "." + clab.Constants.CLIENT_LAN_CLIENT_SUFFIX + "/" + clab.Constants.CLIENT_LAN_PREFIX_LENGTH + " dev eth2",
+			"ip address add " + clab.Constants.CLIENT_LAN_PREFIX + id_str + "." + clab.Constants.CLIENT_LAN_ROUTER_SUFFIX + "/" + clab.Constants.CLIENT_LAN_PREFIX_LENGTH + " dev eth2",
 			"ip link set eth2 up"])
 		self.setAttribute("binds", [clab.Constants.CONFIG_DIR + "/" + self.getName() + self.FILE_EXTENSION + ":/etc/bird.conf"])
 
