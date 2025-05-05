@@ -1,16 +1,4 @@
-import yaml
-
-from clab import Constants, Containerlab, Kind, Lab, Topology
-
-
-
-def representer(dumper, data):
-	return dumper.represent_data(data.__repr__())
-
-yaml.add_representer(Containerlab.Lab, representer)
-yaml.add_representer(Lab.Topology, representer)
-yaml.add_representer(Topology.Link, representer)
-yaml.add_multi_representer(Topology.Node, representer)
+from clab import Constants, Containerlab, Kind
 
 
 
