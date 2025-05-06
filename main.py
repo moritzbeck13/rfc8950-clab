@@ -15,7 +15,8 @@ if __name__ == "__main__":
 #		(Kind.Juniper_vJunos_router, {"image": "vrnetlab/juniper_vjunos-router:23.2R1.15"}),
 #		(Kind.Juniper_vJunos_switch, {"image": "vrnetlab/juniper_vjunos-switch:23.1R1.8"}),
 		(Kind.Juniper_vJunosEvolved, {"image": "vrnetlab/juniper_vjunosevolved:24.4R1.8"}),
-		(Kind.BIRD, {"image": "ghcr.io/srl-labs/bird:2.13"})
+		(Kind.BIRD, {"image": "ghcr.io/srl-labs/bird:2.13"}),
+		(Kind.FRR, {"image": "quay.io/frrouting/frr:8.5.7"})
 	]
 
 	peering_lan = Kind.Bridge(Constants.PEERING_LAN_NAME)
