@@ -15,8 +15,6 @@ class Bridge(clab.Topology.Node):
 
 		self.setAttributes({"kind": self.KIND})
 
-
-
 	def destroy(self):
 		os.system("sudo iptables -vL FORWARD --line-numbers -n | grep 'set by containerlab' | awk '{print $1}' | sort -r | xargs -I {} sudo iptables -D FORWARD {}")
 		os.system("sudo ip link delete " + clab.Constants.PEERING_LAN_NAME)
@@ -25,11 +23,11 @@ class Bridge(clab.Topology.Node):
 		os.system("sudo ip link add " + clab.Constants.PEERING_LAN_NAME + " type bridge")
 		os.system("sudo ip link set dev " + clab.Constants.PEERING_LAN_NAME + " up")
 
+
+
 class Alpine(clab.Topology.Node):
 	KIND = "linux"
 	NAME = "client"
-
-
 
 	def __init__(self, id: int, **kwargs):
 		super().__init__(id, **kwargs)
@@ -37,26 +35,21 @@ class Alpine(clab.Topology.Node):
 		id_str = str(id)
 
 		self.setAttribute("image", "alpine")
-		self.setAttribute(
-			"exec", [
-				"ip address add " + clab.Constants.CLIENT_LAN_PREFIX + id_str + "." + clab.Constants.CLIENT_LAN_CLIENT_SUFFIX + "/" + clab.Constants.CLIENT_LAN_PREFIX_LENGTH + " dev eth1",
-				"ip route del default",
-				"ip route add default via " + clab.Constants.CLIENT_LAN_PREFIX + id_str + "." + clab.Constants.CLIENT_LAN_ROUTER_SUFFIX,
-				"ip link set eth1 up"])
+		self.setAttribute("exec", [
+			"ip address add " + clab.Constants.CLIENT_LAN_PREFIX + id_str + "." + clab.Constants.CLIENT_LAN_CLIENT_SUFFIX + "/" + clab.Constants.CLIENT_LAN_PREFIX_LENGTH + " dev eth1",
+			"ip route del default",
+			"ip route add default via " + clab.Constants.CLIENT_LAN_PREFIX + id_str + "." + clab.Constants.CLIENT_LAN_ROUTER_SUFFIX,
+			"ip link set eth1 up"])
 
 
 
 class Router(clab.Topology.Node):
 	FILE_EXTENSION = None
 
-
-
 	def __init__(self, id, **kwargs):
 		super().__init__(id, **kwargs)
 
 		self.setAttribute("startup-config", clab.Constants.CONFIG_DIR + "/" + self.getName() + self.FILE_EXTENSION)
-
-
 
 	def getNeighborStatement(self) -> str:
 		return None
@@ -104,12 +97,109 @@ class Router(clab.Topology.Node):
 		file.write(config)
 		file.close()
 
+
+
+class Nokia_SR_Linux(Router):
+	KIND = "nokia_srlinux"
+	NAME = "nokia_srlinux"
+	INTERFACE_PREFIX = "e1-"
+	FILE_EXTENSION = ".json"
+
+	def getNeighborStatement(self) -> str:
+		return """\
+            neighbor $PEER_ADDRESS {
+                peer-group "$PEERING_LAN_NAME_group"
+                peer-as $PEER_ASN
+            }"""
+
+
+
+class Nokia_SR_OS(Router):
+	KIND = "nokia_sros"
+	NAME = "nokia_sros"
+	FILE_EXTENSION = ".partial.txt"
+
+	def getNeighborStatement(self) -> str:
+		return """\
+            neighbor $PEER_ADDRESS {
+                group "$PEERING_LAN_NAME_group"
+                peer-as $PEER_ASN
+            }"""
+
+
+
+class Arista_cEOS(Router):
+	KIND = "arista_ceos"
+	NAME = "arista_ceos"
+	FILE_EXTENSION = ""
+
+	def getNeighborStatement(self) -> str:
+		return """\
+    neighbor $PEER_ADDRESS peer group $PEERING_LAN_NAME_group
+    neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
+
+
+class Arista_vEOS(Router):
+	KIND = "arista_veos"
+	NAME = "arista_veos"
+	FILE_EXTENSION = ".cfg"
+
+	def getNeighborStatement(self) -> str:
+		return """\
+    neighbor $PEER_ADDRESS peer group $PEERING_LAN_NAME_group
+    neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
+
+
+
+class Cisco_XRv9k(Router):
+	KIND = "cisco_xrv9k"
+	NAME = "cisco_xrv9k"
+	FILE_EXTENSION = ".partial.cfg"
+
+	def getNeighborStatement(self) -> str:
+		return """\
+    neighbor $PEER_ADDRESS peer-group $PEERING_LAN_NAME_group
+    neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
+
+
+
+class Juniper_vJunos_router(Router):
+	KIND = "juniper_vjunosrouter"
+	NAME = "juniper_vjunosrouter"
+	FILE_EXTENSION = ".cfg"
+
+	def getNeighborStatement(self) -> str:
+		return """\
+            neighbor $PEER_ADDRESS remote-as $PEER_ASN;"""
+
+
+
+class Juniper_vJunos_switch(Router):
+	KIND = "juniper_vjunosswitch"
+	NAME = "juniper_vjunosswitch"
+	FILE_EXTENSION = ".cfg"
+
+	def getNeighborStatement(self) -> str:
+		return """\
+            neighbor $PEER_ADDRESS remote-as $PEER_ASN;"""
+
+
+
+class Juniper_vJunosEvolved(Router):
+	KIND = "juniper_vjunosevolved"
+	NAME = "juniper_vjunosevolved"
+	FILE_EXTENSION = ".cfg"
+
+	def getNeighborStatement(self) -> str:
+		return """\
+            neighbor $PEER_ADDRESS peer-as $PEER_ASN;"""
+
+
+
 class BIRD(Router):
 	KIND = "linux"
 	NAME = "bird"
 	FILE_EXTENSION = ".conf"
-
-
 
 	def __init__(self, id, **kwargs):
 		super().__init__(id, **kwargs)
@@ -123,108 +213,28 @@ class BIRD(Router):
 			"ip link set eth2 up"])
 		self.setAttribute("binds", [clab.Constants.CONFIG_DIR + "/" + self.getName() + self.FILE_EXTENSION + ":/etc/bird.conf"])
 
-
-
 	def getNeighborStatement(self) -> str:
 		return """\
 protocol bgp from $PEERING_LAN_NAME_template {
   	neighbor $PEER_ADDRESS as $PEER_ASN;
 }"""
 
-class Nokia_SR_Linux(Router):
-	KIND = "nokia_srlinux"
-	NAME = "nokia_srlinux"
-	FILE_EXTENSION = ".json"
-	PORT_PREFIX = "e1-"
 
 
+class FRR(Router):
+	KIND = "linux"
+	NAME = "frr"
+	FILE_EXTENSION = ".conf"
 
-	def getNeighborStatement(self) -> str:
+	def __init__(self, id, **kwargs):
+		super().__init__(id, **kwargs)
+
+		self.setAttribute("binds", [
+			clab.Constants.CONFIG_DIR + "/" + self.getName() + self.FILE_EXTENSION + ":/etc/frr/frr.conf",
+			clab.Constants.TEMPLATE_DIR + "/daemons:/etc/frr/daemons",
+			clab.Constants.TEMPLATE_DIR + "/vtysh.conf:/etc/frr/vtysh.conf"])
+
+	def getNeighborStatement(self):
 		return """\
-            neighbor $PEER_ADDRESS {
-                peer-group "$PEERING_LAN_NAME_group"
-                peer-as $PEER_ASN
-            }"""
-
-class Nokia_SR_OS(Router):
-	KIND = "nokia_sros"
-	NAME = "nokia_sros"
-	FILE_EXTENSION = ".partial.txt"
-
-
-
-	def getNeighborStatement(self) -> str:
-		return """\
-            neighbor $PEER_ADDRESS {
-                group "$PEERING_LAN_NAME_group"
-                peer-as $PEER_ASN
-            }"""
-
-class Arista_cEOS(Router):
-	KIND = "arista_ceos"
-	NAME = "arista_ceos"
-	FILE_EXTENSION = ""
-
-
-
-	def getNeighborStatement(self) -> str:
-		return """\
-    neighbor $PEER_ADDRESS peer group $PEERING_LAN_NAME_group
-    neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
-
-class Arista_vEOS(Router):
-	KIND = "arista_veos"
-	NAME = "arista_veos"
-	FILE_EXTENSION = ".cfg"
-
-
-
-	def getNeighborStatement(self) -> str:
-		return """\
-    neighbor $PEER_ADDRESS peer group $PEERING_LAN_NAME_group
-    neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
-
-class Cisco_XRv9k(Router):
-	KIND = "cisco_xrv9k"
-	NAME = "cisco_xrv9k"
-	FILE_EXTENSION = ".partial.cfg"
-
-
-
-	def getNeighborStatement(self) -> str:
-		return """\
-    neighbor $PEER_ADDRESS peer-group $PEERING_LAN_NAME_group
-    neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
-
-class Juniper_vJunos_router(Router):
-	KIND = "juniper_vjunosrouter"
-	NAME = "juniper_vjunosrouter"
-	FILE_EXTENSION = ".cfg"
-
-
-
-	def getNeighborStatement(self) -> str:
-		return """\
-            neighbor $PEER_ADDRESS remote-as $PEER_ASN;"""
-
-class Juniper_vJunos_switch(Router):
-	KIND = "juniper_vjunosswitch"
-	NAME = "juniper_vjunosswitch"
-	FILE_EXTENSION = ".cfg"
-
-
-
-	def getNeighborStatement(self) -> str:
-		return """\
-            neighbor $PEER_ADDRESS remote-as $PEER_ASN;"""
-
-class Juniper_vJunosEvolved(Router):
-	KIND = "juniper_vjunosevolved"
-	NAME = "juniper_vjunosevolved"
-	FILE_EXTENSION = ".cfg"
-
-
-
-	def getNeighborStatement(self) -> str:
-		return """\
-            neighbor $PEER_ADDRESS peer-as $PEER_ASN;"""
+    neighbor $PEER_ADDRESS remote-as $PEER_ASN
+    neighbor $PEER_ADDRESS peer-group $PEERING_LAN_NAME_group"""

@@ -5,9 +5,9 @@ import yaml
 
 
 class Node(yaml.YAMLObject):
-	NAME = None
 	KIND = None
-	PORT_PREFIX = "eth"
+	NAME = None
+	INTERFACE_PREFIX = "eth"
 
 
 
