@@ -14,7 +14,7 @@ class Node(yaml.YAMLObject):
 	def __init__(self, id: int, **kwargs: dict):
 		self.setID(id)
 		self.setName(self.NAME + "_" + str(self.getID()))
-		self.setPortNumber(0)
+		self.setNextInterface(0)
 
 		self.setAttributes(kwargs)
 		self.setAttribute("kind", self.KIND)
@@ -40,17 +40,13 @@ class Node(yaml.YAMLObject):
 
 
 
-	def getPortNumber(self) -> int:
-		return self.port_number
+	def getNextInterface(self) -> str:
+		self.setNextInterface(self.next_interface+1)
 
-	def setPortNumber(self, port_number: int):
-		self.port_number = port_number
+		return self.INTERFACE_PREFIX + str(self.next_interface)
 
-
-	def getNextPort(self) -> str:
-		self.setPortNumber(self.getPortNumber()+1)
-
-		return self.PORT_PREFIX + str(self.getPortNumber())
+	def setNextInterface(self, next_interface: int):
+		self.next_interface = next_interface
 
 
 
@@ -86,8 +82,8 @@ class Link(yaml.YAMLObject):
 	def __repr__(self) -> dict:
 		return {
 			"endpoints": [
-				self.getNodeFrom().getName() + ":" + self.getNodeFrom().getNextPort(),
-	 			self.getNodeTo().getName() + ":" + self.getNodeTo().getNextPort()]}
+				self.getNodeFrom().getName() + ":" + self.getNodeFrom().getNextInterface(),
+	 			self.getNodeTo().getName() + ":" + self.getNodeTo().getNextInterface()]}
 
 
 

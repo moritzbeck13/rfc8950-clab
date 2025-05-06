@@ -11,7 +11,7 @@ class Bridge(clab.Topology.Node):
 	def __init__(self, name: str):
 		self.setID(None)
 		self.setName(name)
-		self.setPortNumber(0)
+		self.setNextInterface(0)
 
 		self.setAttributes({"kind": self.KIND})
 
