@@ -22,7 +22,7 @@ class Alpine(clab.Topology.Node):
 	KIND = "linux"
 	NAME = "client"
 
-	def __init__(self, id: int, **kwargs):
+	def __init__(self, id: int, **kwargs: dict):
 		super().__init__(id, **kwargs)
 
 		id_str = str(id)
@@ -39,7 +39,7 @@ class Alpine(clab.Topology.Node):
 class Router(clab.Topology.Node):
 	FILE_EXTENSION = None
 
-	def __init__(self, id, **kwargs):
+	def __init__(self, id: int, **kwargs: dict):
 		super().__init__(id, **kwargs)
 
 		self.addAttribute("startup-config", clab.Constants.CONFIG_DIR + "/" + self.getName() + self.FILE_EXTENSION)
@@ -195,7 +195,7 @@ class BIRD(Router):
 	NAME = "bird"
 	FILE_EXTENSION = ".conf"
 
-	def __init__(self, id, **kwargs):
+	def __init__(self, id: int, **kwargs: dict):
 		super().__init__(id, **kwargs)
 
 		id_str = str(id)
@@ -220,7 +220,7 @@ class FRR(Router):
 	NAME = "frr"
 	FILE_EXTENSION = ".conf"
 
-	def __init__(self, id, **kwargs):
+	def __init__(self, id: int, **kwargs: dict):
 		super().__init__(id, **kwargs)
 
 		self.addAttribute("binds", [

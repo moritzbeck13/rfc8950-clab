@@ -60,10 +60,10 @@ class Node(yaml.YAMLObject):
 
 
 
-	def getAttribute(self, key: str) -> str:
+	def getAttribute(self, key: str):
 		return self.getAttributes().get(key)
 
-	def setAttribute(self, key: str, value: str):
+	def setAttribute(self, key: str, value):
 		self.getAttributes()[key] = value
 
 	def addAttribute(self, key: str, value):
