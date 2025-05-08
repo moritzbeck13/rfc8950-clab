@@ -8,7 +8,6 @@ class Topology(yaml.YAMLObject):
 	def __init__(self):
 		self.setNodes([])
 		self.setLinks([])
-
 		self.setID(0)
 
 	def __repr__(self) -> dict:
@@ -25,13 +24,11 @@ class Topology(yaml.YAMLObject):
 
 
 
-
 	def getNodes(self) -> list[clab.Topology.Node]:
 		return self.nodes
 
 	def setNodes(self, nodes: list[clab.Topology.Node]):
 		self.nodes = nodes
-
 
 	def addNode(self, node: clab.Topology.Node):
 		self.getNodes().append(node)
@@ -44,10 +41,8 @@ class Topology(yaml.YAMLObject):
 	def setLinks(self, links: list[clab.Topology.Link]):
 		self.links = links
 
-
 	def addLink(self, link: clab.Topology.Link):
 		self.getLinks().append(link)
-
 
 	def connectNodes(self, node_from: clab.Topology.Node, node_to: clab.Topology.Node):
 		self.addLink(clab.Topology.Link(node_from, node_to))
@@ -59,7 +54,6 @@ class Topology(yaml.YAMLObject):
 
 	def setID(self, id: int):
 		self.id = id
-
 
 	def getNextID(self) -> int:
 		self.setID(self.getID()+1)

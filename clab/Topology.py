@@ -27,7 +27,7 @@ class Node(yaml.YAMLObject):
 
 	def setID(self, id: int):
 		self.id = id
-	
+
 
 
 	def getName(self) -> str:
