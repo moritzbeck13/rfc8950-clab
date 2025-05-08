@@ -11,8 +11,8 @@ class Node(yaml.YAMLObject):
 
 	def __init__(self, id: int, **kwargs: dict):
 		self.setID(id)
-		self.setName(self.NAME + "_" + str(self.getID()))
-		self.setNextInterface(0)
+		self.setInterface(0)
+		self.setAttributes({})
 
 		self.setAttributes(kwargs)
 		self.setAttribute("kind", self.KIND)
@@ -31,20 +31,20 @@ class Node(yaml.YAMLObject):
 
 
 	def getName(self) -> str:
-		return self.name
-
-	def setName(self, name: str):
-		self.name = name
+		return self.NAME + "_" + str(self.getID())
 
 
+
+	def getInterface(self) -> int:
+		return self.interface
+	
+	def setInterface(self, interface: int):
+		self.interface = interface
 
 	def getNextInterface(self) -> str:
-		self.setNextInterface(self.next_interface+1)
+		self.setInterface(self.getInterface()+1)
 
-		return self.INTERFACE_PREFIX + str(self.next_interface)
-
-	def setNextInterface(self, next_interface: int):
-		self.next_interface = next_interface
+		return self.INTERFACE_PREFIX + str(self.getInterface())
 
 
 

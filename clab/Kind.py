@@ -6,13 +6,7 @@ import clab.Topology
 
 class Bridge(clab.Topology.Node):
 	KIND = "bridge"
-
-	def __init__(self, name: str):
-		self.setID(None)
-		self.setName(name)
-		self.setNextInterface(0)
-
-		self.setAttributes({"kind": self.KIND})
+	NAME = "bridge"
 
 	def destroy(self):
 		clab.Containerlab.runOnHost("sudo iptables -vL FORWARD --line-numbers -n | grep 'set by containerlab' | awk '{print $1}' | sort -r | xargs -I {} sudo iptables -D FORWARD {}")
