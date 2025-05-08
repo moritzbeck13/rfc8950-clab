@@ -1,6 +1,7 @@
 import os
 
 import clab.Constants
+import clab.Containerlab
 import clab.Topology
 
 
@@ -16,12 +17,12 @@ class Bridge(clab.Topology.Node):
 		self.setAttributes({"kind": self.KIND})
 
 	def destroy(self):
-		os.system("sudo iptables -vL FORWARD --line-numbers -n | grep 'set by containerlab' | awk '{print $1}' | sort -r | xargs -I {} sudo iptables -D FORWARD {}")
-		os.system("sudo ip link delete " + clab.Constants.PEERING_LAN_NAME)
+		clab.Containerlab.runOnHost("sudo iptables -vL FORWARD --line-numbers -n | grep 'set by containerlab' | awk '{print $1}' | sort -r | xargs -I {} sudo iptables -D FORWARD {}")
+		clab.Containerlab.runOnHost("sudo ip link delete " + self.getName())
 
 	def deploy(self):
-		os.system("sudo ip link add " + clab.Constants.PEERING_LAN_NAME + " type bridge")
-		os.system("sudo ip link set dev " + clab.Constants.PEERING_LAN_NAME + " up")
+		clab.Containerlab.runOnHost("sudo ip link add " + self.getName() + " type bridge")
+		clab.Containerlab.runOnHost("sudo ip link set dev " + self.getName() + " up")
 
 
 

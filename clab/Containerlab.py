@@ -7,6 +7,12 @@ import clab.Lab
 
 
 
+def runOnHost(command: str):
+	print(command)
+	os.system(command)
+
+
+
 class Lab(yaml.YAMLObject):
 	def __init__(self, name: str):
 		self.setName(name)
@@ -36,7 +42,7 @@ class Lab(yaml.YAMLObject):
 
 
 	def export(self):
-		os.system("rm " + clab.Constants.FILES_DIR + "/" + clab.Constants.CONFIG_DIR + "/*")
+		runOnHost("rm " + clab.Constants.FILES_DIR + "/" + clab.Constants.CONFIG_DIR + "/*")
 
 		file = open(clab.Constants.FILES_DIR + "/" + self.getName() + ".clab.yml", "w")
 		file.write(yaml.dump(self))
@@ -48,9 +54,8 @@ class Lab(yaml.YAMLObject):
 			if isinstance(node, clab.Kind.Router):
 				node.generateConfig(nodes)
 
-
 	def destroy(self):
-		os.system("clab destroy --cleanup --topo " + clab.Constants.FILES_DIR + "/" + self.getName() + ".clab.yml")
+		runOnHost("clab destroy --cleanup --topo " + clab.Constants.FILES_DIR + "/" + self.getName() + ".clab.yml")
 
 		for node in self.getTopology().getNodes():
 			node.destroy()
@@ -59,4 +64,4 @@ class Lab(yaml.YAMLObject):
 		for node in self.getTopology().getNodes():
 			node.deploy()
 
-		os.system("clab deploy --reconfigure --topo " + clab.Constants.FILES_DIR + "/" + self.getName() + ".clab.yml")
+		runOnHost("clab deploy --reconfigure --topo " + clab.Constants.FILES_DIR + "/" + self.getName() + ".clab.yml")
