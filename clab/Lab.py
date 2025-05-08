@@ -16,7 +16,9 @@ class Topology(yaml.YAMLObject):
 			"nodes": {},
 			"links": self.getLinks()}
 
-		for node in self.getNodes():
+		nodes = self.getNodes()
+
+		for node in nodes:
 			dict.get("nodes")[node.getName()] = node
 
 		return dict

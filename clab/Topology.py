@@ -78,10 +78,13 @@ class Link(yaml.YAMLObject):
 		self.setNodeTo(node_to)
 
 	def __repr__(self) -> dict:
+		node_from = self.getNodeFrom()
+		node_to = self.getNodeTo()
+
 		return {
 			"endpoints": [
-				self.getNodeFrom().getName() + ":" + self.getNodeFrom().getNextInterface(),
-	 			self.getNodeTo().getName() + ":" + self.getNodeTo().getNextInterface()]}
+				node_from.getName() + ":" + node_from.getNextInterface(),
+	 			node_to.getName() + ":" + node_to.getNextInterface()]}
 
 
 
