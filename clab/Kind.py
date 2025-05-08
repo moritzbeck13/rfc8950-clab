@@ -1,5 +1,3 @@
-import os
-
 import clab.Constants
 import clab.Containerlab
 import clab.Topology
