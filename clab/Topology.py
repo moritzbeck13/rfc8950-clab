@@ -14,8 +14,8 @@ class Node(yaml.YAMLObject):
 		self.setInterface(0)
 		self.setAttributes({})
 
-		self.setAttributes(kwargs)
-		self.setAttribute("kind", self.KIND)
+		self.addAttribute("kind", self.KIND)
+		self.addAttributes(kwargs)
 
 	def __repr__(self) -> dict:
 		return self.getAttributes()
@@ -54,6 +54,10 @@ class Node(yaml.YAMLObject):
 	def setAttributes(self, attributes: dict):
 		self.attributes = attributes
 
+	def addAttributes(self, attributes: dict):
+		for key, value in attributes.items():
+			self.addAttribute(key, value)
+
 
 
 	def getAttribute(self, key: str) -> str:
@@ -61,6 +65,19 @@ class Node(yaml.YAMLObject):
 
 	def setAttribute(self, key: str, value: str):
 		self.getAttributes()[key] = value
+
+	def addAttribute(self, key: str, value):
+		attribute = self.getAttribute(key)
+
+		if attribute is None:
+			self.setAttribute(key, value)
+		else:
+			if type(attribute) is list:
+				attribute.extend(value)
+			elif type(attribute) is dict:
+				attribute.update(value)
+			else:
+				attribute = value
 
 
 

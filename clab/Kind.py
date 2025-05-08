@@ -27,12 +27,12 @@ class Alpine(clab.Topology.Node):
 
 		id_str = str(id)
 
-		self.setAttribute("image", "alpine")
-		self.setAttribute("exec", [
+		self.addAttribute("exec", [
 			"ip address add " + clab.Constants.CLIENT_LAN_PREFIX + id_str + "." + clab.Constants.CLIENT_LAN_CLIENT_SUFFIX + "/" + clab.Constants.CLIENT_LAN_PREFIX_LENGTH + " dev eth1",
 			"ip route del default",
 			"ip route add default via " + clab.Constants.CLIENT_LAN_PREFIX + id_str + "." + clab.Constants.CLIENT_LAN_ROUTER_SUFFIX,
 			"ip link set eth1 up"])
+		self.addAttribute("image", "alpine")
 
 
 
@@ -42,7 +42,7 @@ class Router(clab.Topology.Node):
 	def __init__(self, id, **kwargs):
 		super().__init__(id, **kwargs)
 
-		self.setAttribute("startup-config", clab.Constants.CONFIG_DIR + "/" + self.getName() + self.FILE_EXTENSION)
+		self.addAttribute("startup-config", clab.Constants.CONFIG_DIR + "/" + self.getName() + self.FILE_EXTENSION)
 
 	def getNeighborStatement(self) -> str:
 		return None
@@ -132,6 +132,7 @@ class Arista_cEOS(Router):
     neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
 
 
+
 class Arista_vEOS(Router):
 	KIND = "arista_veos"
 	NAME = "arista_veos"
@@ -199,12 +200,12 @@ class BIRD(Router):
 
 		id_str = str(id)
 
-		self.setAttribute("exec", [
+		self.addAttribute("binds", [clab.Constants.CONFIG_DIR + "/" + self.getName() + self.FILE_EXTENSION + ":/etc/bird.conf"])
+		self.addAttribute("exec", [
 			"ip address add " + clab.Constants.PEERING_LAN_PREFIX + id_str + "/" + clab.Constants.PEERING_LAN_PREFIX_LENGTH + " dev eth1",
 			"ip link set eth1 up",
 			"ip address add " + clab.Constants.CLIENT_LAN_PREFIX + id_str + "." + clab.Constants.CLIENT_LAN_ROUTER_SUFFIX + "/" + clab.Constants.CLIENT_LAN_PREFIX_LENGTH + " dev eth2",
 			"ip link set eth2 up"])
-		self.setAttribute("binds", [clab.Constants.CONFIG_DIR + "/" + self.getName() + self.FILE_EXTENSION + ":/etc/bird.conf"])
 
 	def getNeighborStatement(self) -> str:
 		return """\
@@ -222,7 +223,7 @@ class FRR(Router):
 	def __init__(self, id, **kwargs):
 		super().__init__(id, **kwargs)
 
-		self.setAttribute("binds", [
+		self.addAttribute("binds", [
 			clab.Constants.CONFIG_DIR + "/" + self.getName() + self.FILE_EXTENSION + ":/etc/frr/frr.conf",
 			clab.Constants.TEMPLATE_DIR + "/daemons:/etc/frr/daemons",
 			clab.Constants.TEMPLATE_DIR + "/vtysh.conf:/etc/frr/vtysh.conf"])
