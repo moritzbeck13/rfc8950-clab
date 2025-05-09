@@ -196,9 +196,34 @@ class Juniper_vJunosEvolved(Router):
 
 
 
-class BIRD(Router):
+class BIRD2(Router):
 	KIND = "linux"
-	NAME = "bird"
+	NAME = "bird2"
+	FILE_EXTENSION = ".conf"
+
+	def __init__(self, id: int, **kwargs: dict):
+		super().__init__(id, **kwargs)
+
+		id_str = str(id)
+
+		self.addAttribute("binds", [clab.Constants.CONFIG_DIR + "/" + self.getName() + self.FILE_EXTENSION + ":/etc/bird.conf"])
+		self.addAttribute("exec", [
+			"ip address add " + clab.Constants.PEERING_LAN_PREFIX + id_str + "/" + clab.Constants.PEERING_LAN_PREFIX_LENGTH + " dev eth1",
+			"ip link set eth1 up",
+			"ip address add " + clab.Constants.CLIENT_LAN_PREFIX + id_str + "." + clab.Constants.CLIENT_LAN_ROUTER_SUFFIX + "/" + clab.Constants.CLIENT_LAN_PREFIX_LENGTH + " dev eth2",
+			"ip link set eth2 up"])
+
+	def getNeighborStatement(self) -> str:
+		return """\
+protocol bgp from $PEERING_LAN_NAME_template {
+  	neighbor $PEER_ADDRESS as $PEER_ASN;
+}"""
+
+
+
+class BIRD3(Router):
+	KIND = "linux"
+	NAME = "bird3"
 	FILE_EXTENSION = ".conf"
 
 	def __init__(self, id: int, **kwargs: dict):
