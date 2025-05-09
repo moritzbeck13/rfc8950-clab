@@ -101,8 +101,8 @@ class Nokia_SR_Linux(Router):
 	def getNeighborStatement(self) -> str:
 		return """\
             neighbor $PEER_ADDRESS {
-                peer-group "$PEERING_LAN_NAME_group"
                 peer-as $PEER_ASN
+                peer-group $PEERING_LAN_NAME_group
             }"""
 
 
@@ -114,7 +114,7 @@ class Nokia_SR_OS(Router):
 
 	def getNeighborStatement(self) -> str:
 		return """\
-            neighbor $PEER_ADDRESS {
+            neighbor "$PEER_ADDRESS" {
                 group "$PEERING_LAN_NAME_group"
                 peer-as $PEER_ASN
             }"""
@@ -128,8 +128,8 @@ class Arista_cEOS(Router):
 
 	def getNeighborStatement(self) -> str:
 		return """\
-    neighbor $PEER_ADDRESS peer group $PEERING_LAN_NAME_group
-    neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
+   neighbor $PEER_ADDRESS peer group $PEERING_LAN_NAME_group
+   neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
 
 
 
@@ -140,8 +140,8 @@ class Arista_vEOS(Router):
 
 	def getNeighborStatement(self) -> str:
 		return """\
-    neighbor $PEER_ADDRESS peer group $PEERING_LAN_NAME_group
-    neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
+   neighbor $PEER_ADDRESS peer group $PEERING_LAN_NAME_group
+   neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
 
 
 
@@ -152,8 +152,8 @@ class Cisco_XRv9k(Router):
 
 	def getNeighborStatement(self) -> str:
 		return """\
-    neighbor $PEER_ADDRESS peer-group $PEERING_LAN_NAME_group
-    neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
+   neighbor $PEER_ADDRESS peer-group $PEERING_LAN_NAME_group
+   neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
 
 
 
@@ -164,7 +164,9 @@ class Juniper_vJunos_router(Router):
 
 	def getNeighborStatement(self) -> str:
 		return """\
-            neighbor $PEER_ADDRESS remote-as $PEER_ASN;"""
+            neighbor $PEER_ADDRESS {
+                peer-as $PEER_ASN;
+            }"""
 
 
 
@@ -175,7 +177,9 @@ class Juniper_vJunos_switch(Router):
 
 	def getNeighborStatement(self) -> str:
 		return """\
-            neighbor $PEER_ADDRESS remote-as $PEER_ASN;"""
+            neighbor $PEER_ADDRESS {
+                peer-as $PEER_ASN;
+            }"""
 
 
 
@@ -186,7 +190,9 @@ class Juniper_vJunosEvolved(Router):
 
 	def getNeighborStatement(self) -> str:
 		return """\
-            neighbor $PEER_ADDRESS peer-as $PEER_ASN;"""
+            neighbor $PEER_ADDRESS {
+                peer-as $PEER_ASN;
+            }"""
 
 
 
@@ -230,5 +236,5 @@ class FRR(Router):
 
 	def getNeighborStatement(self):
 		return """\
-    neighbor $PEER_ADDRESS remote-as $PEER_ASN
-    neighbor $PEER_ADDRESS peer-group $PEERING_LAN_NAME_group"""
+ neighbor $PEER_ADDRESS remote-as $PEER_ASN
+ neighbor $PEER_ADDRESS peer-group $PEERING_LAN_NAME_group"""
