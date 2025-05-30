@@ -1,23 +1,55 @@
-Port/Interface/Addressing
-- Loopback
-- Peering LAN
-- Client LAN
-
-Prefix List/Policy
-- Client LAN Prefix List
-- Accept Client LAN Policy
-- Default Accept Policy
-
-Routing
-- ASN
-- Router ID
-- Forward IPv4 Packets on IPv6-only Interfaces
-
-BGP
-- Networks
-- Export Policy
-- Import Policy
-- Advertise IPv6 Next-Hops
-- Receive IPv6 Next-Hops
-- Group
-- Neighbors
+- Port
+	- Description
+	- Connector
+	- Interface
+		- Loopback
+			- Description
+			- Loopback
+			- IPv4 Addressing
+			- Enable
+		- Client LAN
+			- Description
+			- IPv4 Addressing
+			- Enable
+		- Peering LAN
+			- Description
+			- IPv4 Forwarding
+			- IPv6 Addressing
+			- Enable
+	- Enable
+- Prefix List/Set
+	- Client LAN Prefix List/Set
+		- accept Client LAN
+		- deny any
+- Route Policy/Map
+	- Accept Client LAN Policy/Route Map
+		- accept Client LAN Prefix List/Set
+		- deny any
+	- Default Accept Policy/Route Map
+		- accept any
+- BGP
+	- ASN
+	- Router ID
+	- Group
+		- Neighbors
+			- IPv6 Address
+			- ASN
+		- Route Map/Policy
+			- Export
+				- Accept Client LAN Policy/Route Map
+			- Import
+				- Default Accept Policy/Route Map
+		- Capabilities
+			- Extended Next-Hop
+				- Advertise
+				- Receive
+		- Address Family
+			- IPv4
+				- Unicast
+					- Enable
+	- Address Family
+		- IPv4
+			- Unicast
+				- Network
+				- Group
+				- Enable

@@ -1,40 +1,43 @@
-from clab import Constants, Containerlab, Kind
+import asyncio
+import time
 
+from clab import constants, containerlab, kinds
 
+lab = containerlab.Lab("peering_lan")
+topology = lab.getTopology()
 
-if __name__ == "__main__":
-	lab = Containerlab.Lab("peeringlan")
-	topology = lab.getTopology()
+nodes = [
+	(kinds.Nokia_SR_Linux, {"image": "ghcr.io/nokia/srlinux"}),
+	(kinds.Nokia_SR_OS, {"image": "vrnetlab/nokia_sros:23.10.R6", "license": constants.LICENSE_DIR + "/SR_OS_VSR-SIM1_license.txt"}),
+	(kinds.Arista_cEOS, {"image": "vrnetlab/arista_ceos:4.33.2F"}),
+	(kinds.Arista_vEOS, {"image": "vrnetlab/arista_veos:4.33.2F"}),
+	(kinds.Cisco_XRd, {"image": "ios-xr/xrd-control-plane:25.1.1"}),
+	(kinds.Juniper_vJunosEvolved, {"image": "vrnetlab/juniper_vjunosevolved:24.4R1.8"}),
+	(kinds.BIRD2, {"image": "bird:2"}),
+	(kinds.BIRD3, {"image": "bird:3"}),
+	(kinds.FRR, {"image": "quay.io/frrouting/frr:10.3.0"})
+]
 
-	nodes = [
-		(Kind.Nokia_SR_Linux, {"image": "ghcr.io/nokia/srlinux"}),
-		(Kind.Nokia_SR_OS, {"image": "vrnetlab/nokia_sros:23.10.R6", "license": Constants.LICENSES_DIR + "/SR_OS_VSR-SIM1_license.txt"}),
-		(Kind.Arista_cEOS, {"image": "vrnetlab/arista_ceos:4.33.2F"}),
-		(Kind.Arista_vEOS, {"image": "vrnetlab/arista_veos:4.33.2F"}),
-#		(Kind.Cisco_XRv9k, {"image": "vrnetlab/cisco_xrv9k:6.6.3"}),
-#		(Kind.Juniper_vJunos_router, {"image": "vrnetlab/juniper_vjunos-router:23.2R1.15"}),
-#		(Kind.Juniper_vJunos_switch, {"image": "vrnetlab/juniper_vjunos-switch:23.1R1.8"}),
-		(Kind.Juniper_vJunosEvolved, {"image": "vrnetlab/juniper_vjunosevolved:24.4R1.8"}),
-		(Kind.BIRD2, {"image": "bird:2"}),
-		(Kind.BIRD3, {"image": "bird:3"}),
-		(Kind.FRR, {"image": "quay.io/frrouting/frr:8.5.7"})
-	]
+peering_lan = kinds.Bridge(None)
+topology.addNode(peering_lan)
 
-	peering_lan = Kind.Bridge(topology.getNextID())
-	topology.addNode(peering_lan)
+for Router, attributes in nodes:
+	id = topology.getNextID()
 
-	for Node, attributes in nodes:
-		id = topology.getNextID()
+	router = Router(id, **attributes)
+	client = kinds.Alpine(id)
 
-		router = Node(id, **attributes)
-		client = Kind.Alpine(id)
+	router.setClient(client)
+	client.setRouter(router)
 
-		topology.addNode(router)
-		topology.addNode(client)
+	topology.addNode(router)
+	topology.addNode(client)
 
-		topology.connectNodes(peering_lan, router)
-		topology.connectNodes(router, client)
+	topology.connectNodes(peering_lan, router)
+	topology.connectNodes(router, client)
 
-	lab.destroy()
-	lab.export()
-	lab.deploy()
+#lab.destroy()
+lab.export()
+#lab.deploy()
+#time.sleep(60*10)
+asyncio.run(lab.test())

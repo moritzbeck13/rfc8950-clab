@@ -1,7 +1,7 @@
 FILES_DIR = "files"
 
 CONFIG_DIR = "configs"
-LICENSES_DIR = "licenses"
+LICENSE_DIR = "licenses"
 TEMPLATE_DIR = "templates"
 
 

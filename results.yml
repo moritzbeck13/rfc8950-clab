@@ -1,0 +1,846 @@
+arista_ceos:
+  icmp-addresses:
+    172.20.20.3:
+      as-seen-by:
+      - nokia_srlinux
+      - nokia_sros
+      - arista_veos
+      - cisco_xrd
+      - juniper_vjunosevolved
+      - bird2
+      - bird3
+      - frr
+      interface: other
+  traceroute:
+    arista_veos:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.4.254 (192.168.4.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.3.1  0.008 ms  0.003 ms  0.004 ms'
+      - ' 2  10.0.0.15  2.298 ms  1.560 ms  1.607 ms'
+      - ' 3  192.168.4.254  2.066 ms  3.417 ms  3.412 ms'
+    bird2:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.7.254 (192.168.7.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.3.1  0.007 ms  0.004 ms  0.005 ms'
+      - ' 2  172.16.7.1  0.771 ms  0.392 ms  0.586 ms'
+      - ' 3  192.168.7.254  0.573 ms  0.445 ms  0.591 ms'
+    bird3:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.8.254 (192.168.8.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.3.1  0.005 ms  0.003 ms  0.003 ms'
+      - ' 2  172.16.8.1  0.725 ms  0.315 ms  0.423 ms'
+      - ' 3  192.168.8.254  0.806 ms  0.306 ms  0.493 ms'
+    cisco_xrd:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.5.254 (192.168.5.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.3.1  0.004 ms  0.003 ms  0.003 ms'
+      - ' 2  172.20.20.9  3.951 ms  1.575 ms  1.832 ms'
+      - ' 3  192.168.5.254  2.069 ms  1.174 ms  1.229 ms'
+    frr:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.9.254 (192.168.9.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.3.1  0.004 ms  0.009 ms  0.003 ms'
+      - ' 2  172.16.9.1  0.850 ms  0.516 ms  0.803 ms'
+      - ' 3  192.168.9.254  0.665 ms  0.525 ms  0.705 ms'
+    juniper_vjunosevolved:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.6.254 (192.168.6.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.3.1  0.004 ms  0.003 ms  0.003 ms'
+      - ' 2  172.16.6.1  10.244 ms  4.785 ms  5.110 ms'
+      - ' 3  192.168.6.254  3.240 ms  3.342 ms  4.616 ms'
+    nokia_srlinux:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.1.254 (192.168.1.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.3.1  0.005 ms  0.004 ms  0.003 ms'
+      - ' 2  192.168.1.1  1.923 ms  1.657 ms  2.640 ms'
+      - ' 3  192.168.1.254  0.766 ms  0.737 ms  1.593 ms'
+    nokia_sros:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.2.254 (192.168.2.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.3.1  0.005 ms  0.009 ms  0.006 ms'
+      - ' 2  192.168.2.1  3.201 ms  1.481 ms  2.769 ms'
+      - ' 3  192.168.2.254  37.414 ms  38.232 ms  39.874 ms'
+arista_veos:
+  icmp-addresses:
+    10.0.0.15:
+      as-seen-by:
+      - nokia_srlinux
+      - nokia_sros
+      - arista_ceos
+      - cisco_xrd
+      - juniper_vjunosevolved
+      - bird2
+      - bird3
+      - frr
+      interface: other
+  traceroute:
+    arista_ceos:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.3.254 (192.168.3.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.4.1  1.266 ms  0.726 ms  0.576 ms'
+      - ' 2  172.20.20.3  1.433 ms  1.493 ms  2.691 ms'
+      - ' 3  192.168.3.254  1.848 ms  1.518 ms  1.456 ms'
+    bird2:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.7.254 (192.168.7.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.4.1  1.482 ms  3.505 ms  1.073 ms'
+      - ' 2  172.16.7.1  4.791 ms  3.079 ms  3.442 ms'
+      - ' 3  192.168.7.254  3.667 ms  2.449 ms  4.089 ms'
+    bird3:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.8.254 (192.168.8.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.4.1  1.793 ms  1.344 ms  1.631 ms'
+      - ' 2  172.16.8.1  2.967 ms  3.652 ms  1.915 ms'
+      - ' 3  192.168.8.254  2.941 ms  1.351 ms  1.589 ms'
+    cisco_xrd:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.5.254 (192.168.5.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.4.1  2.057 ms  2.116 ms  3.184 ms'
+      - ' 2  172.20.20.9  5.065 ms  4.989 ms  4.722 ms'
+      - ' 3  192.168.5.254  4.544 ms  4.669 ms  4.800 ms'
+    frr:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.9.254 (192.168.9.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.4.1  1.971 ms  1.396 ms  1.537 ms'
+      - ' 2  172.16.9.1  2.875 ms  2.747 ms  2.611 ms'
+      - ' 3  192.168.9.254  4.035 ms  1.830 ms  2.569 ms'
+    juniper_vjunosevolved:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.6.254 (192.168.6.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.4.1  0.775 ms  0.618 ms  0.830 ms'
+      - ' 2  172.16.6.1  5.629 ms  9.690 ms  8.257 ms'
+      - ' 3  192.168.6.254  6.662 ms  7.154 ms  6.567 ms'
+    nokia_srlinux:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.1.254 (192.168.1.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.4.1  0.789 ms  0.544 ms  0.971 ms'
+      - ' 2  192.168.1.1  3.468 ms  7.709 ms  5.541 ms'
+      - ' 3  192.168.1.254  4.965 ms  2.844 ms  4.090 ms'
+    nokia_sros:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.2.254 (192.168.2.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.4.1  0.932 ms  4.409 ms  0.899 ms'
+      - ' 2  192.168.2.1  5.959 ms  4.203 ms  11.926 ms'
+      - ' 3  192.168.2.254  48.762 ms  39.604 ms  40.562 ms'
+bird2:
+  icmp-addresses:
+    172.16.7.1:
+      as-seen-by:
+      - nokia_srlinux
+      - nokia_sros
+      - arista_ceos
+      - arista_veos
+      - cisco_xrd
+      - juniper_vjunosevolved
+      - bird3
+      - frr
+      interface: loopback
+  traceroute:
+    arista_ceos:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.3.254 (192.168.3.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.7.1  0.004 ms  0.002 ms  0.003 ms'
+      - ' 2  172.20.20.3  0.958 ms  0.755 ms  0.329 ms'
+      - ' 3  192.168.3.254  0.482 ms  0.408 ms  0.402 ms'
+    arista_veos:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.4.254 (192.168.4.254), 3 hops max, 46 byte packets
+      - ' 1  *  192.168.7.1  0.005 ms  0.004 ms'
+      - ' 2  10.0.0.15  1.547 ms  1.677 ms  0.975 ms'
+      - ' 3  192.168.4.254  3.736 ms  1.498 ms  1.615 ms'
+    bird3:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.8.254 (192.168.8.254), 3 hops max, 46 byte packets
+      - ' 1  *  192.168.7.1  0.011 ms  0.003 ms'
+      - ' 2  172.16.8.1  0.003 ms  0.002 ms  0.003 ms'
+      - ' 3  192.168.8.254  0.003 ms  0.004 ms  0.003 ms'
+    cisco_xrd:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.5.254 (192.168.5.254), 3 hops max, 46 byte packets
+      - ' 1  *  *  192.168.7.1  0.005 ms'
+      - ' 2  172.20.20.9  1.340 ms  0.796 ms  0.912 ms'
+      - ' 3  192.168.5.254  1.095 ms  0.994 ms  0.868 ms'
+    frr:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.9.254 (192.168.9.254), 3 hops max, 46 byte packets
+      - ' 1  *  192.168.7.1  0.008 ms  *'
+      - ' 2  172.16.9.1  0.006 ms  0.004 ms  0.009 ms'
+      - ' 3  192.168.9.254  0.005 ms  0.004 ms  0.003 ms'
+    juniper_vjunosevolved:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.6.254 (192.168.6.254), 3 hops max, 46 byte packets
+      - ' 1  *  *  192.168.7.1  0.010 ms'
+      - ' 2  172.16.6.1  3.685 ms  3.218 ms  3.036 ms'
+      - ' 3  192.168.6.254  3.916 ms  2.358 ms  1.836 ms'
+    nokia_srlinux:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.1.254 (192.168.1.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.7.1  0.004 ms  0.003 ms  0.003 ms'
+      - ' 2  192.168.1.1  0.512 ms  1.059 ms  0.917 ms'
+      - ' 3  192.168.1.254  0.340 ms  0.063 ms  0.067 ms'
+    nokia_sros:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.2.254 (192.168.2.254), 3 hops max, 46 byte packets
+      - ' 1  *  *  192.168.7.1  0.009 ms'
+      - ' 2  192.168.2.1  1.357 ms  1.151 ms  1.408 ms'
+      - ' 3  192.168.2.254  4.995 ms  18.552 ms  10.517 ms'
+bird3:
+  icmp-addresses:
+    172.16.8.1:
+      as-seen-by:
+      - nokia_srlinux
+      - nokia_sros
+      - arista_ceos
+      - arista_veos
+      - cisco_xrd
+      - juniper_vjunosevolved
+      - bird2
+      - frr
+      interface: loopback
+  traceroute:
+    arista_ceos:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.3.254 (192.168.3.254), 3 hops max, 46 byte packets
+      - ' 1  *  192.168.8.1  0.003 ms  0.003 ms'
+      - ' 2  172.20.20.3  0.389 ms  0.502 ms  0.301 ms'
+      - ' 3  192.168.3.254  0.708 ms  0.561 ms  0.372 ms'
+    arista_veos:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.4.254 (192.168.4.254), 3 hops max, 46 byte packets
+      - ' 1  *  *  192.168.8.1  0.008 ms'
+      - ' 2  10.0.0.15  1.814 ms  0.585 ms  0.735 ms'
+      - ' 3  192.168.4.254  1.439 ms  0.892 ms  0.803 ms'
+    bird2:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.7.254 (192.168.7.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.8.1  0.003 ms  0.006 ms  0.003 ms'
+      - ' 2  172.16.7.1  0.002 ms  0.003 ms  0.003 ms'
+      - ' 3  192.168.7.254  0.002 ms  0.003 ms  0.005 ms'
+    cisco_xrd:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.5.254 (192.168.5.254), 3 hops max, 46 byte packets
+      - ' 1  *  *  192.168.8.1  0.005 ms'
+      - ' 2  172.20.20.9  1.672 ms  1.012 ms  1.010 ms'
+      - ' 3  192.168.5.254  1.146 ms  0.980 ms  0.909 ms'
+    frr:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.9.254 (192.168.9.254), 3 hops max, 46 byte packets
+      - ' 1  *  *  192.168.8.1  0.003 ms'
+      - ' 2  172.16.9.1  0.003 ms  0.007 ms  0.003 ms'
+      - ' 3  192.168.9.254  0.003 ms  0.007 ms  0.005 ms'
+    juniper_vjunosevolved:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.6.254 (192.168.6.254), 3 hops max, 46 byte packets
+      - ' 1  *  192.168.8.1  0.007 ms  0.005 ms'
+      - ' 2  172.16.6.1  2.960 ms  3.982 ms  3.218 ms'
+      - ' 3  192.168.6.254  1.357 ms  2.023 ms  1.275 ms'
+    nokia_srlinux:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.1.254 (192.168.1.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.8.1  0.004 ms  0.003 ms  0.006 ms'
+      - ' 2  192.168.1.1  3.135 ms  1.289 ms  2.251 ms'
+      - ' 3  192.168.1.254  0.491 ms  0.319 ms  0.193 ms'
+    nokia_sros:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.2.254 (192.168.2.254), 3 hops max, 46 byte packets
+      - ' 1  *  192.168.8.1  0.004 ms  *'
+      - ' 2  192.168.2.1  0.824 ms  6.488 ms  18.557 ms'
+      - ' 3  192.168.2.254  0.991 ms  9.509 ms  9.969 ms'
+cisco_xrd:
+  icmp-addresses:
+    172.20.20.9:
+      as-seen-by:
+      - nokia_srlinux
+      - nokia_sros
+      - arista_ceos
+      - arista_veos
+      - juniper_vjunosevolved
+      - bird2
+      - bird3
+      - frr
+      interface: other
+  traceroute:
+    arista_ceos:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.3.254 (192.168.3.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.5.1  1.134 ms  0.830 ms  3.073 ms'
+      - ' 2  172.20.20.3  2.545 ms  1.292 ms  1.467 ms'
+      - ' 3  192.168.3.254  3.351 ms  2.123 ms  2.195 ms'
+    arista_veos:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.4.254 (192.168.4.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.5.1  1.363 ms  1.132 ms  1.090 ms'
+      - ' 2  10.0.0.15  2.480 ms  1.153 ms  5.479 ms'
+      - ' 3  192.168.4.254  5.611 ms  4.927 ms  4.402 ms'
+    bird2:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.7.254 (192.168.7.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.5.1  1.308 ms  0.788 ms  1.137 ms'
+      - ' 2  172.16.7.1  1.001 ms  3.654 ms  1.161 ms'
+      - ' 3  192.168.7.254  1.054 ms  1.692 ms  1.131 ms'
+    bird3:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.8.254 (192.168.8.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.5.1  1.277 ms  0.873 ms  0.985 ms'
+      - ' 2  172.16.8.1  1.261 ms  1.131 ms  1.181 ms'
+      - ' 3  192.168.8.254  0.733 ms  0.648 ms  0.755 ms'
+    frr:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.9.254 (192.168.9.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.5.1  0.663 ms  4.259 ms  2.075 ms'
+      - ' 2  172.16.9.1  1.545 ms  0.877 ms  1.174 ms'
+      - ' 3  192.168.9.254  1.959 ms  1.898 ms  1.807 ms'
+    juniper_vjunosevolved:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.6.254 (192.168.6.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.5.1  1.097 ms  1.590 ms  1.081 ms'
+      - ' 2  172.16.6.1  9.638 ms  9.886 ms  6.600 ms'
+      - ' 3  192.168.6.254  3.234 ms  4.161 ms  3.576 ms'
+    nokia_srlinux:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.1.254 (192.168.1.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.5.1  1.108 ms  0.978 ms  0.684 ms'
+      - ' 2  192.168.1.1  6.939 ms  1.288 ms  2.958 ms'
+      - ' 3  192.168.1.254  2.439 ms  1.758 ms  3.652 ms'
+    nokia_sros:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.2.254 (192.168.2.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.5.1  1.267 ms  0.760 ms  1.073 ms'
+      - ' 2  192.168.2.1  2.497 ms  4.370 ms  3.980 ms'
+      - ' 3  192.168.2.254  35.058 ms  39.722 ms  39.768 ms'
+frr:
+  icmp-addresses:
+    172.16.9.1:
+      as-seen-by:
+      - nokia_srlinux
+      - nokia_sros
+      - arista_ceos
+      - arista_veos
+      - cisco_xrd
+      - juniper_vjunosevolved
+      - bird2
+      - bird3
+      interface: loopback
+  traceroute:
+    arista_ceos:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.3.254 (192.168.3.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.9.1  0.007 ms  *  0.022 ms'
+      - ' 2  172.20.20.3  0.899 ms  0.357 ms  0.349 ms'
+      - ' 3  192.168.3.254  0.926 ms  0.763 ms  0.510 ms'
+    arista_veos:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.4.254 (192.168.4.254), 3 hops max, 46 byte packets
+      - ' 1  *  192.168.9.1  0.007 ms  0.024 ms'
+      - ' 2  10.0.0.15  0.902 ms  1.894 ms  1.642 ms'
+      - ' 3  192.168.4.254  1.401 ms  1.420 ms  1.271 ms'
+    bird2:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.7.254 (192.168.7.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.9.1  0.004 ms  0.003 ms  0.003 ms'
+      - ' 2  172.16.7.1  0.002 ms  0.003 ms  0.003 ms'
+      - ' 3  192.168.7.254  0.002 ms  0.002 ms  0.002 ms'
+    bird3:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.8.254 (192.168.8.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.9.1  0.004 ms  0.007 ms  *'
+      - ' 2  172.16.8.1  0.005 ms  0.003 ms  0.012 ms'
+      - ' 3  192.168.8.254  0.007 ms  0.013 ms  0.004 ms'
+    cisco_xrd:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.5.254 (192.168.5.254), 3 hops max, 46 byte packets
+      - ' 1  *  *  192.168.9.1  0.004 ms'
+      - ' 2  172.20.20.9  1.040 ms  0.703 ms  0.666 ms'
+      - ' 3  192.168.5.254  0.926 ms  0.661 ms  0.735 ms'
+    juniper_vjunosevolved:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.6.254 (192.168.6.254), 3 hops max, 46 byte packets
+      - ' 1  *  *  192.168.9.1  0.003 ms'
+      - ' 2  172.16.6.1  2.738 ms  3.000 ms  4.176 ms'
+      - ' 3  192.168.6.254  2.366 ms  42.179 ms  1.299 ms'
+    nokia_srlinux:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.1.254 (192.168.1.254), 3 hops max, 46 byte packets
+      - ' 1  *  192.168.9.1  0.013 ms  0.016 ms'
+      - ' 2  192.168.1.1  1.446 ms  0.678 ms  0.754 ms'
+      - ' 3  192.168.1.254  0.242 ms  0.210 ms  0.185 ms'
+    nokia_sros:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.2.254 (192.168.2.254), 3 hops max, 46 byte packets
+      - ' 1  *  *  192.168.9.1  0.004 ms'
+      - ' 2  192.168.2.1  1.809 ms  14.472 ms  9.479 ms'
+      - ' 3  192.168.2.254  10.028 ms  9.932 ms  9.648 ms'
+juniper_vjunosevolved:
+  icmp-addresses:
+    172.16.6.1:
+      as-seen-by:
+      - nokia_srlinux
+      - nokia_sros
+      - arista_ceos
+      - arista_veos
+      - cisco_xrd
+      - bird2
+      - bird3
+      - frr
+      interface: loopback
+  traceroute:
+    arista_ceos:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.3.254 (192.168.3.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.6.1  8.528 ms  3.889 ms  2.012 ms'
+      - ' 2  172.20.20.3  4.687 ms  1.971 ms  3.162 ms'
+      - ' 3  192.168.3.254  2.641 ms  3.513 ms  2.667 ms'
+    arista_veos:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.4.254 (192.168.4.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.6.1  3.619 ms  6.123 ms  9.365 ms'
+      - ' 2  10.0.0.15  4.995 ms  4.310 ms  4.764 ms'
+      - ' 3  192.168.4.254  4.304 ms  4.243 ms  4.270 ms'
+    bird2:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.7.254 (192.168.7.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.6.1  4.237 ms  9.302 ms  8.248 ms'
+      - ' 2  172.16.7.1  8.557 ms  6.133 ms  8.579 ms'
+      - ' 3  192.168.7.254  6.731 ms  5.036 ms  8.878 ms'
+    bird3:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.8.254 (192.168.8.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.6.1  4.725 ms  5.826 ms  8.095 ms'
+      - ' 2  172.16.8.1  3.634 ms  2.368 ms  3.432 ms'
+      - ' 3  192.168.8.254  2.661 ms  2.865 ms  2.577 ms'
+    cisco_xrd:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.5.254 (192.168.5.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.6.1  7.615 ms  3.933 ms  3.163 ms'
+      - ' 2  172.20.20.9  4.834 ms  3.822 ms  3.635 ms'
+      - ' 3  192.168.5.254  2.641 ms  3.702 ms  2.409 ms'
+    frr:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.9.254 (192.168.9.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.6.1  8.398 ms  4.014 ms  4.105 ms'
+      - ' 2  172.16.9.1  3.080 ms  2.725 ms  2.528 ms'
+      - ' 3  192.168.9.254  1.673 ms  3.015 ms  3.078 ms'
+    nokia_srlinux:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.1.254 (192.168.1.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.6.1  3.174 ms  5.350 ms  8.381 ms'
+      - ' 2  192.168.1.1  6.849 ms  3.795 ms  4.291 ms'
+      - ' 3  192.168.1.254  1.952 ms  2.568 ms  2.837 ms'
+    nokia_sros:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.2.254 (192.168.2.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.6.1  6.311 ms  8.251 ms  6.755 ms'
+      - ' 2  192.168.2.1  18.028 ms  29.669 ms  29.269 ms'
+      - ' 3  192.168.2.254  49.711 ms  39.854 ms  30.201 ms'
+nokia_srlinux:
+  icmp-addresses:
+    192.168.1.1:
+      as-seen-by:
+      - nokia_sros
+      - arista_ceos
+      - arista_veos
+      - cisco_xrd
+      - juniper_vjunosevolved
+      - bird2
+      - bird3
+      - frr
+      interface: client_lan
+  traceroute:
+    arista_ceos:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.3.254 (192.168.3.254), 3 hops max, 46 byte packets
+      - ' 1  *  192.168.1.1  1.042 ms  0.786 ms'
+      - ' 2  172.20.20.3  0.855 ms  0.373 ms  0.431 ms'
+      - ' 3  192.168.3.254  0.571 ms  0.455 ms  0.515 ms'
+    arista_veos:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.4.254 (192.168.4.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.1.1  1.103 ms  0.858 ms  1.747 ms'
+      - ' 2  10.0.0.15  8.224 ms  1.222 ms  1.419 ms'
+      - ' 3  192.168.4.254  2.015 ms  1.462 ms  2.860 ms'
+    bird2:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.7.254 (192.168.7.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.1.1  2.117 ms  0.597 ms  4.048 ms'
+      - ' 2  172.16.7.1  1.769 ms  0.168 ms  0.249 ms'
+      - ' 3  192.168.7.254  0.385 ms  0.282 ms  0.224 ms'
+    bird3:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.8.254 (192.168.8.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.1.1  2.403 ms  *  0.529 ms'
+      - ' 2  172.16.8.1  0.368 ms  0.238 ms  0.212 ms'
+      - ' 3  192.168.8.254  0.278 ms  0.222 ms  0.251 ms'
+    cisco_xrd:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.5.254 (192.168.5.254), 3 hops max, 46 byte packets
+      - ' 1  *  192.168.1.1  0.780 ms  0.900 ms'
+      - ' 2  172.20.20.9  1.593 ms  1.907 ms  1.215 ms'
+      - ' 3  192.168.5.254  1.375 ms  1.313 ms  1.141 ms'
+    frr:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.9.254 (192.168.9.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.1.1  2.147 ms  0.631 ms  3.961 ms'
+      - ' 2  172.16.9.1  1.797 ms  0.399 ms  0.602 ms'
+      - ' 3  192.168.9.254  0.289 ms  0.163 ms  0.231 ms'
+    juniper_vjunosevolved:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.6.254 (192.168.6.254), 3 hops max, 46 byte packets
+      - ' 1  *  192.168.1.1  1.104 ms  0.515 ms'
+      - ' 2  172.16.6.1  2.177 ms  1.693 ms  2.783 ms'
+      - ' 3  192.168.6.254  2.009 ms  1.410 ms  1.175 ms'
+    nokia_sros:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.2.254 (192.168.2.254), 3 hops max, 46 byte packets
+      - ' 1  *  192.168.1.1  0.778 ms  0.752 ms'
+      - ' 2  192.168.2.1  1.613 ms  1.321 ms  0.866 ms'
+      - ' 3  192.168.2.254  1.322 ms  1.111 ms  2.442 ms'
+nokia_sros:
+  icmp-addresses:
+    192.168.2.1:
+      as-seen-by:
+      - nokia_srlinux
+      - arista_ceos
+      - arista_veos
+      - cisco_xrd
+      - juniper_vjunosevolved
+      - bird2
+      - bird3
+      - frr
+      interface: client_lan
+  traceroute:
+    arista_ceos:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.3.254 (192.168.3.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.2.1  7.302 ms  6.965 ms  29.605 ms'
+      - ' 2  172.20.20.3  30.759 ms  68.271 ms  39.789 ms'
+      - ' 3  192.168.3.254  40.251 ms  39.706 ms  39.719 ms'
+    arista_veos:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.4.254 (192.168.4.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.2.1  13.383 ms  16.440 ms  20.063 ms'
+      - ' 2  10.0.0.15  49.725 ms  48.981 ms  59.686 ms'
+      - ' 3  192.168.4.254  40.248 ms  40.142 ms  19.431 ms'
+    bird2:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.7.254 (192.168.7.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.2.1  14.312 ms  3.152 ms  25.395 ms'
+      - ' 2  172.16.7.1  29.682 ms  47.901 ms  39.253 ms'
+      - ' 3  192.168.7.254  40.000 ms  39.993 ms  29.945 ms'
+    bird3:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.8.254 (192.168.8.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.2.1  3.805 ms  13.537 ms  29.916 ms'
+      - ' 2  172.16.8.1  30.790 ms  48.592 ms  39.588 ms'
+      - ' 3  192.168.8.254  40.009 ms  29.996 ms  29.665 ms'
+    cisco_xrd:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.5.254 (192.168.5.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.2.1  30.655 ms  3.157 ms  13.564 ms'
+      - ' 2  172.20.20.9  32.107 ms  57.654 ms  49.306 ms'
+      - ' 3  192.168.5.254  39.821 ms  40.110 ms  40.148 ms'
+    frr:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.9.254 (192.168.9.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.2.1  36.221 ms  30.119 ms  29.808 ms'
+      - ' 2  172.16.9.1  49.093 ms  40.013 ms  29.883 ms'
+      - ' 3  192.168.9.254  30.416 ms  19.349 ms  9.940 ms'
+    juniper_vjunosevolved:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.6.254 (192.168.6.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.2.1  15.936 ms  6.976 ms  29.615 ms'
+      - ' 2  172.16.6.1  59.734 ms  49.181 ms  59.981 ms'
+      - ' 3  192.168.6.254  39.909 ms  40.588 ms  19.238 ms'
+    nokia_srlinux:
+      exit-code: 0
+      reasons: []
+      result: succeeded
+      stderr: []
+      stdout:
+      - traceroute to 192.168.1.254 (192.168.1.254), 3 hops max, 46 byte packets
+      - ' 1  192.168.2.1  20.778 ms  3.157 ms  25.914 ms'
+      - ' 2  192.168.1.1  30.643 ms  56.261 ms  49.691 ms'
+      - ' 3  192.168.1.254  49.873 ms  39.956 ms  30.466 ms'
