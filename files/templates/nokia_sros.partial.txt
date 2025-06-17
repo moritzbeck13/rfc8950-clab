@@ -1,7 +1,7 @@
 configure {
     policy-options {
         prefix-list "$CLIENT_LAN_NAME_prefix_list" {
-            prefix $CLIENT_LAN_NETWORK/$CLIENT_LAN_PREFIX_LENGTH type exact {
+            prefix $CLIENT_LAN_IPv4_NETWORK_ADDRESS/$CLIENT_LAN_IPv4_PREFIX_LENGTH type exact {
             }
         }
         policy-statement "accept_$CLIENT_LAN_NAME_policy_statement" {
@@ -45,33 +45,18 @@ configure {
     }
     router "Base" {
         autonomous-system $ASN
-        router-id $ROUTER_LOOPBACK_ADDRESS
+        router-id $LOOPBACK_IPv4_IP_ADDRESS
         interface "$CLIENT_LAN_NAME_interface" {
             port 1/1/c2/1
-            ipv4 {
-                primary {
-                    address $CLIENT_LAN_ADDRESS
-                    prefix-length $CLIENT_LAN_PREFIX_LENGTH
-                }
-            }
+$CLIENT_LAN_IPv4_INTERFACE
         }
-        interface "$ROUTER_LOOPBACK_NAME_interface" {
+        interface "$LOOPBACK_NAME_interface" {
             loopback
-            ipv4 {
-                primary {
-                    address $ROUTER_LOOPBACK_ADDRESS
-                    prefix-length $ROUTER_LOOPBACK_PREFIX_LENGTH
-                }
-            }
+$LOOPBACK_IPv4_INTERFACE
         }
         interface "$PEERING_LAN_NAME_interface" {
             port 1/1/c1/1
-            ipv6 {
-                forward-ipv4-packets true
-                address $PEERING_LAN_ADDRESS {
-                    prefix-length $PEERING_LAN_PREFIX_LENGTH
-                }
-            }
+$PEERING_LAN_IPv6_INTERFACE
         }
         bgp {
             import {

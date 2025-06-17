@@ -1,40 +1,45 @@
 from __future__ import annotations
 
 import asyncio
+import ipaddress
 import yaml
 
 import clab.lab
 
 
+
+class Interface:
+	def __init__(self,
+			  number: int, connected_to: Interface = None,
+			  ipv4: ipaddress.IPv4Interface = None, ipv6: ipaddress.IPv6Interface = None):
+		self.number: int = number
+
+		self.node: Node = None
+		self.connected_to: Interface = connected_to
+
+		self.ipv4: ipaddress.IPv4Interface = ipv4
+		self.ipv6: ipaddress.IPv6Interface = ipv6
+
+	def get_name(self) -> str:
+		return self.node.INTERFACE_PREFIX + str(self.number)
+
+	def export(self) -> str:
+		pass
+
+
+
 class Link(yaml.YAMLObject):
-	def __init__(self, node_from: Node, node_to: Node):
-		self.setNodeFrom(node_from)
-		self.setNodeTo(node_to)
+	def __init__(self, interface_from: Interface, interface_to: Interface):
+		interface_from.connected_to = interface_to
+		interface_to.connected_to = interface_from
+
+		self.interface_from: Interface = interface_from
+		self.interface_to: Interface = interface_to
 
 	def __repr__(self) -> dict:
-		node_from = self.getNodeFrom()
-		node_to = self.getNodeTo()
-
-		return {
-			"endpoints": [
-				node_from.getName() + ":" + node_from.getNextInterface(),
-				node_to.getName() + ":" + node_to.getNextInterface()]}
-
-
-
-	def getNodeFrom(self) -> Node:
-		return self.node_from
-
-	def setNodeFrom(self, node: Node):
-		self.node_from = node
-
-
-
-	def getNodeTo(self) -> Node:
-		return self.node_to
-
-	def setNodeTo(self, node: Node):
-		self.node_to = node
+		return {"endpoints": [
+			self.interface_from.node.get_name() + ":" + self.interface_from.get_name(),
+			self.interface_to.node.get_name() + ":" + self.interface_to.get_name()]}
 
 
 
@@ -47,95 +52,65 @@ class Node(yaml.YAMLObject):
 
 
 	def __init__(self, id: int, **kwargs: dict):
-		self.setID(id)
-		self.setInterface(0)
-		self.setAttributes({})
+		self.id: int = id
+		self.topology: clab.lab.Topology = None
 
-		self.addAttribute("kind", self.KIND)
-		self.addAttributes(kwargs)
+		self.interfaces: dict[str, Interface] = {}
+		self.attributes: dict[str: any] = {"kind": self.KIND}
+
+		for key, value in kwargs.items():
+			self.add_attribute(key, value)
 
 	def __repr__(self) -> dict:
-		return self.getAttributes()
-
-
-
-	def getTopology(self) -> clab.lab.Topology:
-		return self.topology
-
-	def setTopology(self, topology: clab.lab.Topology):
-		self.topology = topology
-
-
-
-	def getID(self) -> int:
-		return self.id
-
-	def setID(self, id: int):
-		self.id = id
-
-
-
-	def getName(self) -> str:
-		return self.NAME + "_" + str(self.getID())
-
-	def getContainerName(self) -> str:
-		return self.getTopology().getLab().getContainerPrefix() + self.getName()
-
-
-
-	def getInterface(self) -> int:
-		return self.interface
-
-	def setInterface(self, interface: int):
-		self.interface = interface
-
-	def getNextInterface(self) -> str:
-		self.setInterface(self.getInterface()+1)
-
-		return self.INTERFACE_PREFIX + str(self.getInterface())
-
-
-
-	def getAttributes(self) -> dict:
 		return self.attributes
 
-	def setAttributes(self, attributes: dict):
-		self.attributes = attributes
-
-	def addAttributes(self, attributes: dict):
-		for key, value in attributes.items():
-			self.addAttribute(key, value)
 
 
+	def get_name(self) -> str:
+		return self.NAME + "_" + str(self.id)
 
-	def getAttribute(self, key: str):
-		return self.getAttributes().get(key)
+	def get_container_name(self) -> str:
+		return self.topology.lab.get_container_prefix() + self.get_name()
 
-	def setAttribute(self, key: str, value):
-		self.getAttributes()[key] = value
 
-	def addAttribute(self, key: str, value):
-		attribute = self.getAttribute(key)
+
+	def add_interface(self, kind: str, interface: Interface):
+		interface.node = self
+
+		self.interfaces[kind] = interface
+	
+	def add_attribute(self, key: str, value):
+		attribute = self.attributes.get(key)
 
 		if attribute is None:
-			self.setAttribute(key, value)
+			self.attributes[key] = value
 		else:
-			if type(attribute) is list:
+			attribute_type = type(attribute)
+
+			if attribute_type is list:
 				attribute.extend(value)
-			elif type(attribute) is dict:
+			elif attribute_type is dict:
 				attribute.update(value)
 			else:
 				attribute = value
 
 
 
-	def generateConfig(self):
+	def export(self):
 		pass
 
-	def destroy(self):
+
+	def pre_deploy(self):
 		pass
 
-	def deploy(self):
+	def post_deploy(self):
+		pass
+
+
+	def pre_destroy(self):
+		pass
+
+	def post_destroy(self):
 		pass
 
 

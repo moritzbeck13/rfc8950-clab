@@ -2,37 +2,25 @@ interface ethernet-1/1 {
     description $PEERING_LAN_NAME_interface
     admin-state enable
     subinterface 0 {
-        ipv6 {
-            admin-state enable
-            address $PEERING_LAN_ADDRESS/$PEERING_LAN_PREFIX_LENGTH {
-            }
-        }
+$PEERING_LAN_IPv6_INTERFACE
     }
 }
 interface ethernet-1/2 {
     description $CLIENT_LAN_NAME_interface
     admin-state enable
     subinterface 0 {
-        ipv4 {
-            admin-state enable
-            address $CLIENT_LAN_ADDRESS/$CLIENT_LAN_PREFIX_LENGTH {
-            }
-        }
+$CLIENT_LAN_IPv4_INTERFACE
     }
 }
 interface system0 {
-    description $ROUTER_LOOPBACK_NAME_interface
+    description $LOOPBACK_NAME_interface
     subinterface 0 {
-        ipv4 {
-            admin-state enable
-            address $ROUTER_LOOPBACK_ADDRESS/$ROUTER_LOOPBACK_PREFIX_LENGTH {
-            }
-        }
+$LOOPBACK_IPv4_INTERFACE
     }
 }
 routing-policy {
     prefix-set $CLIENT_LAN_NAME_prefix_set {
-        prefix $CLIENT_LAN_NETWORK/$CLIENT_LAN_PREFIX_LENGTH mask-length-range exact {
+        prefix $CLIENT_LAN_IPv4_NETWORK_ADDRESS/$CLIENT_LAN_IPv4_PREFIX_LENGTH mask-length-range exact {
         }
     }
     policy accept_$CLIENT_LAN_NAME_policy {
@@ -67,7 +55,7 @@ network-instance default {
     protocols {
         bgp {
             autonomous-system $ASN
-            router-id $ROUTER_LOOPBACK_ADDRESS
+            router-id $LOOPBACK_IPv4_IP_ADDRESS
             export-policy [
                 accept_$CLIENT_LAN_NAME_policy
             ]

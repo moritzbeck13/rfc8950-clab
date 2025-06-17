@@ -12,63 +12,60 @@ class Bridge(clab.topology.Node):
 	KIND = "bridge"
 	NAME = "bridge"
 
+	def get_name(self) -> str:
+		return self.topology.lab.name
 
+	def post_destroy(self):
+		#clab.containerlab.exec(["sudo", "ip", "link", "delete", self.get_name()])
+		#clab.containerlab.exec(["sudo iptables -vL FORWARD --line-numbers -n | grep 'set by containerlab' | awk '{print $1}' | sort -r | xargs -I {} sudo iptables -D FORWARD {}"])
+		pass
 
-	def getName(self) -> str:
-		return self.NAME
-
-
-
-	def destroy(self):
-		clab.containerlab.run(["sudo iptables -vL FORWARD --line-numbers -n | grep 'set by containerlab' | awk '{print $1}' | sort -r | xargs -I {} sudo iptables -D FORWARD {}"])
-		clab.containerlab.run(["sudo", "ip", "link", "delete", self.getName()])
-
-	def deploy(self):
-		clab.containerlab.run(["sudo", "ip", "link", "add", self.getName(), "type", "bridge"])
-		clab.containerlab.run(["sudo", "ip", "link", "set", "dev", self.getName(), "up"])
-
-
+	def pre_deploy(self):
+		clab.containerlab.exec(["sudo", "ip", "link", "add", self.get_name(), "type", "bridge"])
+		clab.containerlab.exec(["sudo", "ip", "link", "set", "dev", self.get_name(), "up"])
 
 class Client(clab.topology.Node):
 	NAME = "client"
 
+	def __init__(self, id, **kwargs):
+		super().__init__(id, **kwargs)
 
-
-	def getRouter(self) -> Router:
-		return self.router
-
-	def setRouter(self, router: Router):
-		self.router = router
-
-
-
-	def getAddress(self) -> str:
-		return clab.constants.CLIENT_LAN_PREFIX + str(self.getID()) + "." + clab.constants.CLIENT_LAN_CLIENT_SUFFIX
+		self.default_gateway: clab.topology.Interface = None
 
 class Alpine(Client):
 	KIND = "linux"
 
-
-
 	def __init__(self, id, **kwargs):
 		super().__init__(id, **kwargs)
 
-		self.addAttribute("image", "alpine")
+		self.add_attribute("image", "alpine")
 
+	def export(self):
+		exec = []
 
+		for _, interface in self.interfaces.items():
+			interface_name = interface.get_name()
 
-	def generateConfig(self):
-		self.addAttribute("exec", [
-			"ip address add " + self.getAddress() + "/" + clab.constants.CLIENT_LAN_PREFIX_LENGTH + " dev eth1",
-			"ip route del default",
-			"ip route add default via " + self.getRouter().getClientLANAddress(),
-			"ip link set eth1 up"])
+			if interface.ipv4 is not None:
+				exec.append("ip address add " + str(interface.ipv4) + " dev " + interface_name)
+			if interface.ipv6 is not None:
+				exec.append("ip -6 address add " + str(interface.ipv6) + " dev " + interface_name)
 
+			exec.append("ip link set " + interface_name + " up")
 
+		if self.default_gateway is not None:
+			if self.default_gateway.ipv4 is not None:
+				exec.append("ip route del default")
+				exec.append("ip route add default via " + str(self.default_gateway.connected_to.ipv4.ip))
+			if self.default_gateway.ipv6 is not None:
+				exec.append("ip -6 route del default")
+				exec.append("ip -6 route add default via " + str(self.default_gateway.connected_to.ipv6.ip))
+ 
+		self.add_attribute("exec", exec)
 
 	async def exec(self, cmd: list[str], **kwargs: dict):
 		process = await asyncio.create_subprocess_exec(
-			*["docker", "exec", self.getContainerName()] + cmd,
+			*["docker", "exec", self.get_container_name()] + cmd,
 			stdout=asyncio.subprocess.PIPE,
 			stderr=asyncio.subprocess.PIPE)
 
@@ -82,133 +79,101 @@ class Alpine(Client):
 			"stderr": data[1].decode().splitlines(),
 			"kwargs": kwargs}
 
-
-
 class Router(clab.topology.Node):
 	FILE_EXTENSION = None
 	USERNAME = "admin"
 	PASSWORD = "admin"
-	ROUTE_TABLE = None
-
-
 
 	def __init__(self, id: int, **kwargs: dict):
 		super().__init__(id, **kwargs)
 
-		self.addAttribute("startup-config", clab.constants.CONFIG_DIR + "/" + self.getName() + self.FILE_EXTENSION)
+		self.add_attribute("startup-config", clab.constants.CONFIG_DIR + "/" + self.get_name() + self.FILE_EXTENSION)
 
+	def get_ASN(self) -> int:
+		return clab.constants.BASE_ASN + self.id
 
+	def get_IPv4_interface_statement(self) -> str:
+		pass
 
-	def getClient(self) -> Client:
-		return self.client
+	def get_IPv6_interface_statement(self) -> str:
+		pass
 
-	def setClient(self, client: Client):
-		self.client = client
+	def get_BGP_neighbor_statement(self) -> str:
+		pass
 
-
-
-	def getClientLANAddress(self) -> str:
-		return clab.constants.CLIENT_LAN_PREFIX + str(self.getID()) + "." + clab.constants.CLIENT_LAN_ROUTER_SUFFIX
-
-	def getPeeringLANAddress(self) -> str:
-		return clab.constants.PEERING_LAN_PREFIX + str(self.getID())
-
-	def getLoopbackAddress(self) -> str:
-		return clab.constants.ROUTER_LOOPBACK_PREFIX + str(self.getID()) + "." + clab.constants.ROUTER_LOOPBACK_SUFFIX
-
-	def getASN(self) -> int:
-		return clab.constants.BASE_ASN + self.getID()
-
-
-
-	def getNeighborStatement(self) -> str:
-		return None
-
-	def generateConfig(self):
+	def export(self):
 		file = open(clab.constants.FILES_DIR + "/" + clab.constants.TEMPLATE_DIR + "/" + self.NAME + self.FILE_EXTENSION)
 		config = file.read()
 		file.close()
 
-		neighbor = self.getNeighborStatement()
-		neighbor = neighbor.replace("$PEERING_LAN_NAME", clab.constants.PEERING_LAN_NAME)
+		neighbor_statement = self.get_BGP_neighbor_statement() \
+			.replace("$PEERING_LAN_NAME", clab.constants.PEERING_LAN_NAME)
 
 		neighbors = []
 
-		for peer in self.getTopology().getNodes():
-			if isinstance(peer, Router) and peer is not self:
-				neighbors.append(neighbor \
-					.replace("$PEER_ADDRESS",	peer.getPeeringLANAddress()) \
-					.replace("$PEER_ASN",		str(peer.getASN())))
+		for node in self.topology.nodes:
+			if isinstance(node, Router) and node is not self:
+				neighbors.append(neighbor_statement \
+					.replace("$NEIGHBOR_ADDRESS",	str(node.interfaces[clab.constants.PEERING_LAN_NAME].ipv6.ip)) \
+					.replace("$NEIGHBOR_ASN",		str(node.get_ASN())))
 
 		neighbors = "\n".join(neighbors)
 
 		config = config \
-			.replace("$ASN",							str(self.getASN())) \
-			.replace("$PEERING_LAN_NAME",				clab.constants.PEERING_LAN_NAME) \
-			.replace("$PEERING_LAN_ADDRESS",			self.getPeeringLANAddress()) \
-			.replace("$PEERING_LAN_PREFIX_LENGTH",		clab.constants.PEERING_LAN_PREFIX_LENGTH) \
-			.replace("$ROUTER_LOOPBACK_NAME",			clab.constants.ROUTER_LOOPBACK_NAME) \
-			.replace("$ROUTER_LOOPBACK_ADDRESS",		self.getLoopbackAddress()) \
-			.replace("$ROUTER_LOOPBACK_PREFIX_LENGTH",	clab.constants.ROUTER_LOOPBACK_PREFIX_LENGTH) \
-			.replace("$ROUTER_LOOPBACK_SUBNET_MASK",	clab.constants.ROUTER_LOOPBACK_SUBNET_MASK) \
-			.replace("$CLIENT_LAN_NAME",				clab.constants.CLIENT_LAN_NAME) \
-			.replace("$CLIENT_LAN_ADDRESS",				self.getClientLANAddress()) \
-			.replace("$CLIENT_LAN_NETWORK",				clab.constants.CLIENT_LAN_PREFIX + str(self.getID()) + ".0") \
-			.replace("$CLIENT_LAN_PREFIX_LENGTH",		clab.constants.CLIENT_LAN_PREFIX_LENGTH) \
-			.replace("$CLIENT_LAN_SUBNET_MASK",			clab.constants.CLIENT_LAN_SUBNET_MASK) \
-			.replace("$NEIGHBORS",						neighbors)
+			.replace("$ASN",				str(self.get_ASN())) \
+			.replace("$PEERING_LAN_NAME",	clab.constants.PEERING_LAN_NAME) \
+			.replace("$LOOPBACK_NAME",		clab.constants.LOOPBACK_NAME) \
+			.replace("$CLIENT_LAN_NAME",	clab.constants.CLIENT_LAN_NAME) \
+			.replace("$NEIGHBORS",			neighbors)
 
-		file = open(clab.constants.FILES_DIR + "/" + clab.constants.CONFIG_DIR + "/" + self.getName() + self.FILE_EXTENSION, "w")
+		for kind, interface in self.interfaces.items():
+			interface_prefix = "$" + kind.upper()
+
+			if interface.ipv4 is None:
+				config = config \
+					.replace(interface_prefix + "_IPv4_INTERFACE", "")
+			else:
+				interface_statement = self.get_IPv4_interface_statement() \
+					.replace("$INTERFACE", interface_prefix)
+
+				config = config \
+					.replace(interface_prefix + "_IPv4_INTERFACE",			interface_statement) \
+			  		.replace(interface_prefix + "_IPv4_IP_ADDRESS",			str(interface.ipv4.ip)) \
+					.replace(interface_prefix + "_IPv4_PREFIX_LENGTH",		str(interface.ipv4.network.prefixlen)) \
+					.replace(interface_prefix + "_IPv4_SUBNET_MASK",		str(interface.ipv4.netmask)) \
+					.replace(interface_prefix + "_IPv4_NETWORK_ADDRESS",	str(interface.ipv4.network.network_address))
+
+			if interface.ipv6 is None:
+				config = config \
+					.replace(interface_prefix + "_IPv6_INTERFACE", "")
+			else:
+				interface_statement = self.get_IPv6_interface_statement() \
+					.replace("$INTERFACE", interface_prefix)
+
+				config = config \
+					.replace(interface_prefix + "_IPv6_INTERFACE",			interface_statement) \
+			  		.replace(interface_prefix + "_IPv6_IP_ADDRESS",			str(interface.ipv6.ip)) \
+					.replace(interface_prefix + "_IPv6_PREFIX_LENGTH",		str(interface.ipv6.network.prefixlen)) \
+					.replace(interface_prefix + "_IPv6_SUBNET_MASK",		str(interface.ipv6.netmask)) \
+					.replace(interface_prefix + "_IPv6_NETWORK_ADDRESS",	str(interface.ipv6.network.network_address))
+
+		file = open(clab.constants.FILES_DIR + "/" + clab.constants.CONFIG_DIR + "/" + self.get_name() + self.FILE_EXTENSION, "w")
 		file.write(config)
 		file.close()
 
-
-
-class Nokia_SR_Linux(Router):
-	KIND = "nokia_srlinux"
-	NAME = "nokia_srlinux"
-	INTERFACE_PREFIX = "e1-"
-	FILE_EXTENSION = ".json"
-	PASSWORD = "NokiaSrl1!"
-	ROUTE_TABLE = ["show", "network-instance", "route-table", "all"]
-
-
-
-	def getNeighborStatement(self) -> str:
-		return """\
-            neighbor $PEER_ADDRESS {
-                peer-as $PEER_ASN
-                peer-group $PEERING_LAN_NAME_group
-            }"""
-
-
-
-class Nokia_SR_OS(Router):
-	KIND = "nokia_sros"
-	NAME = "nokia_sros"
-	FILE_EXTENSION = ".partial.txt"
-	ROUTE_TABLE = ["show", "router", "route-table", "all"]
-
-
-
-	def getNeighborStatement(self) -> str:
-		return """\
-            neighbor "$PEER_ADDRESS" {
-                group "$PEERING_LAN_NAME_group"
-                peer-as $PEER_ASN
-            }"""
-
-
-
 class Arista(Router):
-	ROUTE_TABLE = ["show", "ip", "route", "detail"]
-
-
-
-	def getNeighborStatement(self) -> str:
+	def get_IPv4_interface_statement(self) -> str:
 		return """\
-   neighbor $PEER_ADDRESS peer group $PEERING_LAN_NAME_group
-   neighbor $PEER_ADDRESS remote-as $PEER_ASN"""
+   ip address $INTERFACE_IPv4_IP_ADDRESS/$INTERFACE_IPv4_PREFIX_LENGTH"""
+
+	def get_IPv6_interface_statement(self) -> str:
+		return """\
+   ipv6 address $INTERFACE_IPv6_IP_ADDRESS/$INTERFACE_IPv6_PREFIX_LENGTH"""
+
+	def get_BGP_neighbor_statement(self) -> str:
+		return """\
+   neighbor $NEIGHBOR_ADDRESS peer group $PEERING_LAN_NAME_group
+   neighbor $NEIGHBOR_ADDRESS remote-as $NEIGHBOR_ASN"""
 
 class Arista_cEOS(Arista):
 	KIND = "arista_ceos"
@@ -220,17 +185,22 @@ class Arista_vEOS(Arista):
 	NAME = "arista_veos"
 	FILE_EXTENSION = ".cfg"
 
-
-
-class Cisco(Router):
+class Cisco_IOS_XR(Router):
 	USERNAME = "clab"
 	PASSWORD = "clab@123"
 
-class Cisco_IOS_XR(Cisco):
-	def getNeighborStatement(self) -> str:
+	def get_IPv4_interface_statement(self) -> str:
 		return """\
- neighbor $PEER_ADDRESS
-  remote-as $PEER_ASN
+ ipv4 address $INTERFACE_IPv4_IP_ADDRESS $INTERFACE_IPv4_SUBNET_MASK"""
+
+	def get_IPv6_interface_statement(self) -> str:
+		return """\
+ ipv6 address $INTERFACE_IPv6_IP_ADDRESS/$INTERFACE_IPv6_PREFIX_LENGTH"""
+
+	def get_BGP_neighbor_statement(self) -> str:
+		return """\
+ neighbor $NEIGHBOR_ADDRESS
+  remote-as $NEIGHBOR_ASN
   use neighbor-group $PEERING_LAN_NAME_group
  """
 
@@ -246,19 +216,26 @@ class Cisco_XRv9k(Cisco_IOS_XR):
 	FILE_EXTENSION = ".partial.cfg"
 	INTERFACE_PREFIX = "Gi0/0/0/"
 
-
-
 class Juniper(Router):
 	FILE_EXTENSION = ".cfg"
 	PASSWORD = "admin@123"
-	ROUTE_TABLE = ["show", "route", "all", "detail"]
 
-
-
-	def getNeighborStatement(self) -> str:
+	def get_IPv4_interface_statement(self) -> str:
 		return """\
-            neighbor $PEER_ADDRESS {
-                peer-as $PEER_ASN;
+            family inet {
+                address $INTERFACE_IPv4_IP_ADDRESS/$INTERFACE_IPv4_PREFIX_LENGTH;
+            }"""
+	
+	def get_IPv6_interface_statement(self) -> str:
+		return """\
+            family inet6 {
+                address $INTERFACE_IPv6_IP_ADDRESS/$INTERFACE_IPv6_PREFIX_LENGTH;
+            }"""
+
+	def get_BGP_neighbor_statement(self) -> str:
+		return """\
+            neighbor $NEIGHBOR_ADDRESS {
+                peer-as $NEIGHBOR_ASN;
             }"""
 
 class Juniper_vJunos_router(Juniper):
@@ -273,38 +250,98 @@ class Juniper_vJunosEvolved(Juniper):
 	KIND = "juniper_vjunosevolved"
 	NAME = "juniper_vjunosevolved"
 
+class Nokia_SR_Linux(Router):
+	KIND = "nokia_srlinux"
+	NAME = "nokia_srlinux"
+	INTERFACE_PREFIX = "e1-"
+	FILE_EXTENSION = ".json"
+	PASSWORD = "NokiaSrl1!"
 
+	def get_IPv4_interface_statement(self) -> str:
+		return """\
+        ipv4 {
+            admin-state enable
+            address $INTERFACE_IPv4_IP_ADDRESS/$INTERFACE_IPv4_PREFIX_LENGTH {
+            }
+        }"""
 
-class BIRD(Router):
+	def get_IPv6_interface_statement(self) -> str:
+		return """\
+        ipv6 {
+            admin-state enable
+            address $INTERFACE_IPv6_IP_ADDRESS/$INTERFACE_IPv6_PREFIX_LENGTH {
+            }
+        }"""
+
+	def get_BGP_neighbor_statement(self) -> str:
+		return """\
+            neighbor $NEIGHBOR_ADDRESS {
+                peer-as $NEIGHBOR_ASN
+                peer-group $PEERING_LAN_NAME_group
+            }"""
+
+class Nokia_SR_OS(Router):
+	KIND = "nokia_sros"
+	NAME = "nokia_sros"
+	FILE_EXTENSION = ".partial.txt"
+
+	def get_IPv4_interface_statement(self) -> str:
+		return """\
+            ipv4 {
+                primary {
+                    address $INTERFACE_IPv4_IP_ADDRESS
+                    prefix-length $INTERFACE_IPv4_PREFIX_LENGTH
+                }
+            }"""
+
+	def get_IPv6_interface_statement(self) -> str:
+		return """\
+            ipv6 {
+                forward-ipv4-packets true
+                address $INTERFACE_IPv6_IP_ADDRESS {
+                    prefix-length $INTERFACE_IPv6_PREFIX_LENGTH
+                }
+            }"""
+
+	def get_BGP_neighbor_statement(self) -> str:
+		return """\
+            neighbor "$NEIGHBOR_ADDRESS" {
+                group "$PEERING_LAN_NAME_group"
+                peer-as $NEIGHBOR_ASN
+            }"""
+
+class Route_Server(Router):
+	def export(self):
+		super().export()
+
+		self.add_attribute("exec", [
+			"ip address add " + str(self.interfaces[clab.constants.LOOPBACK_NAME].ipv4) + " dev lo",
+			"ip link set lo up",
+			"ip address add " + str(self.interfaces[clab.constants.PEERING_LAN_NAME].ipv6) + " dev eth1",
+			"ip link set eth1 up",
+			"ip address add " + str(self.interfaces[clab.constants.CLIENT_LAN_NAME].ipv4) + " dev eth2",
+			"ip link set eth2 up"])
+
+	def get_IPv4_interface_statement(self):
+		return ""
+
+	def get_IPv6_interface_statement(self):
+		return ""
+
+class BIRD(Route_Server):
 	KIND = "linux"
 	FILE_EXTENSION = ".conf"
-	ROUTE_TABLE = ["show", "route", "all"]
-
-
 
 	def __init__(self, id: int, **kwargs: dict):
 		super().__init__(id, **kwargs)
 
-		self.addAttribute("binds", [clab.constants.CONFIG_DIR + "/" + self.getName() + self.FILE_EXTENSION + ":/etc/bird.conf"])
+		self.add_attribute("binds", [clab.constants.CONFIG_DIR + "/" + self.get_name() + self.FILE_EXTENSION + ":/etc/bird.conf"])
 
-
-
-	def getNeighborStatement(self) -> str:
+	def get_BGP_neighbor_statement(self) -> str:
 		return """\
 protocol bgp from $PEERING_LAN_NAME_template {
-  	neighbor $PEER_ADDRESS as $PEER_ASN;
+  	neighbor $NEIGHBOR_ADDRESS as $NEIGHBOR_ASN;
 }"""
-
-	def generateConfig(self):
-		super().generateConfig()
-
-		self.addAttribute("exec", [
-			"ip address add " + self.getLoopbackAddress() + "/" + clab.constants.ROUTER_LOOPBACK_PREFIX_LENGTH + " dev lo",
-			"ip link set lo up",
-			"ip address add " + self.getPeeringLANAddress() + "/" + clab.constants.PEERING_LAN_PREFIX_LENGTH + " dev eth1",
-			"ip link set eth1 up",
-			"ip address add " + self.getClientLANAddress() + "/" + clab.constants.CLIENT_LAN_PREFIX_LENGTH + " dev eth2",
-			"ip link set eth2 up"])
 
 class BIRD2(BIRD):
 	NAME = "bird2"
@@ -312,27 +349,37 @@ class BIRD2(BIRD):
 class BIRD3(BIRD):
 	NAME = "bird3"
 
-
-
-class FRR(Router):
+class FRR(Route_Server):
 	KIND = "linux"
 	NAME = "frr"
 	FILE_EXTENSION = ".conf"
-	ROUTE_TABLE = ["vtysh", "show", "ip", "route"]
-
-
 
 	def __init__(self, id: int, **kwargs: dict):
 		super().__init__(id, **kwargs)
 
-		self.addAttribute("binds", [
-			clab.constants.CONFIG_DIR + "/" + self.getName() + self.FILE_EXTENSION + ":/etc/frr/frr.conf",
+		self.add_attribute("binds", [
+			clab.constants.CONFIG_DIR + "/" + self.get_name() + self.FILE_EXTENSION + ":/etc/frr/frr.conf",
 			clab.constants.TEMPLATE_DIR + "/daemons:/etc/frr/daemons",
 			clab.constants.TEMPLATE_DIR + "/vtysh.conf:/etc/frr/vtysh.conf"])
 
-
-
-	def getNeighborStatement(self):
+	def get_BGP_neighbor_statement(self):
 		return """\
- neighbor $PEER_ADDRESS remote-as $PEER_ASN
- neighbor $PEER_ADDRESS peer-group $PEERING_LAN_NAME_group"""
+ neighbor $NEIGHBOR_ADDRESS remote-as $NEIGHBOR_ASN
+ neighbor $NEIGHBOR_ADDRESS peer-group $PEERING_LAN_NAME_group"""
+
+class OpenBGPD(Route_Server):
+	KIND = "linux"
+	NAME = "openbgpd"
+	FILE_EXTENSION = ".conf"
+
+	def __init__(self, id: int, **kwargs: dict):
+		super().__init__(id, **kwargs)
+
+		self.add_attribute("binds", [
+			clab.constants.CONFIG_DIR + "/" + self.get_name() + self.FILE_EXTENSION + ":/etc/bgpd/bgpd.conf"])
+
+	def get_BGP_neighbor_statement(self):
+		return """\
+	neighbor $NEIGHBOR_ADDRESS {
+		remote-as $NEIGHBOR_ASN
+	}"""
