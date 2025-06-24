@@ -1,0 +1,9 @@
+.*/
+__*__/
+files/clab-*/
+files/configs/
+files/licenses/
+
+.*
+!.gitignore
+*.yml

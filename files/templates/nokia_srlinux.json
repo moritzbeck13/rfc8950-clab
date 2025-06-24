@@ -1,0 +1,78 @@
+interface ethernet-1/1 {
+    description $PEERING_LAN_NAME_interface
+    admin-state enable
+    subinterface 0 {
+$PEERING_LAN_INTERFACES
+    }
+}
+interface ethernet-1/2 {
+    description $CLIENT_LAN_NAME_interface
+    admin-state enable
+    subinterface 0 {
+$CLIENT_LAN_INTERFACES
+    }
+}
+interface system0 {
+    description $LOOPBACK_NAME_interface
+    subinterface 0 {
+$LOOPBACK_INTERFACES
+    }
+}
+routing-policy {
+    prefix-set $CLIENT_LAN_NAME_prefix_set {
+        prefix $CLIENT_LAN_IPV4_NETWORK_ADDRESS/$CLIENT_LAN_IPV4_PREFIX_LENGTH mask-length-range exact {
+        }
+    }
+    policy accept_$CLIENT_LAN_NAME_policy {
+        default-action {
+            policy-result reject
+        }
+        statement 10 {
+            match {
+                prefix {
+                    prefix-set $CLIENT_LAN_NAME_prefix_set
+                }
+            }
+            action {
+                policy-result accept
+            }
+        }
+    }
+    policy default_accept_policy {
+        default-action {
+            policy-result accept
+        }
+    }
+}
+network-instance default {
+    ip-forwarding {
+        receive-ipv4-check false
+        receive-ipv6-check false
+    }
+    interface ethernet-1/1.0 {
+    }
+    interface ethernet-1/2.0 {
+    }
+    protocols {
+        bgp {
+            autonomous-system $BGP_ASN
+            router-id $BGP_ROUTER_ID
+            export-policy [
+                accept_$CLIENT_LAN_NAME_policy
+            ]
+            import-policy [
+                default_accept_policy
+            ]
+            afi-safi ipv4-unicast {
+                admin-state enable
+                ipv4-unicast {
+                    advertise-ipv6-next-hops true
+                    receive-ipv6-next-hops true
+                }
+            }
+            group $BGP_GROUP_NAME_group {
+            }
+$BGP_NEIGHBORS
+        }
+    }
+}

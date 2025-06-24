@@ -1,0 +1,100 @@
+configure {
+    policy-options {
+        prefix-list "$CLIENT_LAN_NAME_prefix_list" {
+            prefix $CLIENT_LAN_IPV4_NETWORK_ADDRESS/$CLIENT_LAN_IPV4_PREFIX_LENGTH type exact {
+            }
+        }
+        policy-statement "accept_$CLIENT_LAN_NAME_policy_statement" {
+            entry 10 {
+                from {
+                    prefix-list ["$CLIENT_LAN_NAME_prefix_list"]
+                }
+                action {
+                    action-type accept
+                }
+            }
+            default-action {
+                action-type reject
+            }
+        }
+        policy-statement "default_accept_policy_statement" {
+            default-action {
+                action-type accept
+            }
+        }
+    }
+    port 1/1/c1 {
+        admin-state enable
+        connector {
+            breakout c1-100g
+        }
+    }
+    port 1/1/c1/1 {
+        admin-state enable
+        description "$PEERING_LAN_NAME_port"
+    }
+    port 1/1/c2 {
+        admin-state enable
+        connector {
+            breakout c1-100g
+        }
+    }
+    port 1/1/c2/1 {
+        admin-state enable
+        description "$CLIENT_LAN_NAME_port"
+    }
+    router "Base" {
+        autonomous-system $BGP_ASN
+        router-id $LOOPBACK_IPV4_IP_ADDRESS
+        interface "$CLIENT_LAN_NAME_interface" {
+            port 1/1/c2/1
+            ipv4 {
+$CLIENT_LAN_NO_IPV6_ADDRESSING
+$CLIENT_LAN_IPV4_ADDRESSING
+            }
+            ipv6 {
+$CLIENT_LAN_NO_IPV4_ADDRESSING
+$CLIENT_LAN_IPV6_ADDRESSING
+            }
+        }
+        interface "$LOOPBACK_NAME_interface" {
+            loopback
+            ipv4 {
+$LOOPBACK_NO_IPV6_ADDRESSING
+$LOOPBACK_IPV4_ADDRESSING
+            }
+            ipv6 {
+$LOOPBACK_NO_IPV4_ADDRESSING
+$LOOPBACK_IPV6_ADDRESSING
+            }
+        }
+        interface "$PEERING_LAN_NAME_interface" {
+            port 1/1/c1/1
+            ipv4 {
+$PEERING_LAN_NO_IPV6_ADDRESSING
+$PEERING_LAN_IPV4_ADDRESSING
+            }
+            ipv6 {
+$PEERING_LAN_NO_IPV4_ADDRESSING
+$PEERING_LAN_IPV6_ADDRESSING
+            }
+        }
+        bgp {
+            import {
+                policy ["default_accept_policy_statement"]
+            }
+            export {
+                policy ["accept_$CLIENT_LAN_NAME_policy_statement"]
+            }
+            extended-nh-encoding {
+                ipv4 true
+            }
+            advertise-ipv6-next-hops {
+                ipv4 true
+            }
+            group "$BGP_GROUP_NAME_group" {
+            }
+$BGP_NEIGHBORS
+        }
+    }
+}
