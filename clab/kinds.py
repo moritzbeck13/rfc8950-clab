@@ -51,7 +51,10 @@ class Alpine(Client):
 		exec = []
 
 		for interface in self.interfaces:
-			interface_name = interface.get_name()
+			if interface.number is None:
+				interface_name = self.LOOPBACK_PREFIX
+			else:
+				interface_name = interface.get_name()
 
 			if interface.ipv4 is not None:
 				exec.append("ip address add " + str(interface.ipv4) + " dev " + interface_name)
