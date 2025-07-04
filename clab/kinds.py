@@ -15,8 +15,13 @@ class Bridge(clab.topology.Node):
 	KIND = "bridge"
 	NAME = "bridge"
 
+	def __init__(self, name: str, **kwargs: dict):
+		super().__init__(None, **kwargs)
+
+		self.name = name
+
 	def get_name(self) -> str:
-		return self.topology.lab.name
+		return self.name
 
 	def post_destroy(self):
 		clab.containerlab.exec(["sudo", "ip", "link", "delete", self.get_name()])
