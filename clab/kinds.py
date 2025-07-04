@@ -253,7 +253,7 @@ class Juniper(Router):
                 address $INTERFACE_IPV6_IP_ADDRESS/$INTERFACE_IPV6_PREFIX_LENGTH;
             }"""
 	STATEMENT_NO_IPV6_ADDRESSING = """\
-			family inet;"""
+			family inet6;"""
 	STATEMENT_BGP_NEIGHBOR = """\
             neighbor $BGP_NEIGHBOR_IP_ADDRESS {
                 peer-as $BGP_NEIGHBOR_ASN;
