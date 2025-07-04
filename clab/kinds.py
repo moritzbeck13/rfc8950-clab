@@ -81,6 +81,7 @@ class Alpine(Client):
 		data = await process.communicate()
 
 		return {
+			"command": " ".join(cmd),
 			"returncode": process.returncode,
 			"stdout": data[0].decode().splitlines(),
 			"stderr": data[1].decode().splitlines(),
