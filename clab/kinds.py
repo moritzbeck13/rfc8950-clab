@@ -34,7 +34,7 @@ class Bridge(clab.topology.Node):
 class Client(clab.topology.Node):
 	NAME = "client"
 
-	def __init__(self, id, **kwargs):
+	def __init__(self, id: int, **kwargs: dict):
 		super().__init__(id, **kwargs)
 
 		self.default_gateway: clab.topology.Interface = None
@@ -42,7 +42,7 @@ class Client(clab.topology.Node):
 class Alpine(Client):
 	KIND = "linux"
 
-	def __init__(self, id, **kwargs):
+	def __init__(self, id: int, **kwargs: dict):
 		super().__init__(id, **kwargs)
 
 		self.add_attribute("image", "alpine")
