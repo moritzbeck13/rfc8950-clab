@@ -370,27 +370,27 @@ class Nokia_SR_OS(Router):
             }"""
 
 class Route_Server(Router):
-		def export(self):
-			super().export()
+	def export(self):
+		super().export()
 
-			exec: list[str] = []
+		exec: list[str] = []
 
-			interface_name: str
+		interface_name: str
 
-			for interface in self.interfaces:
-				if interface.number is None:
-					interface_name = self.LOOPBACK_PREFIX
-				else:
-					interface_name = interface.get_name()
+		for interface in self.interfaces:
+			if interface.number is None:
+				interface_name = self.LOOPBACK_PREFIX
+			else:
+				interface_name = interface.get_name()
 
-				if interface.ipv4 is not None:
-					exec.append("ip address add " + str(interface.ipv4) + " dev " + interface_name)
-				if interface.ipv6 is not None:
-					exec.append("ip -6 address add " + str(interface.ipv6) + " dev " + interface_name)
+			if interface.ipv4 is not None:
+				exec.append("ip address add " + str(interface.ipv4) + " dev " + interface_name)
+			if interface.ipv6 is not None:
+				exec.append("ip -6 address add " + str(interface.ipv6) + " dev " + interface_name)
 
-				exec.append("ip link set " + interface_name + " up")
+			exec.append("ip link set " + interface_name + " up")
 
-			self.add_attribute("exec", exec)
+		self.add_attribute("exec", exec)
 
 class BIRD(Route_Server):
 	KIND = "linux"
