@@ -193,7 +193,7 @@ def rfc8950():
 
 	route_server: kinds.Route_Server = kinds.FRR(id, **route_servers[kinds.FRR])
 	route_server.add_interface(topology.Interface("loopback", None,
-		ipv4=ipaddress.IPv4Interface(("127.0.0." + str(id), 32))))
+		ipv4=ipaddress.IPv4Interface(("203.0.113." + str(id), 32))))
 	route_server.add_interface(topology.Interface("peering_lan", 1,
 		ipv6=ipaddress.IPv6Interface(("2001:7f8::" + str(id), 64))))
 	router_peers.append((route_server, route_server.interfaces[1].ipv6))
@@ -209,7 +209,7 @@ def rfc8950():
 
 			router: kinds.Router = Router(id, **attributes)
 			router.add_interface(topology.Interface("loopback", None,
-				ipv4=ipaddress.IPv4Interface(("127.0.0." + str(id), 32))))
+				ipv4=ipaddress.IPv4Interface(("203.0.113." + str(id), 32))))
 			router.add_interface(topology.Interface("peering_lan", 1,
 				ipv6=ipaddress.IPv6Interface(("2001:7f8::" + str(id), 64))))
 			router.add_interface(topology.Interface("client_lan", 2,
@@ -248,7 +248,7 @@ def peering_lan_reachability():
 
 	route_server: kinds.Route_Server = kinds.FRR(id, **route_servers[kinds.FRR])
 	route_server.add_interface(topology.Interface("loopback", None,
-		ipv4=ipaddress.IPv4Interface(("127.0.0." + str(id), 32)),
+		ipv4=ipaddress.IPv4Interface(("203.0.113." + str(id), 32)),
 		ipv6=ipaddress.IPv6Interface(("3fff::" + str(id), 128))))
 	route_server.add_interface(topology.Interface("peering_lan", 1,
 		ipv4=ipaddress.IPv4Interface(("80.81.192." + str(id), 21)),
@@ -267,7 +267,7 @@ def peering_lan_reachability():
 
 			router: kinds.Router = Router(id, **attributes)
 			router.add_interface(topology.Interface("loopback", None,
-				ipv4=ipaddress.IPv4Interface("127.0.0." + str(id)),
+				ipv4=ipaddress.IPv4Interface("203.0.113." + str(id)),
 				ipv6=ipaddress.IPv6Interface(("3fff::" + str(id), 128))))
 			router.add_interface(topology.Interface("peering_lan", 1,
 				ipv4=ipaddress.IPv4Interface(("80.81.192." + str(id), 21)),
