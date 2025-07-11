@@ -37,7 +37,7 @@
 Note: Operating Systems rely on a Route Server for peering. Therefore they are not included in this category.
 
 ## Overview
-| <br>Type | <br>Vendor | Vendor<br>Platform | Arista<br>EOS | Cisco<br/>IOS XE | Cisco<br/>IOS XR | Cisco<br/>NX-OS | Extreme<br> | Huawei<br> | Juniper<br>Junos OS | Mikrotik<br>RouterOS | Nokia<br/>SR Linux | Nokia<br/>SR OS | <br>BIRD 1 | <br>BIRD 2 | <br>BIRD 3 | <br>FRR | <br>OpenBGPD | <br>Notes |
+| <br>Type | <br>Vendor | <br>Platform | Arista<br>EOS | Cisco<br/>IOS XE | Cisco<br/>IOS XR | Cisco<br/>NX-OS | Extreme<br> | Huawei<br> | Juniper<br>Junos OS | Mikrotik<br>RouterOS | Nokia<br/>SR Linux | Nokia<br/>SR OS | <br>BIRD 1 | <br>BIRD 2 | <br>BIRD 3 | <br>FRR | <br>OpenBGPD | <br>Notes |
 |------------------|--------------|--------------|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|---------------------------------------------------------------|
 | **Router**       | **Arista**   | **EOS**      | ✅ | ❗ | ✅ | ❔ | ❔ | ❔ | ✅ | ❔ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |                                                               |
 |                  | **Cisco**    | **IOS XE**   | ❗ | ❗ | ❗ | ❗ | ❗ | ❗ | ❗ | ❗ | ❗ | ❗ | ❌ | ❗ | ❗ | ❗ | ❗ | Cisco IOS XE only supports a very limited subset of SAFIs[^1] |
