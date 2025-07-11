@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import ipaddress
 
 import clab.containerlab
 import clab.topology
@@ -18,7 +19,7 @@ class Bridge(clab.topology.Node):
 	def __init__(self, name: str, **kwargs: dict):
 		super().__init__(None, **kwargs)
 
-		self.name = name
+		self.name: str = name
 
 	def get_name(self) -> str:
 		return self.name
@@ -48,7 +49,9 @@ class Alpine(Client):
 		self.add_attribute("image", "alpine")
 
 	def export(self):
-		exec = []
+		exec: list[str] = []
+
+		interface_name: str
 
 		for interface in self.interfaces:
 			if interface.number is None:
@@ -107,7 +110,7 @@ class Router(clab.topology.Node):
 	def __init__(self, id: int, **kwargs: dict):
 		super().__init__(id, **kwargs)
 
-		self.peers = []
+		self.peers: list[tuple[Router, ipaddress.IPv4Interface | ipaddress.IPv6Interface]] = []
 
 		self.add_attribute("startup-config", "configs/" + self.get_name() + self.FILE_EXTENSION)
 
@@ -116,18 +119,19 @@ class Router(clab.topology.Node):
 
 	def export(self):
 		file = open("files/templates/" + self.NAME + self.FILE_EXTENSION)
-		config = file.read()
+		config: str = file.read()
 		file.close()
 
-		neighbors = []
+		neighbors: list[Router] = []
 
 		for peer, interface in self.peers:
 			if peer is not self:
 				neighbors.append(self.STATEMENT_BGP_NEIGHBOR \
 					.replace("$BGP_NEIGHBOR_IP_ADDRESS",	str(interface.ip)) \
-					.replace("$BGP_NEIGHBOR_ASN",			str(peer.get_ASN())))
+					.replace("$BGP_NEIGHBOR_ASN",			str(peer.get_ASN()))
+					.replace("$BGP_NEIGHBOR_ID",			str(peer.id)))
 
-		neighbors = "\n".join(neighbors)
+		neighbors: str = "\n".join(neighbors)
 
 		config = config \
 			.replace("$BGP_NEIGHBORS",	neighbors) \
@@ -136,7 +140,7 @@ class Router(clab.topology.Node):
 			.replace("$BGP_GROUP_NAME",	"$PEERING_LAN_NAME") \
 
 		for interface in self.interfaces:
-			prefix = "$" + interface.name.upper()
+			prefix: str = "$" + interface.name.upper()
 
 			config = config \
 				.replace(prefix + "_INTERFACES", prefix + "_INTERFACE_IPV4" + "\n" + prefix + "_INTERFACE_IPV6") \
@@ -148,7 +152,7 @@ class Router(clab.topology.Node):
 					.replace(prefix + "_INTERFACE_IPV4", prefix + "_NO_IPV4_ADDRESSING") \
 			  		.replace(prefix + "_NO_IPV4_ADDRESSING", self.STATEMENT_NO_IPV4_ADDRESSING)
 			else:
-				interface_statement = self.STATEMENT_IPV4_ADDRESSING \
+				interface_statement: str = self.STATEMENT_IPV4_ADDRESSING \
 					.replace("$INTERFACE", prefix)
 
 				config = config \
@@ -166,7 +170,7 @@ class Router(clab.topology.Node):
 					.replace(prefix + "_INTERFACE_IPV6", prefix + "_NO_IPV6_ADDRESSING") \
 			  		.replace(prefix + "_NO_IPV6_ADDRESSING", self.STATEMENT_NO_IPV6_ADDRESSING)
 			else:
-				interface_statement = self.STATEMENT_IPV6_ADDRESSING \
+				interface_statement: str = self.STATEMENT_IPV6_ADDRESSING \
 					.replace("$INTERFACE", prefix)
 
 				config = config \
@@ -296,7 +300,9 @@ class Linux(Router):
 	def export(self):
 		super().export()
 
-		exec = []
+		exec: list[str] = []
+
+		interface_name: str
 
 		for interface in self.interfaces:
 			if interface.number is None:
@@ -367,7 +373,9 @@ class Route_Server(Router):
 		def export(self):
 			super().export()
 
-			exec = []
+			exec: list[str] = []
+
+			interface_name: str
 
 			for interface in self.interfaces:
 				if interface.number is None:
