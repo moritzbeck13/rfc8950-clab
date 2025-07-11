@@ -319,6 +319,14 @@ class Linux(Router):
 
 		self.add_attribute("exec", exec)
 
+class Mikrotik(Router):
+	KIND = "mikrotik_ros"
+	NAME = "mikrotik"
+
+	FILE_EXTENSION = ".auto.rsc"
+
+	STATEMENT_BGP_NEIGHBOR = "/routing/bgp/connection/add name=bgp-connection-$BGP_NEIGHBOR_ID instance=bgp-instance-1 remote.address=$BGP_NEIGHBOR_IP_ADDRESS local.role=ebgp afi=ip"
+
 class Nokia_SR_Linux(Router):
 	KIND = "nokia_srlinux"
 	NAME = "nokia_srlinux"
