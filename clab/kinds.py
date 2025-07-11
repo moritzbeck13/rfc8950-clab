@@ -290,8 +290,8 @@ class Linux(Router):
 
 		self.add_attribute("binds", [
 			"configs/" + self.get_name() + self.FILE_EXTENSION + ":/etc/frr/frr.conf",
-			"templates/daemons:/etc/frr/daemons",
-			"templates/vtysh.conf:/etc/frr/vtysh.conf"])
+			"mounts/daemons:/etc/frr/daemons",
+			"mounts/vtysh.conf:/etc/frr/vtysh.conf"])
 
 	def export(self):
 		super().export()
@@ -420,8 +420,8 @@ class FRR(Route_Server):
 
 		self.add_attribute("binds", [
 			"configs/" + self.get_name() + self.FILE_EXTENSION + ":/etc/frr/frr.conf",
-			"templates/daemons:/etc/frr/daemons",
-			"templates/vtysh.conf:/etc/frr/vtysh.conf"])
+			"mounts/daemons:/etc/frr/daemons",
+			"mounts/vtysh.conf:/etc/frr/vtysh.conf"])
 
 class OpenBGPD(Route_Server):
 	KIND = "linux"
