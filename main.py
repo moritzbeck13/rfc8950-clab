@@ -214,7 +214,7 @@ def rfc8950():
 				ipv6=ipaddress.IPv6Interface(("2001:7f8::" + str(id), 64))))
 			router.add_interface(topology.Interface("client_lan", 2,
 				ipv4=ipaddress.IPv4Interface(("192.168." + str(id) + ".1", 24))))
-			route_server_peers.append((router, router.interfaces[1].ipv6))
+			router_peers.append((router, router.interfaces[1].ipv6))
 			router.peers = router_peers
 			lab.topology.add_node(router)
 
