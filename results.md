@@ -37,7 +37,7 @@ Note: Operating Systems rely on a Route Server for peering. Therefore they are n
 | Type              | Vendor             | Arista | Cisco IOS XE | Cisco IOS XR | Cisco NX-OS | Extreme | Huawei | Juniper | Mikrotik | Nokia SR Linux | Nokia SR OS | BIRD 1 | BIRD 2 | BIRD 3 | FRR | OpenBGPD | Notes                                                              |
 |------------------ |--------------------|--------|--------------|--------------|-------------|---------|--------|---------|----------|----------------|-------------|--------|--------|--------|-----|----------|--------------------------------------------------------------------|
 | **Routers**       | **Arista**         | ✅     | ❗          | ✅           | ❌         | ❌      | ❌    | ✅      | ❌      | ✅             | ✅         | ❌     | ✅    | ✅     | ✅ | ✅       |                                                                    |
-|                   | **Cisco IOS XE**   | ❗     | ❗          | ❗           | ❌         | ❌      | ❌    | ❗      | ❌      | ❗             | ❗         | ❌     | ❗    | ❗     | ❗ | ❗       | Cisco IOS XE only supports a very limited subset of SAFIs[^1] |
+|                   | **Cisco IOS XE**   | ❗     | ❗          | ❗           | ❌         | ❌      | ❌    | ❗      | ❌      | ❗             | ❗         | ❌     | ❗    | ❗     | ❗ | ❗       | Cisco IOS XE only supports a very limited subset of SAFIs[^1]      |
 |                   | **Cisco IOS XR**   | ✅     | ❗          | ✅           | ❌         | ❌      | ❌    | ✅      | ❌      | ✅             | ✅         | ❌     | ✅    | ✅     | ✅ | ✅       |                                                                    |
 |                   | **Cisco NX-OS**    | ❌     | ❌          | ❌           | ❌         | ❌      | ❌    | ❌      | ❌      | ❌             | ❌         | ❌     | ❌    | ❌     | ❌ | ❌       |                                                                    |
 |                   | **Extreme**        | ❌     | ❌          | ❌           | ❌         | ❌      | ❌    | ❌      | ❌      | ❌             | ❌         | ❌     | ❌    | ❌     | ❌ | ❌       |                                                                    |
@@ -102,7 +102,7 @@ Note: Route Servers rely on an Operating System for forwarding. Therefore they a
 ## Overview
 | Type                  | Vendor             | install IPv4 routes with IPv6 next hop | forward IPv4 packets on IPv6 interface | Notes                                                           |
 |-----------------------|--------------------|----------------------------------------|----------------------------------------|-----------------------------------------------------------------|
-| **Routers**           | **Arista**         | ✅                                     | ✅                                    | ```interface * ip routing address required disabled```                                |
+| **Routers**           | **Arista**         | ✅                                     | ✅                                    | ```interface * ip routing address required disabled```          |
 |                       | **Cisco IOS XE**   | ❓                                     | ❓                                    | not tested due to other missing functionality                   |
 |                       | **Cisco IOS XR**   | ✅                                     | ✅                                    | ```interface * ipv4 forwarding-enable```                        |
 |                       | **Cisco NX-OS**    | ❓                                     | ❓                                    | not tested due to other missing functionality                   |
@@ -111,7 +111,7 @@ Note: Route Servers rely on an Operating System for forwarding. Therefore they a
 |                       | **Juniper**        | ✅                                     | ✅                                    | ```set interfaces * unit * family inet```                       |
 |                       | **Mikrotik**       | ❓                                     | ❓                                    | not tested due to other missing functionality                   |
 |                       | **Nokia SR Linux** | ✅                                     | ✅                                    | ```network-instance * ip-forwarding receive-ipv4-check false``` |
-|                       | **Nokia SR OS**    | ✅                                     | ✅                                    | ```router * interface * ipv6 forward-ipv4-packets```            | 
+|                       | **Nokia SR OS**    | ✅                                     | ✅                                    | ```router * interface * ipv6 forward-ipv4-packets```            |
 | **Operating Systems** | **Linux**          | ✅                                     | ✅                                    | no special configuration needed                                 |
 |                       | **OpenBSD**        | ❌ [^2]                                | ❓                                    | not fully tested due to other missing functionality             |
 
