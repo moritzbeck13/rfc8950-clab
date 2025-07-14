@@ -120,7 +120,7 @@ Note: Route Servers rely on an Operating System for forwarding. Therefore they a
 |            | **Nokia**    | **SR Linux** | ✅                             | ✅                             | `network-instance * ip-forwarding receive-ipv4-check false` |
 |            | **Nokia**    | **SR OS**    | ✅                             | ✅                             | `router * interface * ipv6 forward-ipv4-packets`            |
 | **OS**     |              | **Linux**    | ✅                             | ✅                             | no special configuration needed. only via Netlink, not CLI  |
-|            |              | **OpenBSD**  | ❌                             | ❔                             | OpenBGPD does not install routes into the FIB yet[^3]       |
+|            |              | **OpenBSD**  | ❌                             | ❔                             | OpenBGPD does not install routes into the FIB yet[^2]       |
 
 ## ICMP
 The IPv4 address of which interface is used for sending ICMP messages?
@@ -144,5 +144,4 @@ The IPv4 address of which interface is used for sending ICMP messages?
 |            |              | **OpenBSD**  | ❔        |                                      |
 
 [^1]: https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/ip-routing/b-ip-routing/m-support-bgp-vpn-evpn-nexthop.pdf
-[^2]: https://help.mikrotik.com/docs/spaces/ROS/pages/28606515/Routing+Protocol+Overview
-[^3]: https://github.com/openbgpd-portable/openbgpd-openbsd/commit/f9365c08c05927510280d3b077392615c5b96026
+[^2]: https://github.com/openbgpd-portable/openbgpd-openbsd/commit/f9365c08c05927510280d3b077392615c5b96026
