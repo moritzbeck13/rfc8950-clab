@@ -1,16 +1,17 @@
 # Findings
 - Routers:
-	- Arista answers ICMP messages from their management interface if it is in the same VRF, leaking the management IP address.
+	- Arista EOS sends ICMP messages from the management interface if it is in the same VRF, leaking the management IP address.
 	- Cisco IOS XE only supports a very limited subset of SAFIs.
-	- Cisco IOS XR answers ICMP messages from their management interface if it is in the same VRF, leaking the management IP address.
+	- Cisco IOS XR sends ICMP messages from the management interface if it is in the same VRF, leaking the management IP address.
+	- Cisco IOS XR prefers link-local next-hops while not providing a way to configure this behaviour. This can cause connectivity issues in cases where `next-hop self` only updates the GUA.
 - Route Servers:
-	- BIRD has limited functionality for configuring the next hop type preference
-	- ExaBGP cannot modify the route table
-	- GoBGP cannot modify the route table
-	- OpenBGPD does not install routes into the FIB yet
+	- BIRD has limited functionality for configuring the next-hop type preference.
+	- ExaBGP cannot modify the route table.
+	- GoBGP cannot modify the route table.
+	- OpenBGPD does not install routes into the FIB yet.
 - Operating Systems:
-	- Linux can install IPv4 routes with an IPv6 next hop only via Netlink and not e.g. `ip route add`. It can forward IPv4 packets on IPv6 interfaces natively.
-	- OpenBSD cannot install IPv4 routes with an IPv6 next hop. It is unclear if it can forward IPv4 packets on IPv6 interfaces.
+	- Linux can install IPv4 routes with an IPv6 next-hop only via Netlink and not e.g. `ip route add`. It can forward IPv4 packets on IPv6 interfaces natively.
+	- OpenBSD cannot install IPv4 routes with an IPv6 next-hop. It is unclear if it can forward IPv4 packets on IPv6 interfaces.
 
 # Conclusion
 - almost all major vendors support RFC 8950, many smaller ones do not yet
@@ -53,10 +54,10 @@ Note: Operating Systems rely on a Route Server for peering. Therefore they are n
 |                  |              | **BIRD 2**   | ✅ | ❗ | ✅ | ❔ | ❔ | ❔ | ✅ | ❔ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |                                                               |
 |                  |              | **BIRD 3**   | ✅ | ❗ | ✅ | ❔ | ❔ | ❔ | ✅ | ❔ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |                                                               |
 |                  |              | **FRR**      | ✅ | ❗ | ✅ | ❔ | ❔ | ❔ | ✅ | ❔ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |                                                               |
-|                  |              | **OpenBGPD** | ✅ | ❗ | ✅ | ❔ | ❔ | ❔ | ✅ | ❔ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | OpenBGPD does not install routes into the FIB yet             |
+|                  |              | **OpenBGPD** | ✅ | ❗ | ✅ | ❔ | ❔ | ❔ | ✅ | ❔ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |                                                               |
 
 ## Advertising
-Wich types of IPv6 addresses are included in the BGP next hop field?
+Wich types of IPv6 addresses are included in the BGP next-hop field?
 - GUA = global unique adress
 - LLA = link local address
 - :: = zero/null/unspecified address
@@ -106,7 +107,7 @@ Wich type of IPv6 address is installed in the FIB? Is this behaviour configurabl
 Note: Route Servers rely on an Operating System for forwarding. Therefore they are not included in this category.
 
 ## Overview
-| Type       | Vendor       | Platform     | IPv4 routes with IPv6 next hop | IPv4 packets on IPv6 interface | Notes                                                       |
+| Type       | Vendor       | Platform     | IPv4 routes with IPv6 next-hop | IPv4 packets on IPv6 interface | Notes                                                       |
 |------------|--------------|--------------|--------------------------------|--------------------------------|-------------------------------------------------------------|
 | **Router** | **Arista**   | **EOS**      | ✅                             | ✅                             | `interface * ip routing address required disabled`          |
 |            | **Cisco**    | **IOS XE**   | ❔                             | ❔                             |                                                             |
@@ -119,7 +120,7 @@ Note: Route Servers rely on an Operating System for forwarding. Therefore they a
 |            | **Nokia**    | **SR Linux** | ✅                             | ✅                             | `network-instance * ip-forwarding receive-ipv4-check false` |
 |            | **Nokia**    | **SR OS**    | ✅                             | ✅                             | `router * interface * ipv6 forward-ipv4-packets`            |
 | **OS**     |              | **Linux**    | ✅                             | ✅                             | no special configuration needed. only via Netlink, not CLI  |
-|            |              | **OpenBSD**  | ❌[^3]                         | ❔                             |                                                             |
+|            |              | **OpenBSD**  | ❌                             | ❔                             | OpenBGPD does not install routes into the FIB yet[^3]       |
 
 ## ICMP
 The IPv4 address of which interface is used for sending ICMP messages?
