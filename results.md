@@ -39,16 +39,16 @@ Note: Operating Systems rely on a Route Server for peering. Therefore they are n
 ## Overview
 | <br>Type | <br>Vendor | <br>Platform | Arista<br>EOS | Cisco<br/>IOS XE | Cisco<br/>IOS XR | Cisco<br/>NX-OS | Extreme<br> | Huawei<br> | Juniper<br>Junos OS | Mikrotik<br>RouterOS | Nokia<br/>SR Linux | Nokia<br/>SR OS | <br>BIRD 1 | <br>BIRD 2 | <br>BIRD 3 | <br>FRR | <br>OpenBGPD | <br>Notes |
 |------------------|--------------|--------------|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|---------------------------------------------------------------|
-| **Router**       | **Arista**   | **EOS**      | ✅ | ❗ | ✅ | ❔ | ❔ | ❔ | ✅ | ❔ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |                                                               |
+| **Router**       | **Arista**   | **EOS**      | ✅ | ❗ | ✅ | ❔ | ❔ | ❔ | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |                                                               |
 |                  | **Cisco**    | **IOS XE**   | ❗ | ❗ | ❗ | ❗ | ❗ | ❗ | ❗ | ❗ | ❗ | ❗ | ❌ | ❗ | ❗ | ❗ | ❗ | Cisco IOS XE only supports a very limited subset of SAFIs[^1] |
-|                  | **Cisco**    | **IOS XR**   | ✅ | ❗ | ✅ | ❔ | ❔ | ❔ | ✅ | ❔ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |                                                               |
+|                  | **Cisco**    | **IOS XR**   | ✅ | ❗ | ✅ | ❔ | ❔ | ❔ | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |                                                               |
 |                  | **Cisco**    | **NX-OS**    | ❔ | ❗ | ❔ | ❔ | ❔ | ❔ | ❔ | ❔ | ❔ | ❔ | ❌ | ❔ | ❔ | ❔ | ❔ |                                                               |
 |                  | **Extreme**  |              | ❔ | ❗ | ❔ | ❔ | ❔ | ❔ | ❔ | ❔ | ❔ | ❔ | ❌ | ❔ | ❔ | ❔ | ❔ |                                                               |
 |                  | **Huawei**   |              | ❔ | ❗ | ❔ | ❔ | ❔ | ❔ | ❔ | ❔ | ❔ | ❔ | ❌ | ❔ | ❔ | ❔ | ❔ |                                                               |
-|                  | **Juniper**  | **Junos OS** | ✅ | ❗ | ✅ | ❔ | ❔ | ❔ | ✅ | ❔ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |                                                               |
-|                  | **Mikrotik** | **RouterOS** | ❔ | ❗ | ❔ | ❔ | ❔ | ❔ | ❔ | ❔ | ❔ | ❔ | ❌ | ❔ | ❔ | ❔ | ❔ | Mikrotik has announced support for RouterOS v7.20[^2]         |
-|                  | **Nokia**    | **SR Linux** | ✅ | ❗ | ✅ | ❔ | ❔ | ❔ | ✅ | ❔ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |                                                               |
-|                  | **Nokia**    | **SR OS**    | ✅ | ❗ | ✅ | ❔ | ❔ | ❔ | ✅ | ❔ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |                                                               |
+|                  | **Juniper**  | **Junos OS** | ✅ | ❗ | ✅ | ❔ | ❔ | ❔ | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |                                                               |
+|                  | **Mikrotik** | **RouterOS** | ✅ | ❗ | ✅ | ❔ | ❔ | ❔ | ✅ | ✅ | ✅ | ✅ | ❌ | ❔ | ❔ | ❔ | ❔ |                                                               |
+|                  | **Nokia**    | **SR Linux** | ✅ | ❗ | ✅ | ❔ | ❔ | ❔ | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |                                                               |
+|                  | **Nokia**    | **SR OS**    | ✅ | ❗ | ✅ | ❔ | ❔ | ❔ | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |                                                               |
 | **Route Server** |              | **BIRD 1**   | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | BIRD 1 will not support RFC 8950, use later versions instead  |
 |                  |              | **BIRD 2**   | ✅ | ❗ | ✅ | ❔ | ❔ | ❔ | ✅ | ❔ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |                                                               |
 |                  |              | **BIRD 3**   | ✅ | ❗ | ✅ | ❔ | ❔ | ❔ | ✅ | ❔ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |                                                               |
@@ -70,7 +70,7 @@ Wich types of IPv6 addresses are included in the BGP next hop field?
 |                  | **Extreme**  |              | ❔  | ❔  | ❔ |                                               |
 |                  | **Huawei**   |              | ❔  | ❔  | ❔ |                                               |
 |                  | **Juniper**  | **Junos OS** | ✅  | ✅  | ❎ |                                               |
-|                  | **Mikrotik** | **RouterOS** | ❔  | ❔  | ❔ |                                               |
+|                  | **Mikrotik** | **RouterOS** | ✅  | ❌  | ❌ | RFC 2545 non-compliant                        |
 |                  | **Nokia**    | **SR Linux** | ✅  | ❌  | ❌ | RFC 2545 non-compliant                        |
 |                  | **Nokia**    | **SR OS**    | ✅  | ❌  | ❌ | RFC 2545 non-compliant                        |
 | **Route Server** |              | **BIRD 1**   | ❔  | ❔  | ❔ |                                               |
@@ -93,7 +93,7 @@ Wich type of IPv6 address is installed in the FIB? Is this behaviour configurabl
 |                  | **Extreme**  |              | ❔         | ❔           |                                                                                              |
 |                  | **Huawei**   |              | ❔         | ❔           |                                                                                              |
 |                  | **Juniper**  | **Junos OS** | `GUA`      | ❌           |                                                                                              |
-|                  | **Mikrotik** | **RouterOS** | ❔         | ❔           |                                                                                              |
+|                  | **Mikrotik** | **RouterOS** | `GUA`      | ❌           |                                                                                              |
 |                  | **Nokia**    | **SR Linux** | `GUA`      | ❌           |                                                                                              |
 |                  | **Nokia**    | **SR OS**    | `GUA`      | ❌           |                                                                                              |
 | **Route Server** |              | **BIRD 1**   | ❔         | ❔           |                                                                                              |
@@ -115,7 +115,7 @@ Note: Route Servers rely on an Operating System for forwarding. Therefore they a
 |            | **Extreme**  |              | ❔                             | ❔                             |                                                             |
 |            | **Huawei**   |              | ❔                             | ❔                             |                                                             |
 |            | **Juniper**  | **Junos OS** | ✅                             | ✅                             | `set interfaces * unit * family inet`                       |
-|            | **Mikrotik** | **RouterOS** | ❔                             | ❔                             |                                                             |
+|            | **Mikrotik** | **RouterOS** | ✅                             | ✅                             |                                                             |
 |            | **Nokia**    | **SR Linux** | ✅                             | ✅                             | `network-instance * ip-forwarding receive-ipv4-check false` |
 |            | **Nokia**    | **SR OS**    | ✅                             | ✅                             | `router * interface * ipv6 forward-ipv4-packets`            |
 | **OS**     |              | **Linux**    | ✅                             | ✅                             | no special configuration needed. only via Netlink, not CLI  |
@@ -136,7 +136,7 @@ The IPv4 address of which interface is used for sending ICMP messages?
 |            | **Extreme**  |              | ❔        |                                      |
 |            | **Huawei**   |              | ❔        |                                      |
 |            | **Juniper**  | **Junos OS** | `lo`      |                                      |
-|            | **Mikrotik** | **RouterOS** | ❔        |                                      |
+|            | **Mikrotik** | **RouterOS** | `lo`      |                                      |
 |            | **Nokia**    | **SR Linux** | `out`     |                                      |
 |            | **Nokia**    | **SR OS**    | `out`     |                                      |
 | **OS**     |              | **Linux**    | `lo`      |                                      |

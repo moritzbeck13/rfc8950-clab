@@ -325,7 +325,7 @@ class Mikrotik(Router):
 
 	FILE_EXTENSION = ".auto.rsc"
 
-	STATEMENT_BGP_NEIGHBOR = "/routing/bgp/connection/add name=bgp-connection-$BGP_NEIGHBOR_ID instance=bgp-instance-1 remote.address=$BGP_NEIGHBOR_IP_ADDRESS local.role=ebgp afi=ip"
+	STATEMENT_BGP_NEIGHBOR = "add instance=bgp-instance-1 local.role=ebgp name=bgp-connection-$BGP_NEIGHBOR_ID remote.address=$BGP_NEIGHBOR_IP_ADDRESS templates=default"
 
 class Nokia_SR_Linux(Router):
 	KIND = "nokia_srlinux"

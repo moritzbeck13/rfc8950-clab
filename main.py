@@ -20,7 +20,7 @@ routers: dict[type[kinds.Router], dict] = {
 	kinds.Cisco_XRd: {"image": "ios-xr/xrd-control-plane:25.1.1"},
 	kinds.Juniper_vJunosEvolved: {"image": "vrnetlab/juniper_vjunosevolved:24.4R1.8"},
 	kinds.Linux: {"image": "quay.io/frrouting/frr:10.3.0"},
-	kinds.Mikrotik: {"image": "vrnetlab/mikrotik_routeros:7.20beta4"},
+	kinds.Mikrotik: {"image": "vrnetlab/mikrotik_routeros:7.20beta5"},
 	kinds.Nokia_SR_Linux: {"image": "ghcr.io/nokia/srlinux"},
 	kinds.Nokia_SR_OS: {"image": "vrnetlab/nokia_sros:23.10.R6", "license": "licenses/SR_OS_VSR-SIM1_license.txt"}
 }
