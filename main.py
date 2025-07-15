@@ -8,8 +8,7 @@ from clab import containerlab, kinds, topology
 
 
 route_servers: dict[type[kinds.Route_Server], dict] = {
-		kinds.BIRD_2: {"image": "bird:2"},
-		kinds.BIRD_3: {"image": "bird:3"},
+		kinds.BIRD: {"image": "bird:3"},
 		kinds.FRR: {"image": "quay.io/frrouting/frr:10.3.0"},
 		kinds.OpenBGPD: {"image": "openbgpd/openbgpd"}
 }
@@ -19,8 +18,10 @@ routers: dict[type[kinds.Router], dict] = {
 	kinds.Arista_vEOS: {"image": "vrnetlab/arista_veos:4.33.2F"},
 	kinds.Cisco_XRd: {"image": "ios-xr/xrd-control-plane:25.1.1"},
 	kinds.Juniper_vJunosEvolved: {"image": "vrnetlab/juniper_vjunosevolved:24.4R1.8"},
-	kinds.Linux: {"image": "quay.io/frrouting/frr:10.3.0"},
-	kinds.Mikrotik: {"image": "vrnetlab/mikrotik_routeros:7.20beta5"},
+	kinds.Linux_BIRD: {"image": "bird:3"},
+	kinds.Linux_FRR: {"image": "quay.io/frrouting/frr:10.3.0"},
+	kinds.Linux_OpenBGPD: {"image": "openbgpd/openbgpd"},
+	kinds.Mikrotik_RouterOS: {"image": "vrnetlab/mikrotik_routeros:7.20beta5"},
 	kinds.Nokia_SR_Linux: {"image": "ghcr.io/nokia/srlinux"},
 	kinds.Nokia_SR_OS: {"image": "vrnetlab/nokia_sros:23.10.R6", "license": "licenses/SR_OS_VSR-SIM1_license.txt"}
 }
@@ -181,7 +182,7 @@ async def peering_lan_reachability_test(lab: containerlab.Lab):
 	file.close()
 
 def rfc8950():
-	id: int = 1
+	id: int = 0
 	router_peers: list[tuple[kinds.Router, ipaddress.IPv4Interface | ipaddress.IPv6Interface]] = []
 	route_server_peers: list[tuple[kinds.Router, ipaddress.IPv4Interface | ipaddress.IPv6Interface]] = []
 
@@ -191,17 +192,21 @@ def rfc8950():
 	peering_lan.add_interface(topology.Interface(None, None))
 	lab.topology.add_node(peering_lan)
 
-	route_server: kinds.Route_Server = kinds.FRR(id, **route_servers[kinds.FRR])
-	route_server.add_interface(topology.Interface("loopback", None,
-		ipv4=ipaddress.IPv4Interface(("203.0.113." + str(id), 32))))
-	route_server.add_interface(topology.Interface("peering_lan", 1,
-		ipv6=ipaddress.IPv6Interface(("2001:7f8::" + str(id), 64))))
-	router_peers.append((route_server, route_server.interfaces[1].ipv6))
-	route_server.peers = route_server_peers
-	lab.topology.add_node(route_server)
+	for Route_Server, attributes in route_servers.items():
+		for _ in range(1):
+			id += 1
 
-	peering_lan.add_interface(topology.Interface("route_server", id))
-	lab.topology.connect_interfaces(peering_lan.interfaces[id], route_server.interfaces[1])
+			route_server: kinds.Route_Server = Route_Server(id, **attributes)
+			route_server.add_interface(topology.Interface("loopback", None,
+				ipv4=ipaddress.IPv4Interface(("203.0.113." + str(id), 32))))
+			route_server.add_interface(topology.Interface("peering_lan", 1,
+				ipv6=ipaddress.IPv6Interface(("2001:7f8::" + str(id), 64))))
+			router_peers.append((route_server, route_server.interfaces[1].ipv6))
+			route_server.peers = route_server_peers
+			lab.topology.add_node(route_server)
+
+			peering_lan.add_interface(topology.Interface("router_" + str(id), id, id))
+			lab.topology.connect_interfaces(peering_lan.interfaces[id], route_server.interfaces[1])
 
 	for Router, attributes in routers.items():
 		for _ in range(1):
@@ -214,8 +219,8 @@ def rfc8950():
 				ipv6=ipaddress.IPv6Interface(("2001:7f8::" + str(id), 64))))
 			router.add_interface(topology.Interface("client_lan", 2,
 				ipv4=ipaddress.IPv4Interface(("192.168." + str(id) + ".1", 24))))
-			router_peers.append((router, router.interfaces[1].ipv6))
-			router.peers = router_peers
+			route_server_peers.append((router, router.interfaces[1].ipv6))
+			router.peers = route_server_peers
 			lab.topology.add_node(router)
 
 			client: kinds.Client = kinds.Alpine(id)
@@ -225,7 +230,7 @@ def rfc8950():
 			client.default_gateway = client.interfaces[1]
 			lab.topology.add_node(client)
 
-			peering_lan.add_interface(topology.Interface("peering_lan_" + str(id), id))
+			peering_lan.add_interface(topology.Interface("router_" + str(id), id))
 			lab.topology.connect_interfaces(peering_lan.interfaces[id], router.interfaces[1])
 			lab.topology.connect_interfaces(router.interfaces[2], client.interfaces[1])
 
@@ -236,7 +241,7 @@ def rfc8950():
 	asyncio.run(rfc8950_test(lab))
 
 def peering_lan_reachability():
-	id: int = 1
+	id: int = 0
 	router_peers: list[tuple[kinds.Router, ipaddress.IPv4Interface | ipaddress.IPv6Interface]] = []
 	route_server_peers: list[tuple[kinds.Router, ipaddress.IPv4Interface | ipaddress.IPv6Interface]] = []
 
@@ -245,6 +250,8 @@ def peering_lan_reachability():
 	peering_lan: kinds.Bridge = kinds.Bridge("peering_lan")
 	peering_lan.add_interface(topology.Interface(None, None))
 	lab.topology.add_node(peering_lan)
+
+	id += 1
 
 	route_server: kinds.Route_Server = kinds.FRR(id, **route_servers[kinds.FRR])
 	route_server.add_interface(topology.Interface("loopback", None,

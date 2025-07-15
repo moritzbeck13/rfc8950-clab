@@ -186,7 +186,7 @@ class Router(clab.topology.Node):
 		file.write(config)
 		file.close()
 
-class Arista(Router):
+class Arista_EOS(Router):
 	STATEMENT_IPV4_ADDRESSING = """\
    ip address $INTERFACE_IPV4_IP_ADDRESS/$INTERFACE_IPV4_PREFIX_LENGTH"""
 	STATEMENT_NO_IPV4_ADDRESSING = """\
@@ -199,13 +199,13 @@ class Arista(Router):
    neighbor $BGP_NEIGHBOR_IP_ADDRESS peer group $BGP_GROUP_NAME_group
    neighbor $BGP_NEIGHBOR_IP_ADDRESS remote-as $BGP_NEIGHBOR_ASN"""
 
-class Arista_cEOS(Arista):
+class Arista_cEOS(Arista_EOS):
 	KIND = "arista_ceos"
 	NAME = "arista_ceos"
 
 	FILE_EXTENSION = ""
 
-class Arista_vEOS(Arista):
+class Arista_vEOS(Arista_EOS):
 	KIND = "arista_veos"
 	NAME = "arista_veos"
 
@@ -245,7 +245,7 @@ class Cisco_XRv9k(Cisco_IOS_XR):
 
 	INTERFACE_PREFIX = "Gi0/0/0/"
 
-class Juniper(Router):
+class Juniper_Junos_OS(Router):
 	FILE_EXTENSION = ".cfg"
 
 	PASSWORD = "admin@123"
@@ -267,35 +267,20 @@ class Juniper(Router):
                 peer-as $BGP_NEIGHBOR_ASN;
             }"""
 
-class Juniper_vJunos_router(Juniper):
+class Juniper_vJunos_router(Juniper_Junos_OS):
 	KIND = "juniper_vjunosrouter"
 	NAME = "juniper_vjunosrouter"
 
-class Juniper_vJunos_switch(Juniper):
+class Juniper_vJunos_switch(Juniper_Junos_OS):
 	KIND = "juniper_vjunosswitch"
 	NAME = "juniper_vjunosswitch"
 
-class Juniper_vJunosEvolved(Juniper):
+class Juniper_vJunosEvolved(Juniper_Junos_OS):
 	KIND = "juniper_vjunosevolved"
 	NAME = "juniper_vjunosevolved"
 
 class Linux(Router):
 	KIND = "linux"
-	NAME = "linux"
-
-	FILE_EXTENSION = ".conf"
-
-	STATEMENT_BGP_NEIGHBOR = """\
- neighbor $BGP_NEIGHBOR_IP_ADDRESS remote-as $BGP_NEIGHBOR_ASN
- neighbor $BGP_NEIGHBOR_IP_ADDRESS peer-group $BGP_GROUP_NAME_group"""
-
-	def __init__(self, id: int, **kwargs: dict):
-		super().__init__(id, **kwargs)
-
-		self.add_attribute("binds", [
-			"configs/" + self.get_name() + self.FILE_EXTENSION + ":/etc/frr/frr.conf",
-			"mounts/daemons:/etc/frr/daemons",
-			"mounts/vtysh.conf:/etc/frr/vtysh.conf"])
 
 	def export(self):
 		super().export()
@@ -319,7 +304,55 @@ class Linux(Router):
 
 		self.add_attribute("exec", exec)
 
-class Mikrotik(Router):
+class Linux_BIRD(Linux):
+	NAME = "linux_bird"
+
+	FILE_EXTENSION = ".conf"
+
+	STATEMENT_BGP_NEIGHBOR = """\
+protocol bgp from $BGP_GROUP_NAME_template {
+  	neighbor $BGP_NEIGHBOR_IP_ADDRESS as $BGP_NEIGHBOR_ASN;
+}"""
+
+	def __init__(self, id: int, **kwargs: dict):
+		super().__init__(id, **kwargs)
+
+		self.add_attribute("binds", ["configs/" + self.get_name() + self.FILE_EXTENSION + ":/etc/bird.conf"])
+
+class Linux_FRR(Linux):
+	NAME = "linux_frr"
+
+	FILE_EXTENSION = ".conf"
+
+	STATEMENT_BGP_NEIGHBOR = """\
+ neighbor $BGP_NEIGHBOR_IP_ADDRESS remote-as $BGP_NEIGHBOR_ASN
+ neighbor $BGP_NEIGHBOR_IP_ADDRESS peer-group $BGP_GROUP_NAME_group"""
+
+	def __init__(self, id: int, **kwargs: dict):
+		super().__init__(id, **kwargs)
+
+		self.add_attribute("binds", [
+			"configs/" + self.get_name() + self.FILE_EXTENSION + ":/etc/frr/frr.conf",
+			"mounts/daemons:/etc/frr/daemons",
+			"mounts/vtysh.conf:/etc/frr/vtysh.conf"])
+
+class Linux_OpenBGPD(Linux):
+	NAME = "linux_openbgpd"
+
+	FILE_EXTENSION = ".conf"
+
+	STATEMENT_BGP_NEIGHBOR = """\
+	neighbor $BGP_NEIGHBOR_IP_ADDRESS {
+		remote-as $BGP_NEIGHBOR_ASN
+	}"""
+
+	def __init__(self, id: int, **kwargs: dict):
+		super().__init__(id, **kwargs)
+
+		self.add_attribute("binds", [
+			"configs/" + self.get_name() + self.FILE_EXTENSION + ":/etc/bgpd/bgpd.conf"])
+
+class Mikrotik_RouterOS(Router):
 	KIND = "mikrotik_ros"
 	NAME = "mikrotik"
 
@@ -402,6 +435,7 @@ class Route_Server(Router):
 
 class BIRD(Route_Server):
 	KIND = "linux"
+	NAME = "bird"
 
 	FILE_EXTENSION = ".conf"
 
@@ -414,12 +448,6 @@ protocol bgp from $BGP_GROUP_NAME_template {
 		super().__init__(id, **kwargs)
 
 		self.add_attribute("binds", ["configs/" + self.get_name() + self.FILE_EXTENSION + ":/etc/bird.conf"])
-
-class BIRD_2(BIRD):
-	NAME = "bird_2"
-
-class BIRD_3(BIRD):
-	NAME = "bird_3"
 
 class FRR(Route_Server):
 	KIND = "linux"

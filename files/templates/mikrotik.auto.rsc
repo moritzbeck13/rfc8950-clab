@@ -15,5 +15,6 @@ add address=$PEERING_LAN_IPV6_IP_ADDRESS/$PEERING_LAN_IPV6_PREFIX_LENGTH interfa
 /routing bgp connection
 $BGP_NEIGHBORS
 /routing filter rule
-add chain=accept_$CLIENT_LAN_NAME_filter rule="if ( dst == $CLIENT_LAN_IPV4_NETWORK_ADDRESS/$CLIENT_LAN_IPV4_PREFIX_LENGTH ) { accept; } else { reject; }"
+add chain=accept_$CLIENT_LAN_NAME_filter rule="if ( dst == $CLIENT_LAN_IPV4_NETWORK_ADDRESS/$CLIENT_LAN_IPV4_PREFIX_LENGTH ) { accept; }"
+add chain=accept_$CLIENT_LAN_NAME_filter rule=reject
 add chain=default_accept_filter rule=accept
