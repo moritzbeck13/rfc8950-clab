@@ -59,5 +59,4 @@
 - https://elegantnetwork.github.io/posts/comparing-open-source-bgp-stacks/
 - https://datatracker.ietf.org/doc/draft-ietf-idr-linklocal-capability/
 
-## References
 [^1]: https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/ip-routing/b-ip-routing/m-support-bgp-vpn-evpn-nexthop.pdf
