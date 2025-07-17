@@ -18,94 +18,15 @@ routers: dict[type[kinds.Router], dict] = {
 	kinds.Arista_vEOS: {"image": "vrnetlab/arista_veos:4.33.2F"},
 	kinds.Cisco_XRd: {"image": "ios-xr/xrd-control-plane:25.1.1"},
 	kinds.Juniper_vJunosEvolved: {"image": "vrnetlab/juniper_vjunosevolved:24.4R1.8"},
-	kinds.Linux_BIRD: {"image": "bird:3"},
-	kinds.Linux_FRR: {"image": "quay.io/frrouting/frr:10.3.0"},
-	kinds.Linux_OpenBGPD: {"image": "openbgpd/openbgpd"},
+#	kinds.Linux_BIRD: {"image": "bird:3"},
+#	kinds.Linux_FRR: {"image": "quay.io/frrouting/frr:10.3.0"},
+#	kinds.Linux_OpenBGPD: {"image": "openbgpd/openbgpd"},
 	kinds.Mikrotik_RouterOS: {"image": "vrnetlab/mikrotik_routeros:7.20beta5"},
 	kinds.Nokia_SR_Linux: {"image": "ghcr.io/nokia/srlinux"},
 	kinds.Nokia_SR_OS: {"image": "vrnetlab/nokia_sros:23.10.R6", "license": "licenses/SR_OS_VSR-SIM1_license.txt"}
 }
 
 
-
-async def rfc8950_test(lab: containerlab.Lab):
-	routers: list[kinds.Router] = []
-
-	for node in lab.topology.nodes:
-		if isinstance(node, kinds.Router) and not isinstance(node, kinds.Route_Server):
-			routers.append(node)
-
-	matrix = {}
-	tasks = []
-
-	for router_from in routers:
-		matrix[router_from.get_name()] = {
-			"icmp-addresses": {},
-			"traceroute": {}}
-
-		for router_to in routers:
-			if router_to is not router_from:
-				tasks.append(router_from.interfaces[2].connected_to.node.exec(["traceroute", "-I", "-n", "-m", "3", str(router_to.interfaces[2].connected_to.ipv4.ip)],
-					kind="traceroute", router_from=router_from, router_to=router_to))
-
-	results = await asyncio.gather(*tasks)
-
-	for result in results:
-		command = result.get("command")
-		returncode = result.get("returncode")
-		stderr = result.get("stderr")
-		stdout = result.get("stdout")
-		kwargs = result.get("kwargs")
-
-		kind = kwargs.get("kind")
-
-		test = {
-			"command": command,
-			"reasons": [],
-			"result": "failed",
-			"returncode": returncode,
-			"stderr": stderr,
-			"stdout": stdout}
-
-		router_from: kinds.Router = kwargs["router_from"]
-		router_to: kinds.Router = kwargs["router_to"]
-
-		if returncode != 0:
-			test["reasons"].append("non-zero exit code")
-		if len(stderr) != 0:
-			test["reasons"].append("stderr is not empty")
-
-		if kind == "traceroute":
-			if len(stdout) != 4:
-				test["reasons"].append("unexpected length of stdout")
-			if len(stdout) > 1 and str(router_from.interfaces[2].ipv4.ip) not in stdout[1]:
-					test["reasons"].append("incorrect first hop")
-			if len(stdout) > 3 and str(router_to.interfaces[2].connected_to.ipv4.ip) not in stdout[3]:
-					test["reasons"].append("incorrect last hop")
-			if test["reasons"] == []:
-				test["result"] = "succeeded"
-
-				address = stdout[2].split(" ")[3]
-
-				if address not in matrix[router_to.get_name()]["icmp-addresses"]:
-					interface_name = "other"
-
-					for interface in router_to.interfaces:
-						if interface.ipv4 is not None and address == str(interface.ipv4.ip):
-							interface_name = interface.name
-							break
-
-					matrix[router_to.get_name()]["icmp-addresses"][address] = {
-						"as-seen-by": [router_from.get_name()],
-						"interface": interface_name}
-				else:
-					matrix[router_to.get_name()]["icmp-addresses"][address]["as-seen-by"].append(router_from.get_name())
-
-		matrix[router_from.get_name()][kind][router_to.get_name()] = test
-
-	file = open("results.yml", "w")
-	file.write(yaml.dump(matrix))
-	file.close()
 
 async def peering_lan_reachability_test(lab: containerlab.Lab):
 	routers_from: list[kinds.Router] = []
@@ -181,7 +102,6 @@ async def peering_lan_reachability_test(lab: containerlab.Lab):
 	file.write(yaml.dump(matrix))
 	file.close()
 
-def rfc8950():
 	id: int = 0
 	router_peers: list[tuple[kinds.Router, ipaddress.IPv4Interface | ipaddress.IPv6Interface]] = []
 	route_server_peers: list[tuple[kinds.Router, ipaddress.IPv4Interface | ipaddress.IPv6Interface]] = []
@@ -251,22 +171,24 @@ def peering_lan_reachability():
 	peering_lan.add_interface(topology.Interface(None, None))
 	lab.topology.add_node(peering_lan)
 
-	id += 1
+	for Route_Server, attributes in route_servers.items():
+		for _ in range(1):
+			id += 1
 
-	route_server: kinds.Route_Server = kinds.FRR(id, **route_servers[kinds.FRR])
-	route_server.add_interface(topology.Interface("loopback", None,
-		ipv4=ipaddress.IPv4Interface(("203.0.113." + str(id), 32)),
-		ipv6=ipaddress.IPv6Interface(("3fff::" + str(id), 128))))
-	route_server.add_interface(topology.Interface("peering_lan", 1,
-		ipv4=ipaddress.IPv4Interface(("80.81.192." + str(id), 21)),
-		ipv6=ipaddress.IPv6Interface(("2001:7f8::" + str(id), 64))))
-	router_peers.append((route_server, route_server.interfaces[1].ipv4))
-	router_peers.append((route_server, route_server.interfaces[1].ipv6))
-	route_server.peers = route_server_peers
-	lab.topology.add_node(route_server)
+			route_server: kinds.Route_Server = Route_Server(id, **attributes)
+			route_server.add_interface(topology.Interface("loopback", None,
+				ipv4=ipaddress.IPv4Interface(("203.0.113." + str(id), 32)),
+				ipv6=ipaddress.IPv6Interface(("3fff::" + str(id), 128))))
+			route_server.add_interface(topology.Interface("peering_lan", 1,
+				ipv4=ipaddress.IPv4Interface(("80.81.192." + str(id), 21)),
+				ipv6=ipaddress.IPv6Interface(("2001:7f8::" + str(id), 64))))
+			router_peers.append((route_server, route_server.interfaces[1].ipv4))
+			router_peers.append((route_server, route_server.interfaces[1].ipv6))
+			route_server.peers = route_server_peers
+			lab.topology.add_node(route_server)
 
-	peering_lan.add_interface(topology.Interface("route_server", id))
-	lab.topology.connect_interfaces(peering_lan.interfaces[id], route_server.interfaces[1])
+			peering_lan.add_interface(topology.Interface("route_server", id))
+			lab.topology.connect_interfaces(peering_lan.interfaces[id], route_server.interfaces[1])
 
 	for Router, attributes in routers.items():
 		for _ in range(1):
@@ -306,4 +228,4 @@ def peering_lan_reachability():
 	asyncio.run(peering_lan_reachability_test(lab))
 
 if __name__ == "__main__":
-	rfc8950()
+	peering_lan_reachability()
