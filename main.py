@@ -158,7 +158,7 @@ async def peering_lan_reachability_test(lab: containerlab.Lab):
 	lab.export()
 	lab.deploy()
 	time.sleep(60*10)
-	asyncio.run(rfc8950_test(lab))
+	asyncio.run(peering_lan_reachability_test(lab))
 
 def peering_lan_reachability():
 	id: int = 0
