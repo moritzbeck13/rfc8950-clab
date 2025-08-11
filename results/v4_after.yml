@@ -1,0 +1,198 @@
+arista_ceos_2:
+  frr_1:
+    bgp:
+      command: nc -z 80.81.192.1 179
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout: []
+    ping:
+      command: ping -c 3 80.81.192.1
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout:
+      - 'PING 80.81.192.1 (80.81.192.1): 56 data bytes'
+      - ''
+      - '--- 80.81.192.1 ping statistics ---'
+      - 3 packets transmitted, 0 packets received, 100% packet loss
+    traceroute:
+      command: traceroute -I -n -m 2 80.81.192.1
+      reasons:
+      - incorrect last hop
+      result: failed
+      returncode: 0
+      stderr: []
+      stdout:
+      - traceroute to 80.81.192.1 (80.81.192.1), 2 hops max, 46 byte packets
+      - ' 1  192.168.2.1  0.005 ms  0.003 ms  0.003 ms'
+      - ' 2  *  *  *'
+arista_veos_3:
+  frr_1:
+    bgp:
+      command: nc -z 80.81.192.1 179
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout: []
+    ping:
+      command: ping -c 3 80.81.192.1
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout:
+      - 'PING 80.81.192.1 (80.81.192.1): 56 data bytes'
+      - ''
+      - '--- 80.81.192.1 ping statistics ---'
+      - 3 packets transmitted, 0 packets received, 100% packet loss
+    traceroute:
+      command: traceroute -I -n -m 2 80.81.192.1
+      reasons:
+      - incorrect last hop
+      result: failed
+      returncode: 0
+      stderr: []
+      stdout:
+      - traceroute to 80.81.192.1 (80.81.192.1), 2 hops max, 46 byte packets
+      - ' 1  192.168.3.1  0.672 ms  0.685 ms  0.647 ms'
+      - ' 2  *  *  *'
+cisco_xrd_4:
+  frr_1:
+    bgp:
+      command: nc -z 80.81.192.1 179
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout: []
+    ping:
+      command: ping -c 3 80.81.192.1
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout:
+      - 'PING 80.81.192.1 (80.81.192.1): 56 data bytes'
+      - ''
+      - '--- 80.81.192.1 ping statistics ---'
+      - 3 packets transmitted, 0 packets received, 100% packet loss
+    traceroute:
+      command: traceroute -I -n -m 2 80.81.192.1
+      reasons:
+      - incorrect last hop
+      result: failed
+      returncode: 0
+      stderr: []
+      stdout:
+      - traceroute to 80.81.192.1 (80.81.192.1), 2 hops max, 46 byte packets
+      - ' 1  192.168.4.1  1.119 ms  0.712 ms  0.521 ms'
+      - ' 2  *  *  *'
+juniper_vjunosevolved_5:
+  frr_1:
+    bgp:
+      command: nc -z 80.81.192.1 179
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout: []
+    ping:
+      command: ping -c 3 80.81.192.1
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout:
+      - 'PING 80.81.192.1 (80.81.192.1): 56 data bytes'
+      - ''
+      - '--- 80.81.192.1 ping statistics ---'
+      - 3 packets transmitted, 0 packets received, 100% packet loss
+    traceroute:
+      command: traceroute -I -n -m 2 80.81.192.1
+      reasons:
+      - incorrect last hop
+      result: failed
+      returncode: 0
+      stderr: []
+      stdout:
+      - traceroute to 80.81.192.1 (80.81.192.1), 2 hops max, 46 byte packets
+      - ' 1  192.168.5.1  3.662 ms  2.424 ms  3.384 ms'
+      - ' 2  *  *  *'
+nokia_srlinux_6:
+  frr_1:
+    bgp:
+      command: nc -z 80.81.192.1 179
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout: []
+    ping:
+      command: ping -c 3 80.81.192.1
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout:
+      - 'PING 80.81.192.1 (80.81.192.1): 56 data bytes'
+      - ''
+      - '--- 80.81.192.1 ping statistics ---'
+      - 3 packets transmitted, 0 packets received, 100% packet loss
+    traceroute:
+      command: traceroute -I -n -m 2 80.81.192.1
+      reasons:
+      - incorrect last hop
+      result: failed
+      returncode: 0
+      stderr: []
+      stdout:
+      - traceroute to 80.81.192.1 (80.81.192.1), 2 hops max, 46 byte packets
+      - ' 1  192.168.6.1  1.448 ms  0.678 ms  0.420 ms'
+      - ' 2  *  *  *'
+nokia_sros_7:
+  frr_1:
+    bgp:
+      command: nc -z 80.81.192.1 179
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout: []
+    ping:
+      command: ping -c 3 80.81.192.1
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout:
+      - 'PING 80.81.192.1 (80.81.192.1): 56 data bytes'
+      - ''
+      - '--- 80.81.192.1 ping statistics ---'
+      - 3 packets transmitted, 0 packets received, 100% packet loss
+    traceroute:
+      command: traceroute -I -n -m 2 80.81.192.1
+      reasons:
+      - incorrect last hop
+      result: failed
+      returncode: 0
+      stderr: []
+      stdout:
+      - traceroute to 80.81.192.1 (80.81.192.1), 2 hops max, 46 byte packets
+      - ' 1  192.168.7.1  1.342 ms  1.716 ms  1.033 ms'
+      - ' 2  *  *  *'

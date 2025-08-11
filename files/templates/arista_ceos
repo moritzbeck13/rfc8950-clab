@@ -1,3 +1,24 @@
+ip access-list rs_protection_v4
+   10 permit icmp 80.81.192.0/21 80.81.192.0/21
+   30 permit tcp 80.81.192.0/21 eq bgp 80.81.192.0/21
+   31 permit tcp 80.81.192.0/21 80.81.192.0/21 eq bgp
+   40 permit udp 80.81.192.0/21 eq bfd 80.81.192.0/21
+   41 permit udp 80.81.192.0/21 80.81.192.0/21 eq bfd
+   50 deny ip any any
+
+ipv6 access-list rs_protection_v6
+   10 permit icmpv6 2001:7f8::/64 2001:7f8::/64
+   11 permit icmpv6 2001:7f8::/64 fe80::/10
+   12 permit icmpv6 2001:7f8::/64 ff00::/8
+   20 permit icmpv6 fe80::/10 2001:7f8::/64
+   21 permit icmpv6 fe80::/10 fe80::/10
+   22 permit icmpv6 fe80::/10 ff00::/8
+   30 permit tcp 2001:7f8::/64 eq bgp 2001:7f8::/64
+   31 permit tcp 2001:7f8::/64 2001:7f8::/64 eq bgp
+   40 permit udp 2001:7f8::/64 eq bfd 2001:7f8::/64
+   41 permit udp 2001:7f8::/64 2001:7f8::/64 eq bfd
+   50 deny ipv6 any any
+
 interface Ethernet1
    description $PEERING_LAN_NAME_interface
    no switchport
@@ -14,13 +35,7 @@ $LOOPBACK_INTERFACES
 
 ip routing
 
-ip prefix-list $CLIENT_LAN_NAME_prefix_list seq 10 permit $CLIENT_LAN_IPV4_NETWORK_ADDRESS/$CLIENT_LAN_IPV4_PREFIX_LENGTH
-ip prefix-list $CLIENT_LAN_NAME_prefix_list seq 20 deny 0.0.0.0/0
-
-route-map accept_$CLIENT_LAN_NAME_route_map permit 10
-   match ip address prefix-list $CLIENT_LAN_NAME_prefix_list
-
-route-map accept_$CLIENT_LAN_NAME_route_map deny 20
+ipv6 unicast-routing
 
 route-map default_accept_route_map permit 10
 
@@ -32,8 +47,13 @@ $BGP_NEIGHBORS
    address-family ipv4
       neighbor $BGP_GROUP_NAME_group activate
       neighbor $BGP_GROUP_NAME_group route-map default_accept_route_map in
-      neighbor $BGP_GROUP_NAME_group route-map accept_$CLIENT_LAN_NAME_route_map out
-      neighbor $BGP_GROUP_NAME_group next-hop address-family ipv6 originate
+      neighbor $BGP_GROUP_NAME_group route-map default_accept_route_map out
       network $CLIENT_LAN_IPV4_NETWORK_ADDRESS/$CLIENT_LAN_IPV4_PREFIX_LENGTH
+   
+   address-family ipv6
+      neighbor $BGP_GROUP_NAME_group activate
+      neighbor $BGP_GROUP_NAME_group route-map default_accept_route_map in
+      neighbor $BGP_GROUP_NAME_group route-map default_accept_route_map out
+      network $CLIENT_LAN_IPV6_NETWORK_ADDRESS/$CLIENT_LAN_IPV6_PREFIX_LENGTH
 
 end

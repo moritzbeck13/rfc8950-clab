@@ -1,0 +1,24 @@
+ipv4 access-list rs_protection_v4
+ 10 permit icmp 80.81.192.0/21 80.81.192.0/21
+ 30 permit tcp 80.81.192.0/21 eq bgp 80.81.192.0/21
+ 31 permit tcp 80.81.192.0/21 80.81.192.0/21 eq bgp
+ 40 permit udp 80.81.192.0/21 eq bfd 80.81.192.0/21
+ 41 permit udp 80.81.192.0/21 80.81.192.0/21 eq bfd
+ 50 deny ipv4 any any
+
+ipv6 access-list rs_protection_v6
+ 10 permit icmpv6 2001:7f8::/64 2001:7f8::/64
+ 11 permit icmpv6 2001:7f8::/64 fe80::/10
+ 12 permit icmpv6 2001:7f8::/64 ff00::/8
+ 20 permit icmpv6 fe80::/10 2001:7f8::/64
+ 21 permit icmpv6 fe80::/10 fe80::/10
+ 22 permit icmpv6 fe80::/10 ff00::/8
+ 30 permit tcp 2001:7f8::/64 eq bgp 2001:7f8::/64
+ 31 permit tcp 2001:7f8::/64 2001:7f8::/64 eq bgp
+ 40 permit udp 2001:7f8::/64 eq bfd 2001:7f8::/64
+ 41 permit udp 2001:7f8::/64 2001:7f8::/64 eq bfd
+ 50 deny ipv6 any any
+
+interface *
+ ipv4 access-group rs_protection_v4 egress
+ ipv6 access-group rs_protection_v6 egress

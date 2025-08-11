@@ -1,0 +1,200 @@
+arista_ceos_2:
+  frr_1:
+    bgp:
+      command: nc -z 2001:7f8::1 179
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout: []
+    ping:
+      command: ping -c 3 2001:7f8::1
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout:
+      - 'PING 2001:7f8::1 (2001:7f8::1): 56 data bytes'
+      - ''
+      - '--- 2001:7f8::1 ping statistics ---'
+      - 3 packets transmitted, 0 packets received, 100% packet loss
+    traceroute:
+      command: traceroute -n -m 2 2001:7f8::1
+      reasons:
+      - incorrect last hop
+      result: failed
+      returncode: 0
+      stderr: []
+      stdout:
+      - traceroute to 2001:7f8::1 (2001:7f8::1), 2 hops max, 72 byte packets
+      - ' 1  2001:db8:2::1  0.009 ms  0.003 ms  0.002 ms'
+      - ' 2  *  *  *'
+arista_veos_3:
+  frr_1:
+    bgp:
+      command: nc -z 2001:7f8::1 179
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout: []
+    ping:
+      command: ping -c 3 2001:7f8::1
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout:
+      - 'PING 2001:7f8::1 (2001:7f8::1): 56 data bytes'
+      - ''
+      - '--- 2001:7f8::1 ping statistics ---'
+      - 3 packets transmitted, 0 packets received, 100% packet loss
+    traceroute:
+      command: traceroute -n -m 2 2001:7f8::1
+      reasons:
+      - unexpected length of stdout
+      - incorrect first hop
+      result: failed
+      returncode: 0
+      stderr: []
+      stdout:
+      - traceroute to 2001:7f8::1 (2001:7f8::1), 2 hops max, 72 byte packets
+      - ' 1  2001:db8:3:0:a8c1:abff:fe79:c35f  3051.477 ms !H  3071.709 ms !H  3071.910
+        ms !H'
+cisco_xrd_4:
+  frr_1:
+    bgp:
+      command: nc -z 2001:7f8::1 179
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout: []
+    ping:
+      command: ping -c 3 2001:7f8::1
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout:
+      - 'PING 2001:7f8::1 (2001:7f8::1): 56 data bytes'
+      - ''
+      - '--- 2001:7f8::1 ping statistics ---'
+      - 3 packets transmitted, 0 packets received, 100% packet loss
+    traceroute:
+      command: traceroute -n -m 2 2001:7f8::1
+      reasons:
+      - incorrect first hop
+      - incorrect last hop
+      result: failed
+      returncode: 0
+      stderr: []
+      stdout:
+      - traceroute to 2001:7f8::1 (2001:7f8::1), 2 hops max, 72 byte packets
+      - ' 1  *  *  *'
+      - ' 2  *  *  *'
+juniper_vjunosevolved_5:
+  frr_1:
+    bgp:
+      command: nc -z 2001:7f8::1 179
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout: []
+    ping:
+      command: ping -c 3 2001:7f8::1
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout:
+      - 'PING 2001:7f8::1 (2001:7f8::1): 56 data bytes'
+      - ''
+      - '--- 2001:7f8::1 ping statistics ---'
+      - 3 packets transmitted, 0 packets received, 100% packet loss
+    traceroute:
+      command: traceroute -n -m 2 2001:7f8::1
+      reasons:
+      - incorrect last hop
+      result: failed
+      returncode: 0
+      stderr: []
+      stdout:
+      - traceroute to 2001:7f8::1 (2001:7f8::1), 2 hops max, 72 byte packets
+      - ' 1  2001:db8:5::1  8.496 ms  1.831 ms  1.586 ms'
+      - ' 2  *  *  *'
+nokia_srlinux_6:
+  frr_1:
+    bgp:
+      command: nc -z 2001:7f8::1 179
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout: []
+    ping:
+      command: ping -c 3 2001:7f8::1
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout:
+      - 'PING 2001:7f8::1 (2001:7f8::1): 56 data bytes'
+      - ''
+      - '--- 2001:7f8::1 ping statistics ---'
+      - 3 packets transmitted, 0 packets received, 100% packet loss
+    traceroute:
+      command: traceroute -n -m 2 2001:7f8::1
+      reasons:
+      - incorrect last hop
+      result: failed
+      returncode: 0
+      stderr: []
+      stdout:
+      - traceroute to 2001:7f8::1 (2001:7f8::1), 2 hops max, 72 byte packets
+      - ' 1  2001:db8:6::1  2.958 ms  0.768 ms  0.826 ms'
+      - ' 2  *  *  *'
+nokia_sros_7:
+  frr_1:
+    bgp:
+      command: nc -z 2001:7f8::1 179
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout: []
+    ping:
+      command: ping -c 3 2001:7f8::1
+      reasons:
+      - non-zero returncode
+      result: failed
+      returncode: 1
+      stderr: []
+      stdout:
+      - 'PING 2001:7f8::1 (2001:7f8::1): 56 data bytes'
+      - ''
+      - '--- 2001:7f8::1 ping statistics ---'
+      - 3 packets transmitted, 0 packets received, 100% packet loss
+    traceroute:
+      command: traceroute -n -m 2 2001:7f8::1
+      reasons:
+      - incorrect last hop
+      result: failed
+      returncode: 0
+      stderr: []
+      stdout:
+      - traceroute to 2001:7f8::1 (2001:7f8::1), 2 hops max, 72 byte packets
+      - ' 1  2001:db8:7::1  1.136 ms  1.677 ms  1.169 ms'
+      - ' 2  *  *  *'

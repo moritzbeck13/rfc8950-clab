@@ -207,43 +207,18 @@ firewall {
     }
 }
 interfaces {
-    et-0/0/0 {
-        description $PEERING_LAN_NAME_interface;
-        unit 0 {
-$PEERING_LAN_INTERFACES
+    * {
+        unit * {
+            family inet {
+                filter {
+                    output rs_protection_v4;
+                }
+            }
+            family inet6 {
+                filter {
+                    output rs_protection_v6;
+                }
+            }
         }
-    }
-    et-0/0/1 {
-        description $CLIENT_LAN_NAME_interface;
-        unit 0 {
-$CLIENT_LAN_INTERFACES
-        }
-    }
-    lo0 {
-        description $LOOPBACK_NAME_interface;
-        unit 0 {
-$LOOPBACK_INTERFACES
-        }
-    }
-}
-policy-options {
-    policy-statement default_accept_policy_statement {
-        then accept;
-    }
-}
-routing-options {
-    router-id $BGP_ROUTER_ID;
-    autonomous-system $BGP_ASN;
-}
-protocols {
-    bgp {
-        family inet6 {
-            unicast;
-        }
-        group $BGP_GROUP_NAME_group {
-$BGP_NEIGHBORS
-        }
-        import default_accept_policy_statement;
-        export default_accept_policy_statement;
     }
 }

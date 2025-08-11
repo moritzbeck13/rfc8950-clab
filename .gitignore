@@ -5,5 +5,6 @@ files/clab-*/
 .*
 !.gitignore
 *.yml
+!results/*
 files/configs/*
 files/licenses/*

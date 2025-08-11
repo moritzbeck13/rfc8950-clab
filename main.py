@@ -8,9 +8,9 @@ from clab import containerlab, kinds, topology
 
 
 route_servers: dict[type[kinds.Route_Server], dict] = {
-		kinds.BIRD: {"image": "bird:3"},
-		kinds.FRR: {"image": "quay.io/frrouting/frr:10.3.0"},
-		kinds.OpenBGPD: {"image": "openbgpd/openbgpd"}
+#	kinds.BIRD: {"image": "bird:3"},
+	kinds.FRR: {"image": "quay.io/frrouting/frr:10.3.0"},
+#	kinds.OpenBGPD: {"image": "openbgpd/openbgpd"}
 }
 
 routers: dict[type[kinds.Router], dict] = {
@@ -21,7 +21,7 @@ routers: dict[type[kinds.Router], dict] = {
 #	kinds.Linux_BIRD: {"image": "bird:3"},
 #	kinds.Linux_FRR: {"image": "quay.io/frrouting/frr:10.3.0"},
 #	kinds.Linux_OpenBGPD: {"image": "openbgpd/openbgpd"},
-	kinds.Mikrotik_RouterOS: {"image": "vrnetlab/mikrotik_routeros:7.20beta5"},
+#	kinds.Mikrotik_RouterOS: {"image": "vrnetlab/mikrotik_routeros:7.20beta5"},
 	kinds.Nokia_SR_Linux: {"image": "ghcr.io/nokia/srlinux"},
 	kinds.Nokia_SR_OS: {"image": "vrnetlab/nokia_sros:23.10.R6", "license": "licenses/SR_OS_VSR-SIM1_license.txt"}
 }
@@ -29,34 +29,43 @@ routers: dict[type[kinds.Router], dict] = {
 
 
 async def peering_lan_reachability_test(lab: containerlab.Lab):
-	routers_from: list[kinds.Router] = []
+	routers: list[kinds.Router] = []
 	route_servers: list[kinds.Route_Server] = []
 
 	for node in lab.topology.nodes:
 		if isinstance(node, kinds.Route_Server):
 			route_servers.append(node)
 		elif isinstance(node, kinds.Router):
-			routers_from.append(node)
+			routers.append(node)
 
-	matrix = {}
+	dict = {}
 	tasks = []
 
-	for router_from in routers_from:
-		matrix[router_from.get_name()] = {
-			"bgp": {},
-			"ping": {},
-			"traceroute": {}}
+	for router in routers:
+		dict[router.get_name()] = {}
 
 		for route_server in route_servers:
-			node = router_from.interfaces[2].connected_to.node
-			route_server_interface_ip = str(route_server.interfaces[1].ipv4.ip)
+			dict[router.get_name()][route_server.get_name()] = {}
 
-			tasks.append(node.exec(["nc", "-z", route_server_interface_ip, "179"],
-				kind="bgp", router_from=router_from, route_server=route_server))
-			tasks.append(node.exec(["ping", "-c", "3", route_server_interface_ip],
-				kind="ping", router_from=router_from, route_server=route_server))
-			tasks.append(node.exec(["traceroute", "-n", "-m", "2", route_server_interface_ip],
-				kind="traceroute", router_from=router_from, route_server=route_server))
+			node = router.interfaces[2].connected_to.node
+
+			router_from = router
+			router_to = route_server
+
+			interface_from = router.interfaces[2].ipv6
+			interface_to = route_server.interfaces[1].ipv6
+
+			ip_address = str(interface_to.ip)
+
+			tasks.append(node.exec(["nc", "-z", ip_address, "179"], kind="bgp",
+				router_from=router_from, router_to=router_to,
+				interface_from=interface_from, interface_to=interface_to))
+			tasks.append(node.exec(["ping", "-c", "3", ip_address], kind="ping",
+				router_from=router_from, router_to=router_to,
+				interface_from=interface_from, interface_to=interface_to))
+			tasks.append(node.exec(["traceroute", "-n", "-m", "2", ip_address], kind="traceroute",
+				router_from=router_from, router_to=router_to,
+				interface_from=interface_from, interface_to=interface_to))
 
 	results = await asyncio.gather(*tasks)
 
@@ -78,7 +87,13 @@ async def peering_lan_reachability_test(lab: containerlab.Lab):
 			"stdout": stdout}
 
 		router_from: kinds.Router = kwargs["router_from"]
-		route_server: kinds.Route_Server = kwargs["route_server"]
+		router_to: kinds.Route_Server = kwargs["router_to"]
+
+		interface_from: ipaddress.IPv4Interface | ipaddress.IPv6Interface = kwargs.get("interface_from")
+		interface_to: ipaddress.IPv4Interface | ipaddress.IPv6Interface = kwargs.get("interface_to")
+
+		if dict[router_from.get_name()][router_to.get_name()].get(kind) is None:
+			dict[router_from.get_name()][router_to.get_name()][kind] = {}
 
 		if returncode != 0:
 			test["reasons"].append("non-zero returncode")
@@ -88,77 +103,19 @@ async def peering_lan_reachability_test(lab: containerlab.Lab):
 		if kind == "traceroute":
 			if len(stdout) != 3:
 				test["reasons"].append("unexpected length of stdout")
-			if len(stdout) > 1 and str(router_from.interfaces[2].ipv4.ip) not in stdout[1]:
+			if len(stdout) > 1 and str(interface_from.ip) not in stdout[1]:
 					test["reasons"].append("incorrect first hop")
-			if len(stdout) > 2 and str(route_server.interfaces[1].ipv4.ip) not in stdout[2]:
+			if len(stdout) > 2 and str(interface_to.ip) not in stdout[2]:
 					test["reasons"].append("incorrect last hop")
 
 		if test["reasons"] == []:
 			test["result"] = "succeeded"
 
-		matrix[router_from.get_name()][kind][route_server.get_name()] = test
+		dict[router_from.get_name()][router_to.get_name()][kind] = test
 
 	file = open("results.yml", "w")
-	file.write(yaml.dump(matrix))
+	file.write(yaml.dump(dict))
 	file.close()
-
-	id: int = 0
-	router_peers: list[tuple[kinds.Router, ipaddress.IPv4Interface | ipaddress.IPv6Interface]] = []
-	route_server_peers: list[tuple[kinds.Router, ipaddress.IPv4Interface | ipaddress.IPv6Interface]] = []
-
-	lab: containerlab.Lab = containerlab.Lab("peering_lan")
-
-	peering_lan: kinds.Bridge = kinds.Bridge("peering_lan")
-	peering_lan.add_interface(topology.Interface(None, None))
-	lab.topology.add_node(peering_lan)
-
-	for Route_Server, attributes in route_servers.items():
-		for _ in range(1):
-			id += 1
-
-			route_server: kinds.Route_Server = Route_Server(id, **attributes)
-			route_server.add_interface(topology.Interface("loopback", None,
-				ipv4=ipaddress.IPv4Interface(("203.0.113." + str(id), 32))))
-			route_server.add_interface(topology.Interface("peering_lan", 1,
-				ipv6=ipaddress.IPv6Interface(("2001:7f8::" + str(id), 64))))
-			router_peers.append((route_server, route_server.interfaces[1].ipv6))
-			route_server.peers = route_server_peers
-			lab.topology.add_node(route_server)
-
-			peering_lan.add_interface(topology.Interface("router_" + str(id), id, id))
-			lab.topology.connect_interfaces(peering_lan.interfaces[id], route_server.interfaces[1])
-
-	for Router, attributes in routers.items():
-		for _ in range(1):
-			id += 1
-
-			router: kinds.Router = Router(id, **attributes)
-			router.add_interface(topology.Interface("loopback", None,
-				ipv4=ipaddress.IPv4Interface(("203.0.113." + str(id), 32))))
-			router.add_interface(topology.Interface("peering_lan", 1,
-				ipv6=ipaddress.IPv6Interface(("2001:7f8::" + str(id), 64))))
-			router.add_interface(topology.Interface("client_lan", 2,
-				ipv4=ipaddress.IPv4Interface(("192.168." + str(id) + ".1", 24))))
-			route_server_peers.append((router, router.interfaces[1].ipv6))
-			router.peers = route_server_peers
-			lab.topology.add_node(router)
-
-			client: kinds.Client = kinds.Alpine(id)
-			client.add_interface(topology.Interface("loopback", None))
-			client.add_interface(topology.Interface("client_lan", 1,
-				ipv4=ipaddress.IPv4Interface(("192.168." + str(id) + ".254", 24))))
-			client.default_gateway = client.interfaces[1]
-			lab.topology.add_node(client)
-
-			peering_lan.add_interface(topology.Interface("router_" + str(id), id))
-			lab.topology.connect_interfaces(peering_lan.interfaces[id], router.interfaces[1])
-			lab.topology.connect_interfaces(router.interfaces[2], client.interfaces[1])
-
-	lab.destroy()
-	lab.export()
-	lab.deploy()
-	time.sleep(60*10)
-	asyncio.run(peering_lan_reachability_test(lab))
 
 def peering_lan_reachability():
 	id: int = 0
@@ -182,7 +139,6 @@ def peering_lan_reachability():
 			route_server.add_interface(topology.Interface("peering_lan", 1,
 				ipv4=ipaddress.IPv4Interface(("80.81.192." + str(id), 21)),
 				ipv6=ipaddress.IPv6Interface(("2001:7f8::" + str(id), 64))))
-			router_peers.append((route_server, route_server.interfaces[1].ipv4))
 			router_peers.append((route_server, route_server.interfaces[1].ipv6))
 			route_server.peers = route_server_peers
 			lab.topology.add_node(route_server)
@@ -203,8 +159,7 @@ def peering_lan_reachability():
 				ipv6=ipaddress.IPv6Interface(("2001:7f8::" + str(id), 64))))
 			router.add_interface(topology.Interface("client_lan", 2,
 				ipv4=ipaddress.IPv4Interface(("192.168." + str(id) + ".1", 24)),
-				ipv6=ipaddress.IPv6Interface(("fc00:" + str(id) + "::1", 64))))
-			route_server_peers.append((router, router.interfaces[1].ipv4))
+				ipv6=ipaddress.IPv6Interface(("2001:db8:" + str(id) + "::1", 64))))
 			route_server_peers.append((router, router.interfaces[1].ipv6))
 			router.peers = router_peers
 			lab.topology.add_node(router)
@@ -213,7 +168,7 @@ def peering_lan_reachability():
 			client.add_interface(topology.Interface("loopback", None))
 			client.add_interface(topology.Interface("client_lan", 1,
 				ipv4=ipaddress.IPv4Interface(("192.168." + str(id) + ".254", 24)),
-				ipv6=ipaddress.IPv6Interface(("fc00:" + str(id) + "::ffff", 64))))
+				ipv6=ipaddress.IPv6Interface(("2001:db8:" + str(id) + "::ffff", 64))))
 			client.default_gateway = client.interfaces[1]
 			lab.topology.add_node(client)
 

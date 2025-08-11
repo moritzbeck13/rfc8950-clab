@@ -1,0 +1,203 @@
+arista_ceos_2:
+  frr_1:
+    bgp:
+      command: nc -z 2001:7f8::1 179
+      reasons: []
+      result: succeeded
+      returncode: 0
+      stderr: []
+      stdout: []
+    ping:
+      command: ping -c 3 2001:7f8::1
+      reasons: []
+      result: succeeded
+      returncode: 0
+      stderr: []
+      stdout:
+      - 'PING 2001:7f8::1 (2001:7f8::1): 56 data bytes'
+      - '64 bytes from 2001:7f8::1: seq=0 ttl=63 time=1.666 ms'
+      - '64 bytes from 2001:7f8::1: seq=1 ttl=63 time=1.370 ms'
+      - '64 bytes from 2001:7f8::1: seq=2 ttl=63 time=1.148 ms'
+      - ''
+      - '--- 2001:7f8::1 ping statistics ---'
+      - 3 packets transmitted, 3 packets received, 0% packet loss
+      - round-trip min/avg/max = 1.148/1.394/1.666 ms
+    traceroute:
+      command: traceroute -n -m 2 2001:7f8::1
+      reasons: []
+      result: succeeded
+      returncode: 0
+      stderr: []
+      stdout:
+      - traceroute to 2001:7f8::1 (2001:7f8::1), 2 hops max, 72 byte packets
+      - ' 1  2001:db8:2::1  0.007 ms  0.005 ms  0.005 ms'
+      - ' 2  2001:7f8::1  1.199 ms  0.572 ms  0.369 ms'
+arista_veos_3:
+  frr_1:
+    bgp:
+      command: nc -z 2001:7f8::1 179
+      reasons: []
+      result: succeeded
+      returncode: 0
+      stderr: []
+      stdout: []
+    ping:
+      command: ping -c 3 2001:7f8::1
+      reasons: []
+      result: succeeded
+      returncode: 0
+      stderr: []
+      stdout:
+      - 'PING 2001:7f8::1 (2001:7f8::1): 56 data bytes'
+      - '64 bytes from 2001:7f8::1: seq=0 ttl=63 time=18.436 ms'
+      - '64 bytes from 2001:7f8::1: seq=1 ttl=63 time=2.775 ms'
+      - '64 bytes from 2001:7f8::1: seq=2 ttl=63 time=2.438 ms'
+      - ''
+      - '--- 2001:7f8::1 ping statistics ---'
+      - 3 packets transmitted, 3 packets received, 0% packet loss
+      - round-trip min/avg/max = 2.438/7.883/18.436 ms
+    traceroute:
+      command: traceroute -n -m 2 2001:7f8::1
+      reasons: []
+      result: succeeded
+      returncode: 0
+      stderr: []
+      stdout:
+      - traceroute to 2001:7f8::1 (2001:7f8::1), 2 hops max, 72 byte packets
+      - ' 1  2001:db8:3::1  15.955 ms  2.533 ms  2.362 ms'
+      - ' 2  2001:7f8::1  2.332 ms  1.130 ms  0.913 ms'
+cisco_xrd_4:
+  frr_1:
+    bgp:
+      command: nc -z 2001:7f8::1 179
+      reasons: []
+      result: succeeded
+      returncode: 0
+      stderr: []
+      stdout: []
+    ping:
+      command: ping -c 3 2001:7f8::1
+      reasons: []
+      result: succeeded
+      returncode: 0
+      stderr: []
+      stdout:
+      - 'PING 2001:7f8::1 (2001:7f8::1): 56 data bytes'
+      - '64 bytes from 2001:7f8::1: seq=0 ttl=63 time=4.347 ms'
+      - '64 bytes from 2001:7f8::1: seq=1 ttl=63 time=1.970 ms'
+      - '64 bytes from 2001:7f8::1: seq=2 ttl=63 time=1.920 ms'
+      - ''
+      - '--- 2001:7f8::1 ping statistics ---'
+      - 3 packets transmitted, 3 packets received, 0% packet loss
+      - round-trip min/avg/max = 1.920/2.745/4.347 ms
+    traceroute:
+      command: traceroute -n -m 2 2001:7f8::1
+      reasons: []
+      result: succeeded
+      returncode: 0
+      stderr: []
+      stdout:
+      - traceroute to 2001:7f8::1 (2001:7f8::1), 2 hops max, 72 byte packets
+      - ' 1  2001:db8:4::1  4.669 ms  1.399 ms  1.097 ms'
+      - ' 2  2001:7f8::1  1.226 ms  1.005 ms  0.755 ms'
+juniper_vjunosevolved_5:
+  frr_1:
+    bgp:
+      command: nc -z 2001:7f8::1 179
+      reasons: []
+      result: succeeded
+      returncode: 0
+      stderr: []
+      stdout: []
+    ping:
+      command: ping -c 3 2001:7f8::1
+      reasons: []
+      result: succeeded
+      returncode: 0
+      stderr: []
+      stdout:
+      - 'PING 2001:7f8::1 (2001:7f8::1): 56 data bytes'
+      - '64 bytes from 2001:7f8::1: seq=1 ttl=63 time=3.066 ms'
+      - '64 bytes from 2001:7f8::1: seq=2 ttl=63 time=2.510 ms'
+      - ''
+      - '--- 2001:7f8::1 ping statistics ---'
+      - 3 packets transmitted, 2 packets received, 33% packet loss
+      - round-trip min/avg/max = 2.510/2.788/3.066 ms
+    traceroute:
+      command: traceroute -n -m 2 2001:7f8::1
+      reasons: []
+      result: succeeded
+      returncode: 0
+      stderr: []
+      stdout:
+      - traceroute to 2001:7f8::1 (2001:7f8::1), 2 hops max, 72 byte packets
+      - ' 1  2001:db8:5::1  26.375 ms  1.486 ms  1.872 ms'
+      - ' 2  2001:7f8::1  1.051 ms  1.174 ms  1.578 ms'
+nokia_srlinux_6:
+  frr_1:
+    bgp:
+      command: nc -z 2001:7f8::1 179
+      reasons: []
+      result: succeeded
+      returncode: 0
+      stderr: []
+      stdout: []
+    ping:
+      command: ping -c 3 2001:7f8::1
+      reasons: []
+      result: succeeded
+      returncode: 0
+      stderr: []
+      stdout:
+      - 'PING 2001:7f8::1 (2001:7f8::1): 56 data bytes'
+      - '64 bytes from 2001:7f8::1: seq=0 ttl=63 time=0.561 ms'
+      - '64 bytes from 2001:7f8::1: seq=1 ttl=63 time=0.362 ms'
+      - '64 bytes from 2001:7f8::1: seq=2 ttl=63 time=0.473 ms'
+      - ''
+      - '--- 2001:7f8::1 ping statistics ---'
+      - 3 packets transmitted, 3 packets received, 0% packet loss
+      - round-trip min/avg/max = 0.362/0.465/0.561 ms
+    traceroute:
+      command: traceroute -n -m 2 2001:7f8::1
+      reasons: []
+      result: succeeded
+      returncode: 0
+      stderr: []
+      stdout:
+      - traceroute to 2001:7f8::1 (2001:7f8::1), 2 hops max, 72 byte packets
+      - ' 1  2001:db8:6::1  4.336 ms  0.962 ms  2.459 ms'
+      - ' 2  2001:7f8::1  0.263 ms  0.312 ms  0.253 ms'
+nokia_sros_7:
+  frr_1:
+    bgp:
+      command: nc -z 2001:7f8::1 179
+      reasons: []
+      result: succeeded
+      returncode: 0
+      stderr: []
+      stdout: []
+    ping:
+      command: ping -c 3 2001:7f8::1
+      reasons: []
+      result: succeeded
+      returncode: 0
+      stderr: []
+      stdout:
+      - 'PING 2001:7f8::1 (2001:7f8::1): 56 data bytes'
+      - '64 bytes from 2001:7f8::1: seq=0 ttl=63 time=6.013 ms'
+      - '64 bytes from 2001:7f8::1: seq=1 ttl=63 time=2.144 ms'
+      - '64 bytes from 2001:7f8::1: seq=2 ttl=63 time=2.592 ms'
+      - ''
+      - '--- 2001:7f8::1 ping statistics ---'
+      - 3 packets transmitted, 3 packets received, 0% packet loss
+      - round-trip min/avg/max = 2.144/3.583/6.013 ms
+    traceroute:
+      command: traceroute -n -m 2 2001:7f8::1
+      reasons: []
+      result: succeeded
+      returncode: 0
+      stderr: []
+      stdout:
+      - traceroute to 2001:7f8::1 (2001:7f8::1), 2 hops max, 72 byte packets
+      - ' 1  2001:db8:7::1  4.767 ms  1.571 ms  0.838 ms'
+      - ' 2  2001:7f8::1  6.493 ms  0.507 ms  9.122 ms'

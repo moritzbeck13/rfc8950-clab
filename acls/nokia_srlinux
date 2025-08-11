@@ -156,8 +156,8 @@ acl {
                     destination-ip {
                         prefix ff00::/8
                     }
-                    next-header icmp6
                 }
+                next-header icmp6
             }
             action {
                 accept {
@@ -207,8 +207,8 @@ acl {
                     destination-ip {
                         prefix ff00::/8
                     }
-                    next-header icmp6
                 }
+                next-header icmp6
             }
             action {
                 accept {
@@ -290,7 +290,7 @@ acl {
                     destination-ip {
                         prefix 2001:7f8::/64
                     }
-                    next-header udp
+                    protocol udp
                 }
                 transport {
                     destination-port {
@@ -310,62 +310,12 @@ acl {
             }
         }
     }
-}
-interface ethernet-1/1 {
-    description $PEERING_LAN_NAME_interface
-    admin-state enable
-    subinterface 0 {
-$PEERING_LAN_INTERFACES
-    }
-}
-interface ethernet-1/2 {
-    description $CLIENT_LAN_NAME_interface
-    admin-state enable
-    subinterface 0 {
-$CLIENT_LAN_INTERFACES
-    }
-}
-interface system0 {
-    description $LOOPBACK_NAME_interface
-    subinterface 0 {
-$LOOPBACK_INTERFACES
-    }
-}
-routing-policy {
-    policy default_accept_policy {
-        default-action {
-            policy-result accept
-        }
-    }
-}
-network-instance default {
-    ip-forwarding {
-        receive-ipv4-check false
-        receive-ipv6-check false
-    }
-    interface ethernet-1/1.0 {
-    }
-    interface ethernet-1/2.0 {
-    }
-    protocols {
-        bgp {
-            autonomous-system $BGP_ASN
-            router-id $BGP_ROUTER_ID
-            export-policy [
-                default_accept_policy
-            ]
-            import-policy [
-                default_accept_policy
-            ]
-            afi-safi ipv4-unicast {
-                admin-state enable
+    interface * {
+        output {
+            acl-filter rs_protection_v4 type ipv4 {
             }
-            afi-safi ipv6-unicast {
-                admin-state enable
+            acl-filter rs_protection_v6 type ipv6 {
             }
-            group $BGP_GROUP_NAME_group {
-            }
-$BGP_NEIGHBORS
         }
     }
 }
